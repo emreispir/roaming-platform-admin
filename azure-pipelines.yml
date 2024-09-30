@@ -1,0 +1,54 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - script: |
+      mkdir -p $(Pipeline.Workspace)/.npm
+    displayName: 'Create npm cache directory'
+
+  - task: Cache@2
+    inputs:
+      key: 'npm | "$(Agent.OS)" | package-lock.json'
+      restoreKeys: |
+        npm | "$(Agent.OS)"
+      path: $(Pipeline.Workspace)/.npm
+    displayName: 'Cache npm'
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.19'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install -g @angular/cli
+      npm install --legacy-peer-deps
+    displayName: 'npm install'
+
+  - script: |
+      npm install -g @openapitools/openapi-generator-cli
+    displayName: 'Install OpenAPI Generator'
+
+  - script: |
+      npm install surge-components-0.0.1.tgz
+    displayName: 'Install surge-components library'
+
+  - script: |
+      rm -rf ./api/api.ts && rm -rf ./api/model
+      openapi-generator-cli generate -o ./api -i https://surge-mobility-api-dev.azurewebsites.net/swagger/v1/swagger.json -g typescript-angular --additional-properties useEnumExtension=true,modelPropertyNaming=original,enumValueNaming=UPPERCASE
+    displayName: 'Generate API with OpenAPI Generator'
+
+  - script: |
+      echo "export const version = '$(Build.BuildNumber)';" > src/environments/version.ts
+    displayName: 'Set version info'
+
+  - script: |
+      ng build --aot
+    displayName: 'Surge Call Center BackOffice - SurgeMobilityDev'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'dist'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'

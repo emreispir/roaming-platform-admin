@@ -1,0 +1,145 @@
+@import 'node_modules/bootstrap/scss/mixins/breakpoints';
+@import '../../../@theme/styles/colors';
+
+p-breadcrumb .p-menuitem-link .p-menuitem-text {
+  color: $dark-blue !important;
+}
+
+.p-breadcrumb ul li:last-child .p-menuitem-link {
+  pointer-events: none !important;
+  &.p-menuitem-text:hover {
+    cursor: default !important;
+    color: $dark-blue !important;
+  }
+}
+
+p-breadcrumb .p-menuitem-link .p-menuitem-text:hover {
+  color: $blue !important;
+}
+
+.navbar {
+  position: fixed !important;
+  width: calc(100vw - 240px);
+  z-index: 55;
+  padding: 10px 20px;
+  height: 74px;
+  left: 240px;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid $light-gray4;
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 1279px) {
+    width: calc(100vw - 72px);
+    left: 72px;
+  }
+
+  @media screen and (max-width: 550px) {
+    padding: 10px 10px;
+    height: 121px;
+
+    .navbar-container {
+      flex-direction: column-reverse;
+      justify-content: center;
+      align-items: flex-start;
+      row-gap: 15px;
+
+      .profile-container {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+
+  .logged-user-info {
+    margin-left: 8px;
+    max-width: 200px;
+
+    li.nav-item.dropdown {
+      display: flex;
+      list-style: none;
+      flex-direction: column;
+    }
+
+    .dropdown-toggle {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      color: $dark-blue;
+      text-transform: capitalize;
+
+      &::after {
+        content: url(../../../../assets/svg/arrow-down-dark.svg);
+        border: none;
+        vertical-align: middle;
+      }
+
+      &:hover {
+        color: $blue !important;
+        transition: none;
+      }
+    }
+
+    ul.dropdown-menu {
+      top: 64px;
+      left: -45px;
+      margin: 0px;
+      padding: 8px 0px 8px;
+      border: none;
+    }
+
+    .sub-info {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16px;
+      color: $dark-gray;
+      &:hover {
+        color: $dark-gray !important;
+        transition: none;
+      }
+    }
+  }
+}
+
+.directory-info {
+  display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    color: $blue !important;
+    transition: none;
+  }
+
+  label {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 3;
+    cursor: pointer;
+  }
+
+  a {
+    font-size: 10px;
+    color: $blue;
+    line-height: 16px;
+    font-weight: 500;
+    flex: 1;
+  }
+}
+
+.menu-toggle-button {
+  @media screen and (max-width: 1280px) {
+    display: none;
+  }
+}

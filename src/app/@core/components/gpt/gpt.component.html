@@ -1,0 +1,37 @@
+<div class="iframe-container">
+  <iframe
+    id="gptIframe"
+    src="https://web.powerva.microsoft.com/environments/Default-c0e7fc2c-848b-4689-8036-a8efe1f24dc9/bots/cr8a9_surgeGptCustomerSupport/webchat?__version__=2"
+    frameborder="0"
+    *ngIf="showChat()"
+  ></iframe>
+
+  <button
+    pButton
+    class="p-button p-button-default dark-blue large gpt-button"
+    (click)="showChat.set(!showChat())"
+    type="button"
+  >
+    <div class="svgContainer" [innerHTML]="SurgeMobilityLogoWithoutText"></div>
+
+    {{ 'COMMON.SURGE-GPT' | translate }}
+
+    <ng-container *ngIf="showChat()">
+      <svg
+        class="ms-3"
+        width="18"
+        height="18"
+        viewBox="0 0 22 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M2 12C2 6.49751 6.49751 2 12 2C17.5025 2 22 6.49751 22 12C22 17.5025 17.5025 22 12 22C6.49751 22 2 17.5025 2 12ZM12 4.17822C7.70051 4.17822 4.17822 7.70051 4.17822 12C4.17822 16.2995 7.70051 19.8218 12 19.8218C16.2995 19.8218 19.8218 16.2995 19.8218 12C19.8218 7.70051 16.2995 4.17822 12 4.17822ZM8.70803 8.70814C9.13335 8.28282 9.82294 8.28282 10.2483 8.70814L11.9999 10.4598L13.7516 8.70814C14.1769 8.28282 14.8665 8.28282 15.2918 8.70814C15.7172 9.13346 15.7172 9.82305 15.2918 10.2484L13.5402 12L15.2918 13.7517C15.7172 14.177 15.7172 14.8666 15.2918 15.2919C14.8665 15.7173 14.1769 15.7173 13.7516 15.2919L11.9999 13.5403L10.2483 15.2919C9.82294 15.7173 9.13335 15.7173 8.70803 15.2919C8.28271 14.8666 8.28271 14.177 8.70803 13.7517L10.4597 12L8.70803 10.2484C8.28271 9.82305 8.28271 9.13346 8.70803 8.70814Z"
+          fill="white"
+        />
+      </svg>
+    </ng-container>
+  </button>
+</div>

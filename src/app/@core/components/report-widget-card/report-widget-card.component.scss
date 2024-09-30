@@ -1,0 +1,115 @@
+@import '../../../@theme/styles/colors';
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  box-shadow: 0px 2px 4px rgba(16, 24, 40, 0.04);
+  border-radius: 6px;
+  min-width: 380px;
+  min-height: 200px;
+  max-width: 400px;
+  width: 100%;
+
+  @media (min-width: 1920px) {
+    min-width: 400px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-bottom: 20px;
+
+    @media screen and (max-width: 550px) {
+      flex-direction: column;
+      align-items: flex-start;
+      row-gap: 5px;
+    }
+  }
+
+  .card-header-left {
+    display: flex;
+
+    .title {
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 24px;
+      color: $dark-blue;
+
+      display: flex;
+      align-items: center;
+      column-gap: 2px;
+    }
+  }
+
+  .card-header-right {
+    display: flex;
+    align-items: center;
+
+    .p-button-default {
+      &.gray {
+        padding: 4px 8px;
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 16px;
+        margin-right: 12px;
+
+        i {
+          width: 12px;
+          height: 13px;
+        }
+      }
+    }
+
+    .nav-title {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16px;
+      color: $dark-blue;
+      align-items: center;
+      display: flex;
+
+      i {
+        width: 7px;
+        height: 12px;
+        margin-left: 6px;
+      }
+    }
+  }
+
+  .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    position: relative;
+
+    div {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .infoText {
+      font-family: 'Inter';
+      font-weight: 500;
+      font-size: 40px;
+      line-height: 44px;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+      color: $dark-blue;
+    }
+
+    .card-body-right {
+      img {
+        width: 80px;
+        height: 60px;
+      }
+    }
+  }
+}

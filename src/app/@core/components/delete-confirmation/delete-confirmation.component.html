@@ -1,0 +1,71 @@
+<div class="page-container child-modal">
+  <div class="page-body">
+    <div class="page-body-left-dialog">
+      <div class="svgContainer" [innerHTML]="config?.data?.bannerIcon"></div>
+    </div>
+
+    <div class="page-body-right">
+      <button
+        type="button"
+        tabindex="-1"
+        class="p-button p-button-default circle close transparent p-0"
+        (click)="close()"
+        [disabled]="buttonLoading"
+      >
+        <div class="svgContainer" [innerHTML]="closeIcon"></div>
+      </button>
+
+      <div class="d-flex flex-column">
+        <label class="form-title" tabindex="1">{{ config?.data?.title }}</label>
+        <label
+          class="form-subtitle"
+          [innerHTML]="config?.data?.description"
+        ></label>
+      </div>
+
+      <div class="form-group mb-20" *ngIf="config?.data?.showDropdown">
+        <p-dropdown
+          *ngIf="config?.data?.showDropdown"
+          [options]="config?.data?.dropdownOptions"
+          [(ngModel)]="config.data.selectedDropdownOption"
+          optionLabel="label"
+          optionValue="value"
+          [emptyMessage]="'COMMON.NO-RESULT' | translate"
+        >
+        </p-dropdown>
+        <ng-container *ngIf="!config.data.selectedDropdownOption && submitted">
+          <small class="text-error">
+            {{ 'COMMON.REQUIRED' | translate }}
+          </small>
+        </ng-container>
+      </div>
+
+      <div class="d-flex flex-row justify-content-end align-items-center">
+        <button
+          pButton
+          class="p-button p-button-default large text"
+          tabindex="-1"
+          (click)="close()"
+          type="button"
+          [disabled]="buttonLoading"
+        >
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+
+        <button
+          type="button"
+          class="p-button p-button-default red large"
+          tabindex="-1"
+          (click)="onDeleteButtonClicked()"
+        >
+          <img
+            src="../../../../assets/gif/loader.gif"
+            *ngIf="buttonLoading"
+            [disabled]="buttonLoading"
+          />
+          <span>{{ config?.data.buttonText }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,89 @@
+<div class="page-container child-modal confirmation">
+  <div class="page-body">
+    <div class="page-body-right">
+      <button
+        type="button"
+        tabindex="-1"
+        class="p-button p-button-default circle close transparent p-0 justify-content-end"
+        (click)="cancel()"
+        [disabled]="buttonLoading"
+        *ngIf="!config?.data?.nonClosable"
+      >
+        <div class="svgContainer" [innerHTML]="closeIcon"></div>
+      </button>
+
+      <div class="d-flex flex-column">
+        <label class="form-title" tabindex="1">
+          <ng-container *ngIf="config?.data?.title; else noTitleCond">
+            {{ config?.data?.title }}
+          </ng-container>
+          <ng-template #noTitleCond>
+            {{ 'COMMON.ARE-YOU-SURE' | translate }}
+          </ng-template>
+        </label>
+        <label
+          class="form-subtitle"
+          [innerHTML]="config?.data?.description"
+        ></label>
+      </div>
+
+      <form [formGroup]="myForm" aria-labelledby="title" novalidate>
+        <div class="form-container">
+          <div class="form-group" *ngIf="config?.data?.confirmWithDescription">
+            <label for="input-description">{{
+              config?.data?.confirmDescriptionTitle
+            }}</label>
+            <textarea
+              formControlName="description"
+              placeholder="{{ config?.data?.confirmDescriptionTitle }}"
+              id="input-description"
+              class="form-control"
+              rows="3"
+              [required]="true"
+              [class.invalid-input]="
+                myForm.get('description')?.invalid && submitted
+              "
+            ></textarea>
+
+            <ng-container
+              *ngIf="myForm.get('description').invalid && submitted"
+            >
+              <small class="text-error">
+                {{ 'COMMON.REQUIRED' | translate }}
+              </small>
+            </ng-container>
+          </div>
+        </div>
+      </form>
+
+      <div class="d-flex flex-row justify-content-end align-items-center">
+        <button
+          pButton
+          tabindex="-1"
+          class="p-button p-button-default large text"
+          (click)="cancel()"
+          type="button"
+          [disabled]="buttonLoading"
+          *ngIf="!config?.data?.nonClosable"
+        >
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+
+        <button
+          type="button"
+          tabindex="-1"
+          class="p-button p-button-default blue large"
+          (click)="onConfirmButtonClicked()"
+          *ngIf="config?.data.buttonText"
+        >
+          <img
+            src="../../../../assets/gif/loader.gif"
+            *ngIf="buttonLoading"
+            [disabled]="buttonLoading"
+          />
+          <span>{{ config?.data.buttonText }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<app-report-widget-card
+  [headerTitle]="'PAGES.TRANSACTIONS.TOTAL-TRANSACTION' | translate"
+  [toolTipContent]="tooltipContent"
+  [navTitle]="'COMMON.VIEW' | translate"
+  [navRoute]="routePath"
+  [isHTMLContent]="false"
+  imgSrc="../../../assets/svg/transactions.svg"
+  [infoText]="
+    transactionsReportResponse
+      ? (transactionsReportResponse | number: '1.0-0')
+      : 0
+  "
+  [showRange]="true"
+  [loading]="transactionReportLoading"
+  (dataRangeChanged)="getTransactionReport($event)"
+>
+</app-report-widget-card>

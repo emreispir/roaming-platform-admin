@@ -1,0 +1,188 @@
+<div
+  [ngClass]="{
+    'page-container child-modal': config.data?.isChild,
+    'child-page': isChild
+  }"
+>
+  <div class="page-body">
+    <app-loader
+      [loaderMessage]="loaderMessage"
+      *ngIf="loading"
+      class="box-loader"
+    ></app-loader>
+    <div class="page-body-left" *ngIf="config.data?.isChild">
+      <svg
+        width="150"
+        height="280"
+        viewBox="0 0 150 280"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="171.081" cy="129.419" r="128.919" fill="#E1E7F2" />
+        <circle cx="128.919" cy="142.392" r="128.919" fill="#F3F5FD" />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M174.048 265.807L251.154 218.358C265.409 209.587 274.093 194.05 274.093 177.318V105.88C274.093 89.1382 265.409 73.6014 251.154 64.8306L174.048 17.3816C158.559 7.84937 139.023 7.84937 123.534 17.3816L46.4282 64.8306C32.1733 73.6014 23.4989 89.1382 23.4989 105.88V177.318C23.4989 194.05 32.1733 209.587 46.4282 218.358L123.534 265.807C139.023 275.339 158.559 275.339 174.048 265.807Z"
+          stroke="#2755F6"
+          stroke-width="12.973"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M148.79 252.435V165.691"
+          stroke="#2755F6"
+          stroke-width="12.973"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M129.513 136.776L52.4073 88.585"
+          stroke="#2755F6"
+          stroke-width="12.973"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <circle cx="29.9237" cy="41.5277" r="8.03186" fill="#2755F6" />
+      </svg>
+    </div>
+
+    <form [formGroup]="myForm" aria-labelledby="title" novalidate>
+      <div
+        class="info-description-container"
+        *ngIf="toolTipContent && chargePointId"
+      >
+        <div class="svgContainer" [innerHTML]="infoIconSmall"></div>
+        <label class="info-description"> {{ toolTipContent }}</label>
+      </div>
+
+      <div class="form-container" formArrayName="connectors">
+        <div class="grid-container">
+          <ng-container
+            *ngFor="let connector of connectors.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="connector-item">
+              <div class="connector-info-items">
+                <div class="connector-info-item">
+                  <div class="d-flex flex-column align-items-center">
+                    <lib-surge-avatar
+                      [imageUrl]="connector.get('avatarPath').value"
+                      [avatarSize]="'xlarge'"
+                    >
+                    </lib-surge-avatar>
+                    <label
+                      class="title connector-status-color mt-2"
+                      [ngClass]="connector?.get('status')?.value?.toLowerCase()"
+                    >
+                      {{
+                        getEnumTypeTranslation(
+                          connectorStatusTypes,
+                          connector?.get('status')?.value
+                        )
+                      }}
+                    </label>
+                  </div>
+                  <div class="d-flex flex-column" style="min-width: 180px;">
+                    <label class="title">
+                      {{
+                        'PAGES.CONNECTORS.CONNECTOR-PARAM'
+                          | translate
+                            : {
+                                param: connector?.get('connectorNumber')?.value
+                              }
+                      }}
+                    </label>
+
+                    <label class="subTitle">
+                      <b>{{ 'COMMON.TYPE' | translate }}:</b>
+                      {{ connector?.get('type')?.value }}
+                    </label>
+
+                    <label class="subTitle">
+                      <b>{{ 'PAGES.TARIFFS.TARIFF' | translate }}:</b>
+                      {{ connector?.get('tariff')?.value?.name }}
+                    </label>
+
+                    <label class="subTitle">
+                      <b>{{ 'PAGES.CONNECTORS.LAST-METER' | translate }}:</b>
+                      <ng-container
+                        *ngIf="
+                          connector?.get('lastMeter')?.value;
+                          else noLastMeterCond
+                        "
+                      >
+                        {{ connector?.get('lastMeter')?.value }}
+                        {{ 'PAGES.SESSIONS.KWH' | translate }}
+                      </ng-container>
+                      <ng-template #noLastMeterCond>
+                        -
+                      </ng-template>
+
+                      <br />
+
+                      <b
+                        >{{
+                          'PAGES.CONNECTORS.LAST-METER-TIME' | translate
+                        }}:</b
+                      >
+                      <ng-container
+                        *ngIf="
+                          connector?.get('lastMeter')?.value;
+                          else noLastMeterTimeCond
+                        "
+                      >
+                        {{
+                          connector?.get('lastMeterTime')?.value
+                            | date
+                              : 'dd MMM y HH:mm:ss'
+                              : undefined
+                              : sharedService.language
+                        }}
+                      </ng-container>
+                      <ng-template #noLastMeterTimeCond>
+                        -
+                      </ng-template>
+                    </label>
+
+                    <a
+                      class="title blue"
+                      (click)="showQRCode(connector?.value)"
+                      >{{ 'COMMON.VIEW-QR-CODE' | translate }}</a
+                    >
+                  </div>
+                </div>
+
+
+                <div class="connector-info-item">
+                  <label class="title">{{
+                    'COMMON.ACTIONS' | translate
+                  }}</label>
+                  <p-dropdown
+                    formControlName="actionType"
+                    [placeholder]="'COMMON.ACTIONS' | translate"
+                    [options]="
+                      connectorActionsResponse[connector?.get('id').value]
+                    "
+                    (onChange)="changeConnectorAction(connector, $event?.value)"
+                    optionLabel="label"
+                    optionValue="value"
+                    [emptyMessage]="'COMMON.NO-RESULT' | translate"
+                    *ngIf="
+                      isUserValidForPolicies([
+                        policy.ChargePointRemoteStart,
+                        policy.ChargePointRemoteStop,
+                        policy.ChargePointUnlock
+                      ])
+                    "
+                  >
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

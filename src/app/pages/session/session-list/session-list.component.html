@@ -1,0 +1,158 @@
+<div [ngClass]="isChild ? 'child-page' : 'page-container'">
+  <div class="page-header">
+    <app-header-panel
+      title="{{ 'PAGES.SESSIONS.TITLE' | translate }}"
+      [toolTipContent]="'PAGES.SESSIONS.SESSIONS-TOOLTIP' | translate"
+      *ngIf="!isChild && !isScrolled"
+    >
+    </app-header-panel>
+
+    <div class="action-bar sticky-action-bar">
+      <div class="action-bar-left">
+        <label class="title" *ngIf="showActionbarTitle">{{
+          'PAGES.SESSIONS.TITLE' | translate
+        }}</label>
+
+        <span class="p-input-icon-left" *ngIf="showActionbarSearch">
+          <div class="svgContainer" [innerHTML]="searchIcon"></div>
+          <input
+            pInputText
+            #gb
+            [formControl]="searchItem"
+            placeholder="{{ 'COMMON.SEARCH-ID-OR-USER' | translate }}"
+            id="input-search"
+            class="form-control radius-border search"
+          />
+        </span>
+
+        <div class="filter" [formGroup]="myForm">
+          <p-calendar
+            formControlName="rangeDate"
+            selectionMode="range"
+            [showButtonBar]="true"
+            dateFormat="dd.mm.yy"
+            #calendar
+            [placeholder]="'COMMON.PLEASE-SELECT-START-END-DATE' | translate"
+            *ngIf="showActionbarFilter"
+          ></p-calendar>
+        </div>
+
+        <button
+          type="button"
+          class="p-button p-button-default border-radius transparent small filter-btn"
+          [class.selected-filter]="selectedFilter !== null"
+          (click)="filterMenu.toggle($event); generateFilterMenuItems()"
+          *ngIf="showActionbarFilter"
+        >
+          <div class="svgContainer" [innerHTML]="filterIcon"></div>
+          <ng-container *ngIf="selectedFilter; else defaultFilter">
+            {{ 'COMMON.FILTER-PARAM' | translate: { param: selectedFilter } }}
+          </ng-container>
+          <ng-template #defaultFilter>
+            {{ 'COMMON.FILTER' | translate }}
+          </ng-template>
+        </button>
+        <p-menu
+          #filterMenu
+          [popup]="true"
+          [model]="filterMenuItems"
+          appendTo="body"
+          styleClass="filter-menu"
+        ></p-menu>
+      </div>
+
+      <div class="action-bar-right">
+        <button
+          type="button"
+          class="p-button p-button-default small me-2"
+          [ngClass]="isBox ? 'gray' : 'bordered-white'"
+          (click)="getSessions(this.page, this.pageSize)"
+        >
+          <div class="svgContainer" [innerHTML]="refreshIcon"></div>
+          <span>{{ 'COMMON.REFRESH' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body" #pageBody>
+    <app-loader [loaderMessage]="loaderMessage" *ngIf="loading"></app-loader>
+    <ng-container *ngIf="sessionsResponse">
+      <ng-container *ngIf="sessionsResponse?.length === 0; else sessionListing">
+        <ng-container
+          *ngIf="isSearchActive === true || filter?.status; else emptyResponse"
+        >
+          <div class="d-flex flex-column w-100">
+            <div class="table-info">
+              <div class="svgContainer" [innerHTML]="infoIcon"></div>
+              <label [innerHTML]="'PAGES.SESSIONS.NO-ITEM' | translate">
+              </label>
+              <ng-container *ngIf="isSearchActive === true || filter?.status">
+                <button
+                  type="button"
+                  class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                  (click)="resetFilter()"
+                >
+                  {{ 'COMMON.RESET' | translate }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #emptyResponse>
+          <ng-container *ngIf="!loading">
+            <app-info-panel
+              [imageUrl]="noSessionIconGiga"
+              [title]="infoPanelTitle"
+              [description]="infoPanelDescription"
+              [showButton]="false"
+              *ngIf="!isBox; else infoCard"
+            >
+            </app-info-panel>
+
+            <ng-template #infoCard>
+              <app-info-card
+                [title]="getTranslate('PAGES.SESSIONS.DONT-HAVE')"
+                [imgSrc]="noSessionIcon"
+                [headerOption]="{
+                  text: getTranslate('PAGES.SESSIONS.SESSION')
+                }"
+              >
+              </app-info-card>
+            </ng-template>
+          </ng-container>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #sessionListing>
+        <div class="d-flex flex-column w-100">
+          <div class="table-info">
+            <div class="svgContainer" [innerHTML]="infoIcon"></div>
+            <label
+              [innerHTML]="
+                'PAGES.SESSIONS.TOTAL-ITEM'
+                  | translate: { param: totalItemCount }
+              "
+            >
+            </label>
+            <ng-container *ngIf="isSearchActive === true || filter?.status">
+              <button
+                type="button"
+                class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                (click)="resetFilter()"
+              >
+                {{ 'COMMON.RESET' | translate }}
+              </button>
+            </ng-container>
+          </div>
+          <lib-surge-table
+            [data]="sessionsResponse"
+            [columns]="tableColumns"
+            [config]="tableConfig"
+          >
+          </lib-surge-table>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

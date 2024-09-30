@@ -1,0 +1,79 @@
+<div class="page-container detail">
+  <div class="page-detail-header">
+    <app-header-panel
+      [title]="userResponse?.displayName"
+      [tags]="userTagsResponse"
+      showAvatar="true"
+      *ngIf="!isScrolled"
+    >
+    </app-header-panel>
+
+    <ul class="nav nav-tabs">
+      <ng-container *ngFor="let tab of tabs; let i = index">
+        <li
+          class="nav-item"
+          *ngIf="tab?.label"
+          [class.active]="(sharedService.selectedTabIndex | async) === i"
+        >
+          <a
+            class="nav-link"
+            [routerLink]="['/users', userId, tab.routeTab]"
+            (click)="sharedService?.changeSelectedTab(i)"
+            >{{ tab.label }}</a
+          >
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <div
+    class="page-body overview-report"
+    *ngIf="(sharedService.selectedTabIndex | async) === 0"
+    #pageBody
+  >
+    <ng-container *ngIf="(sharedService.selectedTabIndex | async) === 0">
+      <ng-container *ngIf="!userLoading">
+
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div
+    class="page-detail-body"
+    *ngIf="(sharedService.selectedTabIndex | async) > 0"
+    #pageBody
+  >
+    <ng-container *ngIf="(sharedService.selectedTabIndex | async) === 1">
+      <div class="page-detail-body-right">
+        <app-session-list
+          [userId]="userId"
+          [isChild]="true"
+          [showActionbar]="true"
+          [showActionbarSearch]="true"
+          [showActionbarFilter]="true"
+          [showActionbarButton]="true"
+          *ngIf="isUserValidForPolicies([policy.ChargeSessionRead])"
+        >
+        </app-session-list>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="(sharedService.selectedTabIndex | async) === 2">
+      <div class="page-detail-body-right">
+        <app-transaction-list
+          [userId]="userId"
+          [isChild]="true"
+          [showActionbar]="true"
+          [showActionbarSearch]="true"
+          [showActionbarFilter]="true"
+          [showActionbarButton]="true"
+          *ngIf="isUserValidForPolicies([policy.TransactionRead])"
+        ></app-transaction-list>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="(sharedService.selectedTabIndex | async) === 3">
+      <div class="page-detail-body-right">
+       User Campaings
+      </div>
+    </ng-container>
+  </div>
+</div>

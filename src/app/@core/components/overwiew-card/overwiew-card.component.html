@@ -1,0 +1,121 @@
+<div class="card-container widget-box">
+  <div class="card-header" *ngIf="headerTitle || navTitle">
+    <div class="card-header-left">
+      <label class="title" *ngIf="navTitle"
+        >{{ headerTitle }}
+
+        <div
+          class="svgContainer"
+          [innerHTML]="infoIconSmall"
+          [pTooltip]="toolTipContent"
+          *ngIf="toolTipContent"
+        ></div
+      ></label>
+    </div>
+    <div class="card-header-right">
+      <a class="nav-title" [routerLink]="[navRoute]"
+        >{{ navTitle }}<i class="s-arrow-right"></i
+      ></a>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <app-loader [loaderMessage]="null" *ngIf="loading"></app-loader>
+
+    <ng-container *ngIf="!loading">
+      <div class="title-container" *ngIf="title || subTitle">
+        <label class="title truncate" [pTooltip]="title" *ngIf="title">{{
+          title
+        }}</label>
+
+        <label class="subTitle" *ngIf="subTitle">{{ subTitle }}</label>
+      </div>
+
+      <div class="info-container" *ngIf="infoText">
+        <lib-surge-avatar
+          [label]="getInitials(infoText, true)"
+          *ngIf="!infoImgSrc"
+        >
+        </lib-surge-avatar>
+        <lib-surge-avatar [svgElement]="infoImgSrc" *ngIf="infoImgSrc">
+        </lib-surge-avatar>
+        <div class="d-flex flex-column">
+          <ng-container *ngIf="infoTextRoute; else noInfoTextRouteCond">
+            <label
+              class="infoText text-capitalize truncate"
+              [routerLink]="[infoTextRoute]"
+              [pTooltip]="infoText"
+              >{{ infoText }}</label
+            >
+          </ng-container>
+          <ng-template #noInfoTextRouteCond>
+            <label
+              class="infoText text-capitalize truncate"
+              [pTooltip]="infoText"
+              >{{ infoText }}</label
+            >
+          </ng-template>
+
+          <label class="subInfoText" *ngIf="subInfoText">{{
+            subInfoText
+          }}</label>
+        </div>
+      </div>
+
+      <div class="rate-container" *ngIf="rate">
+        <app-rating [rating]="myForm.get('rating').value"></app-rating>
+      </div>
+
+      <div class="flex-container">
+        <div
+          [innerHTML]="noReviewImgSrc"
+          *ngIf="noReviewImgSrc"
+          class="no-review"
+        ></div>
+        <p
+          class="description truncate"
+          [pTooltip]="description"
+          *ngIf="description"
+        >
+          {{ description }}
+        </p>
+      </div>
+
+      <div class="tags" *ngIf="tags?.length > 0">
+        <ng-container *ngFor="let tag of tags">
+          <span
+            class="tag {{ tag?.color ? tag?.color : 'gray' }}"
+            *ngIf="tag?.text"
+          >
+            <i class="{{ tag.icon }}" *ngIf="tag?.icon"></i>
+            <span>{{ tag.text }}</span>
+          </span>
+        </ng-container>
+      </div>
+
+      <label class="infoDescription" *ngIf="infoDescription">{{
+        infoDescription
+      }}</label>
+
+      <div class="detail-info-container" *ngIf="detailInfoText">
+        <lib-surge-avatar
+          [label]="getInitials(detailInfoText, true)"
+          *ngIf="!detailInfoImgSrc"
+        >
+        </lib-surge-avatar>
+        <lib-surge-avatar
+          [svgElement]="detailInfoImgSrc"
+          *ngIf="detailInfoImgSrc"
+        >
+        </lib-surge-avatar>
+
+        <div class="d-flex flex-column">
+          <label class="detailInfoText">{{ detailInfoText }}</label>
+          <label class="detailSubInfoText" *ngIf="detailSubInfoText">{{
+            detailSubInfoText
+          }}</label>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,122 @@
+<div [ngClass]="isChild ? 'child-page' : 'page-container'">
+  <div class="page-header">
+    <app-header-panel
+      title="{{ 'PAGES.USERS.TITLE' | translate }}"
+      *ngIf="!isChild && !isScrolled"
+    >
+    </app-header-panel>
+
+    <div
+      class="action-bar sticky-action-bar"
+      *ngIf="usersResponse?.length > 0 || isSearchActive === true"
+    >
+      <div class="action-bar-left">
+        <label class="title" *ngIf="actionbarTitle">{{ actionbarTitle }}</label>
+
+        <span class="p-input-icon-left" *ngIf="showActionbarSearch">
+          <div class="svgContainer" [innerHTML]="searchIcon"></div>
+          <input
+            pInputText
+            #gb
+            [formControl]="searchItem"
+            placeholder="{{ 'COMMON.SEARCH-EMAIL' | translate }}"
+            id="input-search"
+            class="form-control radius-border search"
+          />
+        </span>
+      </div>
+      <div class="action-bar-right">
+        <button
+          type="button"
+          class="p-button p-button-default small me-2"
+          [ngClass]="isBox ? 'gray' : 'bordered-white'"
+          (click)="getUsers(this.page, this.pageSize)"
+        >
+          <div class="svgContainer" [innerHTML]="refreshIcon"></div>
+          <span>{{ 'COMMON.REFRESH' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body" #pageBody>
+    <app-loader [loaderMessage]="loaderMessage" *ngIf="loading"></app-loader>
+
+    <ng-container *ngIf="usersResponse">
+      <ng-container *ngIf="usersResponse?.length === 0; else usersListing">
+        <ng-container *ngIf="isSearchActive === true; else emptyResponse">
+          <div class="d-flex flex-column w-100">
+            <div class="table-info">
+              <div class="svgContainer" [innerHTML]="infoIcon"></div>
+              <label [innerHTML]="'PAGES.USERS.NO-ITEM' | translate"> </label>
+              <ng-container *ngIf="isSearchActive === true">
+                <button
+                  type="button"
+                  class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                  (click)="resetFilter()"
+                >
+                  {{ 'COMMON.RESET' | translate }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #emptyResponse>
+          <ng-container *ngIf="!loading">
+            <app-info-panel
+              [imageUrl]="noUserIconGiga"
+              [title]="infoPanelTitle"
+              [description]="infoPanelDescription"
+              *ngIf="!isBox; else infoCard"
+            >
+            </app-info-panel>
+            <ng-template #infoCard>
+              <app-info-card
+                [title]="infoTitle"
+                [subtitle]="infoSubtitle"
+                [imgSrc]="noUserIcon"
+                [headerOption]="{ text: actionbarTitle }"
+                class="w-100 headered-card"
+              >
+              </app-info-card>
+            </ng-template>
+          </ng-container>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #usersListing>
+        <div class="d-flex flex-column w-100 table-radius">
+          <div class="info-description-container" *ngIf="toolTipContent">
+            <div class="svgContainer" [innerHTML]="infoIconSmall"></div>
+            <label class="info-description"> {{ toolTipContent }}</label>
+          </div>
+
+          <div class="table-info">
+            <div class="svgContainer" [innerHTML]="infoIcon"></div>
+            <label
+              [innerHTML]="
+                'PAGES.USERS.TOTAL-ITEM' | translate: { param: totalItemCount }
+              "
+            >
+            </label>
+            <ng-container *ngIf="isSearchActive === true">
+              <button
+                type="button"
+                class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                (click)="resetFilter()"
+              >
+                {{ 'COMMON.RESET' | translate }}
+              </button>
+            </ng-container>
+          </div>
+          <lib-surge-table
+            [data]="usersResponse"
+            [columns]="tableColumns"
+            [config]="tableConfig"
+          >
+          </lib-surge-table>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

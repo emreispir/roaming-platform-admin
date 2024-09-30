@@ -1,0 +1,55 @@
+@import '../../../@theme/styles/colors';
+
+.file-items {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+
+  .file-item {
+    display: flex;
+    flex-direction: column;
+    width: 125px;
+    position: relative;
+    padding: 10px;
+    gap: 5px;
+    background-color: $gray;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0px 2px 24px rgba(26, 44, 81, 0.08);
+    }
+
+    button.close {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+    }
+
+    .file-img-container {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 5px;
+
+      img {
+        width: 80px;
+        height: 80px;
+      }
+    }
+
+    p.file-name {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16px;
+      color: $dark-blue;
+      width: 100%;
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0px;
+    }
+  }
+}

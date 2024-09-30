@@ -1,0 +1,52 @@
+<div class="custom-dialog">
+  <div class="dialog-header">
+    <div class="d-flex flex-column">
+      <label class="form-title">{{ config?.data?.title }}</label>
+    </div>
+
+    <button
+      tabindex="-1"
+      type="button"
+      class="p-button p-button-default circle close transparent p-0"
+      (click)="close()"
+      [disabled]="buttonLoading"
+    >
+      <div class="svgContainer" [innerHTML]="closeIcon"></div>
+    </button>
+  </div>
+
+  <div class="dialog-body">
+    <div class="qrcodeImage" *ngIf="qrData">
+      <qrcode
+        [qrdata]="qrData"
+        [allowEmptyString]="true"
+        [ariaLabel]="'QR Code image with the following content...'"
+        [cssClass]="'center'"
+        [colorDark]="'#000000ff'"
+        [colorLight]="'#ffffffff'"
+        [elementType]="'canvas'"
+        [errorCorrectionLevel]="'L'"
+        [scale]="1"
+        [title]="'A custom title attribute'"
+        [width]="320"
+      ></qrcode>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <div
+      class="form-group d-flex flex-row justify-content-end align-items-center"
+    >
+      <button
+        pButton
+        class="p-button p-button-default large text"
+        (click)="close()"
+        [disabled]="buttonLoading"
+        type="button"
+        tabindex="-1"
+      >
+        {{ 'COMMON.CLOSE' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

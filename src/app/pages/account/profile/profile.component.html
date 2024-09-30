@@ -1,0 +1,44 @@
+<div class="page-container detail">
+  <div class="page-detail-header">
+    <app-header-panel
+      showAvatar="true"
+      [avatarSrc]="sharedService?.userData?.imageUrl"
+      [title]="
+        sharedService?.userData?.firstName +
+        ' ' +
+        sharedService?.userData?.lastName
+      "
+      *ngIf="!isScrolled"
+    >
+    </app-header-panel>
+  </div>
+  <div class="page-detail-body justify-content-center" #pageBody>
+    <app-loader [loaderMessage]="loaderMessage" *ngIf="loading"></app-loader>
+    <div class="page-body-left">
+      <p-menu [model]="menuItems"></p-menu>
+    </div>
+    <div class="page-body-right">
+      <div #sectionContainer id="profileEditSection" class="section">
+        <app-profile-edit [isChild]="true"></app-profile-edit>
+      </div>
+      <div #sectionContainer id="changeLanguageSection" class="section">
+        <app-info-card
+          [headerOption]="{
+            text: getTranslate('PAGES.PROFILE.LANGUAGE-SETTING')
+          }"
+          [buttonOption]="{
+            color: 'blue',
+            size: 'large',
+            text: getTranslate('PAGES.PROFILE.CHANGE-LANGUAGE')
+          }"
+          showDropdown="true"
+          [dropdownOptions]="languageOptions"
+          [selectedDropdownOption]="selectedLanguage"
+          (dropdownSelectionChanged)="onLanguageSelectionChanged($event)"
+          (buttonClicked)="changeLanguage()"
+        >
+        </app-info-card>
+      </div>
+    </div>
+  </div>
+</div>

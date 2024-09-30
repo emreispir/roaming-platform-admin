@@ -1,0 +1,23 @@
+<div class="page-container detail dashboard">
+  <div class="page-detail-header">
+    <app-header-panel
+      title="{{ 'PAGES.DASHBOARD.TITLE' | translate }}"
+      [buttonOption]="{
+        color: 'blue',
+        size: 'large',
+        text: getTranslate('PAGES.CHARGE-POINTS.START-CHARGE'),
+        icon: sessionIcon,
+      }"
+      (buttonClicked)="startChargeConfirmation()"
+      [showButton]="
+        isUserValidForPolicies([policy.ChargePointRemoteStart]) ? true : false
+      "
+      *ngIf="!isScrolled"
+    >
+    </app-header-panel>
+  </div>
+
+  <div class="page-body flex-column"  #pageBody>
+
+  </div>
+</div>

@@ -1,0 +1,790 @@
+<div class="page-container detail">
+  <div class="page-detail-header">
+    <app-header-panel [title]="transactionResponse?.readableId">
+    </app-header-panel>
+  </div>
+  <div class="page-detail-body">
+    <app-loader [loaderMessage]="loaderMessage" *ngIf="loading"></app-loader>
+
+    <ng-container *ngIf="transactionResponse">
+      <div class="overview-container">
+        <div class="page-body-left">
+          <div class="card white flex-column align-items-start p-0 mb-24">
+            <div class="info-container flex-column w-100">
+              <div class="info-detail align-items-start">
+                <div class="info-detail-item">
+                  <label class="title bold">{{
+                    'COMMON.DETAIL' | translate
+                  }}</label>
+
+                  <label class="description"
+                    ><span class="bold"
+                      >{{
+                        'PAGES.TRANSACTIONS.TRANSACTION-ID' | translate
+                      }}:</span
+                    >
+                    {{ transactionResponse?.readableId }}
+                  </label>
+
+                  <label class="description">
+                    <span class="bold"
+                      >{{
+                        'PAGES.TRANSACTIONS.TRANSACTION-STATUS' | translate
+                      }}:</span
+                    >
+                    {{
+                      getEnumTypeTranslation(
+                        transactionStatus,
+                        transactionResponse?.status
+                      )
+                    }}</label
+                  >
+
+                  <label class="description"
+                    ><span class="bold"
+                      >{{ 'PAGES.TRANSACTIONS.TOTAL-KWH' | translate }}:</span
+                    >
+                    {{ transactionResponse?.totalKWH | round: 3 }}
+                    {{ 'PAGES.SESSIONS.KWH' | translate }}</label
+                  >
+
+                  <label class="description">
+                    <span class="bold"
+                      >{{
+                        'PAGES.TRANSACTIONS.TOTAL-MINUTES' | translate
+                      }}:</span
+                    >
+                    {{ transactionResponse?.totalMinutes }}
+                  </label>
+
+                  <label class="description">
+                    <span class="bold"
+                      >{{ 'PAGES.TRANSACTIONS.TOTAL-FEE' | translate }}:</span
+                    >
+                    {{ transactionResponse?.currency?.symbol }}
+                    {{
+                      this.transactionResponse?.totalFee | number: '1.2-2'
+                    }}</label
+                  >
+
+                  <label class="description">
+                    <span class="bold"
+                      >{{ 'PAGES.TRANSACTIONS.TAX-RATE' | translate }}:</span
+                    >
+                    %{{ transactionResponse?.taxRate }}</label
+                  >
+
+                  <label class="description">
+                    <span class="bold"
+                      >{{ 'PAGES.TRANSACTIONS.TOTAL-TAX' | translate }}:</span
+                    >
+                    {{ transactionResponse?.currency?.symbol }}
+                    {{
+                      this.transactionResponse?.totalTax | number: '1.2-2'
+                    }}</label
+                  >
+
+                  <label class="description">
+                    <span class="bold"
+                      >{{
+                        'PAGES.TRANSACTIONS.DISCOUNT-AMOUNT' | translate
+                      }}:</span
+                    >
+                    {{ transactionResponse?.currency?.symbol }}
+                    {{ transactionResponse?.discountAmount | number: '1.2-2' }}
+                  </label>
+
+                  <label class="description">
+                    <span class="bold"
+                      >{{
+                        'PAGES.TRANSACTIONS.TOTAL-AMOUNT' | translate
+                      }}:</span
+                    >
+                    {{ transactionResponse?.currency?.symbol }}
+                    {{ transactionResponse?.totalAmount | number: '1.2-2' }}
+                  </label>
+
+                  <label class="description" [ngClass]="{
+                    'error-text-color':
+                      transactionResponse?.status ===
+                      transactionStatus.Failed
+                  }">
+                    <span
+                      class="bold"
+                      
+                      >{{ 'PAGES.TRANSACTIONS.METADATA' | translate }}:</span
+                    >
+                    {{ transactionResponse?.metadata }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page-body-right">
+          <div class="left-second-zone">
+            <div class="card white flex-column align-items-start p-0">
+              <div class="info-container flex-column w-100">
+                <div class="info-detail align-items-start">
+                  <div class="info-detail-item">
+                    <label class="title bold">{{
+                      'PAGES.TARIFFS.TARIFF' | translate
+                    }}</label>
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.TARIFFS.TARIFF-NAME' | translate }}:</span
+                      >
+                      {{ transactionSessionResponse?.tariff?.name }}</label
+                    >
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.TARIFFS.TYPE' | translate }}:</span
+                      >
+                      {{
+                        getEnumTypeTranslation(
+                          tariffType,
+                          transactionSessionResponse?.tariff?.tariffType
+                        ) || '-'
+                      }}</label
+                    >
+                    <label class="description"
+                      ><span class="bold"
+                        >{{ 'PAGES.TARIFFS.BASE-PRICE' | translate }}:</span
+                      >
+
+                      {{ transactionSessionResponse?.tariff?.currency?.symbol
+                      }}{{
+                        transactionSessionResponse?.tariff?.basePrice
+                          | number: '1.2-2' || '-'
+                      }}
+                      {{
+                        getEnumTypeTranslation(
+                          basePriceType,
+                          transactionSessionResponse?.tariff?.basePriceType
+                        )
+                      }}
+                    </label>
+
+                    <label class="title mt-4">{{
+                      'PAGES.TARIFFS.STARTING-FEE' | translate
+                    }}</label>
+                    <ng-container
+                      *ngIf="
+                        transactionSessionResponse?.tariff?.startingFee;
+                        else elseStartingFeeCond
+                      "
+                    >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{ 'COMMON.DESCRIPTION' | translate }}:</span
+                        >
+                        {{
+                          transactionSessionResponse?.tariff?.startingFee
+                            ?.description
+                        }}</label
+                      >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{ 'PAGES.TARIFFS.PRICE' | translate }}:</span
+                        >
+                        {{ transactionSessionResponse?.tariff?.currency?.symbol
+                        }}{{
+                          transactionSessionResponse?.tariff?.startingFee
+                            ?.price | number: '1.2-2'
+                        }}</label
+                      >
+                    </ng-container>
+                    <ng-template #elseStartingFeeCond>
+                      <label class="description">-</label>
+                    </ng-template>
+
+                    <label class="title mt-4">{{
+                      'PAGES.TARIFFS.CHARGING-FEE' | translate
+                    }}</label>
+                    <ng-container
+                      *ngIf="
+                        transactionSessionResponse?.tariff?.chargingFee;
+                        else elseChargingFeeCond
+                      "
+                    >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{ 'COMMON.DESCRIPTION' | translate }}:</span
+                        >
+                        {{
+                          transactionSessionResponse?.tariff?.chargingFee
+                            ?.description
+                        }}</label
+                      >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{ 'PAGES.TARIFFS.PRICE' | translate }}:</span
+                        >
+                        {{ transactionSessionResponse?.tariff?.currency?.symbol
+                        }}{{
+                          transactionSessionResponse?.tariff?.chargingFee
+                            ?.price | number: '1.2-2'
+                        }}</label
+                      >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{
+                            'PAGES.TARIFFS.APPLY-AFTER-MINUTE' | translate
+                          }}:</span
+                        >
+                        {{
+                          transactionSessionResponse?.tariff?.chargingFee
+                            ?.applyAfterMinutes
+                        }}
+                        {{ 'COMMON.MIN' | translate }}</label
+                      >
+                    </ng-container>
+                    <ng-template #elseChargingFeeCond>
+                      <label class="description">-</label>
+                    </ng-template>
+
+                    <label class="title mt-4">{{
+                      'PAGES.TARIFFS.MINUTE-FEE' | translate
+                    }}</label>
+                    <ng-container
+                      *ngIf="
+                        transactionSessionResponse?.tariff?.minuteFee;
+                        else elseMinuteFeeCond
+                      "
+                    >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{ 'COMMON.DESCRIPTION' | translate }}:</span
+                        >
+                        {{
+                          transactionSessionResponse?.tariff?.minuteFee
+                            ?.description
+                        }}</label
+                      >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{ 'PAGES.TARIFFS.PRICE' | translate }}:</span
+                        >
+                        {{ transactionSessionResponse?.tariff?.currency?.symbol
+                        }}{{
+                          transactionSessionResponse?.tariff?.minuteFee?.price
+                            | number: '1.2-2'
+                        }}</label
+                      >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{
+                            'PAGES.TARIFFS.APPLY-AFTER-MINUTE' | translate
+                          }}:</span
+                        >
+                        {{
+                          transactionSessionResponse?.tariff?.minuteFee
+                            ?.applyAfterMinutes
+                        }}{{ 'COMMON.MIN' | translate }}</label
+                      >
+                      <label
+                        class="description"
+                        [ngSwitch]="
+                          transactionSessionResponse?.tariff?.minuteFee
+                            ?.stopFeeIfCompleted
+                        "
+                        ><span class="bold"
+                          >{{
+                            'PAGES.TARIFFS.STOP-FEE-IF-COMPLETED' | translate
+                          }}:</span
+                        >
+                        <ng-container *ngSwitchCase="true">
+                          {{ 'COMMON.YES' | translate }}
+                        </ng-container>
+                        <ng-container *ngSwitchCase="false">
+                          {{ 'COMMON.NO' | translate }}
+                        </ng-container>
+                      </label>
+                    </ng-container>
+                    <ng-template #elseMinuteFeeCond>
+                      <label class="description">-</label>
+                    </ng-template>
+
+                    <label class="title mt-4">{{
+                      'PAGES.TARIFFS.IDLE-FEE' | translate
+                    }}</label>
+                    <ng-container
+                      *ngIf="
+                        transactionSessionResponse?.tariff?.idleFee;
+                        else elseIdleFeeCond
+                      "
+                    >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{ 'COMMON.DESCRIPTION' | translate }}:</span
+                        >
+                        {{
+                          transactionSessionResponse?.tariff?.idleFee
+                            ?.description
+                        }}</label
+                      >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{ 'PAGES.TARIFFS.PRICE' | translate }}:</span
+                        >
+                        {{ transactionSessionResponse?.tariff?.currency?.symbol
+                        }}{{
+                          transactionSessionResponse?.tariff?.idleFee?.price
+                            | number: '1.2-2'
+                        }}</label
+                      >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{
+                            'PAGES.TARIFFS.APPLY-AFTER-MINUTE' | translate
+                          }}:</span
+                        >
+                        {{
+                          transactionSessionResponse?.tariff?.idleFee
+                            ?.applyAfterMinutes
+                        }}{{ 'COMMON.MIN' | translate }}</label
+                      >
+                      <label class="description"
+                        ><span class="bold"
+                          >{{
+                            'PAGES.TARIFFS.MAXIMUM-AMOUNT' | translate
+                          }}:</span
+                        >
+                        {{ transactionSessionResponse?.tariff?.currency?.symbol
+                        }}{{
+                          transactionSessionResponse?.tariff?.idleFee
+                            ?.maximumAmount | number: '1.2-2'
+                        }}</label
+                      >
+                    </ng-container>
+                    <ng-template #elseIdleFeeCond>
+                      <label class="description">-</label>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card white flex-column align-items-start p-0 ">
+              <div class="info-container flex-column w-100">
+                <div class="info-detail align-items-start">
+                  <div class="info-detail-item">
+                    <label class="title bold">{{
+                      'PAGES.SESSIONS.SESSION' | translate
+                    }}</label>
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.SESSIONS.SESSION-ID' | translate }}:</span
+                      >
+                      <a
+                        [routerLink]="[
+                          '/sessions',
+                          transactionSessionResponse?.id
+                        ]"
+                      >
+                        {{ transactionSessionResponse?.readableId }}</a
+                      >
+                    </label>
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.CHARGE-SESSIONS.STATUS' | translate }}:</span
+                      >
+                      {{
+                        getEnumTypeTranslation(
+                          sessionStatus,
+                          transactionSessionResponse?.status
+                        )
+                      }}</label
+                    >
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.USERS.USER' | translate }}:</span
+                      >
+                      <a
+                        [routerLink]="['/users', transactionResponse?.user?.id]"
+                      >
+                        {{ transactionResponse?.user?.firstName }}
+                        {{ transactionResponse?.user?.lastName }}
+                      </a>
+                    </label>
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{
+                          'PAGES.CHARGE-POINTS.CHARGE-POINT' | translate
+                        }}:</span
+                      >
+                      <a
+                        [routerLink]="[
+                          '/charge-points',
+                          transactionResponse?.chargePointId
+                        ]"
+                      >
+                        {{ transactionResponse?.chargePointName }}
+                      </a>
+                    </label>
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{
+                          'PAGES.CONNECTORS.CONNECTOR-NUMBER' | translate
+                        }}:</span
+                      >
+                      {{ transactionSessionResponse?.connectorNumber }}</label
+                    >
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.SESSIONS.PLATE' | translate }}:</span
+                      >
+                      {{ transactionSessionResponse?.plateNo }}</label
+                    >
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.TRANSACTIONS.OCPP-ID' | translate }}:</span
+                      >
+                      {{ transactionSessionResponse?.ocppTransactionId }}</label
+                    >
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.SESSIONS.START-REASON' | translate }}:</span
+                      >
+                      {{ this.transactionSessionResponse?.startReason }}</label
+                    >
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.SESSIONS.STOP-REASON' | translate }}:</span
+                      >
+                      {{ this.transactionSessionResponse?.stopReason }}</label
+                    >
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.SESSIONS.STARTED' | translate }}:</span
+                      >
+                      {{
+                        transactionSessionResponse?.chargeSessionData
+                          ?.startMeterTime
+                          | date
+                            : 'dd MMM yyyy HH:mm:ss'
+                            : undefined
+                            : sharedService.language
+                      }}</label
+                    >
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.SESSIONS.STOPPED' | translate }}:</span
+                      >
+                      {{
+                        transactionSessionResponse?.chargeSessionData
+                          ?.stopMeterTime
+                          | date
+                            : 'dd MMM yyyy HH:mm:ss'
+                            : undefined
+                            : sharedService.language
+                      }}</label
+                    >
+
+                    <label class="description"
+                      ><span class="bold"
+                        >{{ 'PAGES.SESSIONS.DURATION' | translate }}:</span
+                      >
+                      {{
+                        dateDifference(
+                          transactionSessionResponse?.chargeSessionData
+                            ?.startMeterTime,
+                          transactionSessionResponse?.chargeSessionData
+                            ?.stopMeterTime
+                        )
+                      }}</label
+                    >
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.SESSIONS.USAGE' | translate }}:</span
+                      >
+                      {{
+                        transactionSessionResponse?.chargeSessionData
+                          ?.calculatedKWH | round: 3
+                      }}&nbsp;{{ 'PAGES.SESSIONS.KWH' | translate }}</label
+                    >
+
+                    <div class="d-flex">
+                      <label class="description">
+                        <span class="bold"
+                          >{{
+                            'PAGES.SESSIONS.STATE-OF-CHARGE' | translate
+                          }}:</span
+                        >
+                        <ng-container
+                          *ngIf="
+                            transactionSessionResponse?.chargeSessionData
+                              ?.stateOfChargeStart;
+                            else noChargeStartStateCond
+                          "
+                        >
+                          %{{
+                            transactionSessionResponse?.chargeSessionData
+                              ?.stateOfChargeStart
+                          }}
+                        </ng-container>
+                        <ng-template #noChargeStartStateCond>
+                          {{ 'COMMON.UNKNOWN' | translate }}
+                        </ng-template>
+                      </label>
+
+                      <i class="fa fa-arrow-right mx-2"> </i>
+
+                      <label class="description">
+                        <ng-container
+                          *ngIf="
+                            transactionSessionResponse?.chargeSessionData
+                              ?.stateOfChargeStop;
+                            else noChargeStopStateCond
+                          "
+                        >
+                          %{{
+                            transactionSessionResponse?.chargeSessionData
+                              ?.stateOfChargeStop
+                          }}
+                        </ng-container>
+                        <ng-template #noChargeStopStateCond>
+                          {{ 'COMMON.UNKNOWN' | translate }}
+                        </ng-template>
+                      </label>
+                    </div>
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{
+                          'PAGES.SESSIONS.START-IDLE-TIME' | translate
+                        }}:</span
+                      >
+                      <ng-container
+                        *ngIf="
+                          transactionSessionResponse?.chargeSessionData
+                            ?.startIdleTime;
+                          else noStartIdleTimeCond
+                        "
+                      >
+                        {{
+                          transactionSessionResponse?.chargeSessionData
+                            ?.startIdleTime | date: 'HH:mm:ss'
+                        }}
+                      </ng-container>
+                      <ng-template #noStartIdleTimeCond>
+                        {{ 'COMMON.UNKNOWN' | translate }}
+                      </ng-template>
+                    </label>
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.SESSIONS.METER-START' | translate }}:</span
+                      >
+                      {{
+                        transactionSessionResponse?.chargeSessionData.meterStart
+                      }}</label
+                    >
+
+                    <label class="description">
+                      <span class="bold"
+                        >{{ 'PAGES.SESSIONS.METER-STOP' | translate }}:</span
+                      >
+                      {{
+                        transactionSessionResponse?.chargeSessionData.meterStop
+                      }}</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card white flex-column align-items-start p-0 my-24">
+            <ng-container
+              *ngIf="
+                transactionResponse?.invoice &&
+                  (transactionResponse?.status === transactionStatus.Success ||
+                    transactionResponse?.status === transactionStatus.Refunded);
+                else noInvoiceCond
+              "
+            >
+              <div class="info-container flex-column w-100">
+                <label class="title">{{
+                  'PAGES.INVOICES.DETAIL' | translate
+                }}</label>
+
+                <div class="info-detail align-items-start">
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.CREATE-DATE' | translate
+                    }}</label>
+                    <label class="description">{{
+                      transactionResponse?.invoice?.issueDate
+                        | date
+                          : 'dd MMM y HH:mm:ss'
+                          : undefined
+                          : sharedService.language
+                    }}</label>
+                  </div>
+
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.LAST-UPDATE-DATE' | translate
+                    }}</label>
+                    <label class="description">{{
+                      (transactionResponse?.invoice?.lastUpdate
+                        | date
+                          : 'dd MMM y HH:mm:ss'
+                          : undefined
+                          : sharedService.language) || '-'
+                    }}</label>
+                  </div>
+
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.STATUS' | translate
+                    }}</label>
+                    <label class="description">
+                      {{
+                        getEnumTypeTranslation(
+                          invoiceStatus,
+                          transactionResponse?.invoice?.status
+                        )
+                      }}</label
+                    >
+                  </div>
+                </div>
+
+                <div class="info-detail align-items-start">
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.STATUS-MESSAGE' | translate
+                    }}</label>
+                    <label class="description">{{
+                      transactionResponse?.invoice?.statusMessage || '-'
+                    }}</label>
+                  </div>
+
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.SUPPLIER-NAME' | translate
+                    }}</label>
+                    <label class="description">{{
+                      transactionResponse?.invoice?.supplierName
+                    }}</label>
+                  </div>
+
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.SUPPLIER-TAX-NO' | translate
+                    }}</label>
+                    <label class="description">{{
+                      transactionResponse?.invoice?.supplierTaxNo
+                    }}</label>
+                  </div>
+                </div>
+
+                <div class="info-detail align-items-start">
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.CUSTOMER-NAME' | translate
+                    }}</label>
+                    <label class="description">{{
+                      transactionResponse?.invoice?.customerName
+                    }}</label>
+                  </div>
+
+                  <div class="info-detail-item"></div>
+
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.CUSTOMER-TAX-NO' | translate
+                    }}</label>
+                    <label class="description">{{
+                      transactionResponse?.invoice?.customerTaxNo
+                    }}</label>
+                  </div>
+                </div>
+
+                <div
+                  class="d-flex"
+                  *ngIf="transactionResponse?.isInvoiceDownloadable"
+                >
+                  <button
+                    type="button"
+                    class="p-button p-button-default blue medium me-2"
+                    (click)="downloadInvoice()"
+                  >
+                    <span>{{
+                      'PAGES.INVOICES.DOWNLOAD-INVOICE' | translate
+                    }}</span>
+                  </button>
+                </div>
+
+                <hr />
+
+                <label class="title">{{
+                  'PAGES.FINANCE.MEMBER-BILLING-INFO' | translate
+                }}</label>
+
+                <div class="info-detail align-items-start">
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.CUSTOMER-NAME' | translate
+                    }}</label>
+                    <label class="description">{{
+                      transactionResponse?.taxName || '-'
+                    }}</label>
+                  </div>
+
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.TAX-ADMINISTRATION' | translate
+                    }}</label>
+                    <label class="description">{{
+                      transactionResponse?.taxAdministration || '-'
+                    }}</label>
+                  </div>
+
+                  <div class="info-detail-item">
+                    <label class="title">{{
+                      'PAGES.INVOICES.TAX-NO' | translate
+                    }}</label>
+                    <label class="description">{{
+                      transactionResponse?.taxNo || '-'
+                    }}</label>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #noInvoiceCond>
+              <app-info-card
+                [title]="getTranslate('PAGES.INVOICES.DONT-HAVE')"
+                [imgSrc]="noInvoiceSvg"
+                class="w-100 headered-card"
+                [buttonOption]="{
+                  color: 'orange',
+                  size: 'large',
+                  text:
+                    transactionResponse?.status === transactionStatus.Success &&
+                    transactionResponse?.invoice == null
+                      ? getTranslate('PAGES.INVOICES.RETRY-CREATE-INVOICE')
+                      : null
+                }"
+                (buttonClicked)="retryCreateInvoice()"
+              >
+              </app-info-card>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

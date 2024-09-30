@@ -1,0 +1,26 @@
+<app-report-widget-card
+  [headerTitle]="'PAGES.SESSIONS.ACTIVE-SESSIONS' | translate"
+  [toolTipContent]="'PAGES.SESSIONS.ACTIVE-SESSIONS-TOOLTIP' | translate"
+  [navTitle]="'COMMON.VIEW' | translate"
+  [navRoute]="routePath"
+  [queryParam]="{ status: statusTypes.Charging }"
+  [isHTMLContent]="false"
+  imgSrc="../../../assets/svg/active-charge.svg"
+  [infoText]="
+    activeSessionsReportResponse
+      ? (activeSessionsReportResponse | number: '1.0-0')
+      : 0
+  "
+  [infoTextColor]="'#5AA454'"
+  [bgColor]="'#F7FFF0'"
+  [tags]="activeSessionsReportResponse ?? [
+{
+  icon: null,
+  text: getTranslate('PAGES.SESSIONS.CHARGING'),
+  color: 'blue'
+}
+]"
+  [loading]="activeSessionLoading"
+  *ngIf="isUserValidForPolicies([policy.ChargeSessionRead])"
+>
+</app-report-widget-card>

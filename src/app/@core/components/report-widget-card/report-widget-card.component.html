@@ -1,0 +1,93 @@
+<div
+  class="card-container widget-box"
+  [ngStyle]="{ 'background-color': bgColor ?? bgColor }"
+>
+  <div class="card-header" *ngIf="headerTitle || navTitle">
+    <div class="card-header-left">
+      <label class="title" *ngIf="headerTitle"
+        >{{ headerTitle }}
+        <div
+          class="svgContainer"
+          [innerHTML]="infoIconSmall"
+          [pTooltip]="toolTipContent"
+          *ngIf="toolTipContent"
+        ></div>
+      </label>
+    </div>
+    <div class="card-header-right">
+      <div class="d-flex" *ngIf="firstMenuItems?.length > 0">
+        <button
+          type="button"
+          class="p-button p-button-default gray circle transparent"
+          (click)="firstMenu.toggle($event); generateFirstMenuItems(item)"
+        >
+          {{ selectedFirstMenuItem?.label }}<i class="pi-chevron-down"></i>
+        </button>
+        <p-menu
+          #firstMenu
+          [popup]="true"
+          [model]="firstMenuItems"
+          appendTo="body"
+          class="small"
+        ></p-menu>
+      </div>
+      <div class="d-flex" *ngIf="showRange">
+        <button
+          type="button"
+          class="p-button p-button-default gray circle transparent"
+          (click)="menu.toggle($event); generateMenuItems(item)"
+        >
+          {{ selectedDateRange?.label }}<i class="pi-chevron-down"></i>
+        </button>
+        <p-menu
+          #menu
+          [popup]="true"
+          [model]="menuItems"
+          appendTo="body"
+          class="small"
+        ></p-menu>
+      </div>
+      <a
+        class="nav-title"
+        [routerLink]="[navRoute]"
+        [queryParams]="queryParam"
+        *ngIf="navTitle"
+      >
+        {{ navTitle }}<i class="s-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <app-loader [loaderMessage]="null" *ngIf="loading"></app-loader>
+
+    <ng-container *ngIf="!loading">
+      <div class="card-body-left">
+        <label
+          class="infoText"
+          [ngStyle]="{ color: infoTextColor ?? infoinfoTextColor }"
+          *ngIf="infoText || infoText === 0"
+          >{{ infoText }}</label
+        >
+        <div class="tags" *ngIf="tags?.length > 0">
+          <span
+            class="tag {{ tag?.color ? tag?.color : 'gray' }}"
+            *ngFor="let tag of tags"
+          >
+            <i class="{{ tag.icon }}" *ngIf="tag?.icon"></i>
+            <span>{{ tag.text }}</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="card-body-right">
+        <ng-container *ngIf="isHTMLContent; else imgContent">
+          <div class="svgContainer" [innerHTML]="imgSrc" *ngIf="imgSrc"></div>
+        </ng-container>
+        <ng-template #imgContent>
+          <img [src]="imgSrc" *ngIf="imgSrc" />
+        </ng-template>
+      </div>
+    </ng-container>
+  </div>
+</div>

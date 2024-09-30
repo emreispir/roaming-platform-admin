@@ -1,0 +1,145 @@
+<div class="card white flex-column align-items-start p-0 mb-24">
+  <div class="info-container flex-column w-100 gap-4">
+    <label class="title" *ngIf="title">{{ title }}</label>
+
+    <button
+      type="button"
+      (click)="fileInput.click()"
+      class="p-button p-button-default outlined dark-gray xsmall me-2 w-fit"
+      *ngIf="!disabledUpload"
+    >
+      <div class="svgContainer" [innerHTML]="plusIconBlack"></div>
+      {{ 'COMMON.CHOOSE-PHOTO' | translate }}
+    </button>
+    <input
+      #fileInput
+      type="file"
+      (change)="onFileSelected($event)"
+      accept=".png, .jpg, .jpeg, .pdf"
+      [multiple]="true"
+      style="display: none;"
+      class="p-button p-button-default outlined blue medium me-2"
+    />
+    <ng-container *ngIf="selectedFiles?.length > 0">
+      <div class="d-flex flex-column">
+        <label class="subTitle mb-2 bold">{{
+          'COMMON.WAITING-UPLOAD-FILES' | translate
+        }}</label>
+        <div class="file-items">
+          <div
+            *ngFor="let file of selectedFiles; let i = index"
+            class="file-item"
+          >
+            <div class="file-img-container">
+              <img
+                *ngIf="file.fileType !== 'application/pdf'"
+                [src]="file.file"
+                [alt]="file.file"
+                (click)="selectedPreviewFile = file.file; showDialog = true"
+              />
+              <a
+                *ngIf="file.fileType === 'application/pdf'"
+                [href]="file.file"
+                download="{{ file.fileName }}"
+              >
+                <img
+                  src="../../../../assets/png/pdf-image.png"
+                  alt="{{ file.fileName }}"
+                />
+              </a>
+            </div>
+
+            <button
+              type="button"
+              tabindex="-1"
+              class="p-button p-button-default circle close transparent p-0 justify-content-end"
+              (click)="removeFile(file)"
+              *ngIf="!disabledUpload"
+            >
+              <div class="svgContainer" [innerHTML]="closeIcon"></div>
+            </button>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end w-100">
+          <button
+            type="button"
+            class="p-button p-button-default blue medium me-2"
+            (click)="uploadPhotos()"
+            [disabled]="selectedFiles?.length === 0"
+            *ngIf="!disabledUpload"
+          >
+            <span>{{ 'COMMON.UPLOAD-PHOTO' | translate }}</span>
+          </button>
+        </div>
+
+        <hr />
+      </div>
+    </ng-container>
+
+    <ng-container
+      class="d-flex flex-column"
+      *ngIf="uploadedFiles?.length > 0; else emptyFilesCond"
+    >
+      <div class="d-flex flex-column">
+        <label class="subTitle mb-2 bold">{{
+          'COMMON.UPLOADED-FILES' | translate
+        }}</label>
+        <div class="file-items">
+          <div
+            *ngFor="let file of uploadedFiles; let i = index"
+            class="file-item"
+          >
+            <div class="file-img-container">
+              <ng-container
+                *ngIf="!file?.endsWith('.pdf'); else otherFormatCond"
+              >
+                <img
+                  [src]="file"
+                  [alt]="file"
+                  (click)="selectedPreviewFile = file; showDialog = true"
+                />
+              </ng-container>
+              <ng-template #otherFormatCond>
+                <a [href]="file" download="{{ file.fileName }}">
+                  <img
+                    src="../../../../assets/png/pdf-image.png"
+                    [alt]="file"
+                  />
+                </a>
+              </ng-template>
+            </div>
+
+            <button
+              type="button"
+              tabindex="-1"
+              class="p-button p-button-default circle close transparent p-0 justify-content-end"
+              (click)="removeUploadedFile(file)"
+              *ngIf="!disabledUpload"
+            >
+              <div class="svgContainer" [innerHTML]="closeIcon"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyFilesCond>
+      <div class="info-description-container" *ngIf="tooltipContent">
+        <div class="svgContainer" [innerHTML]="infoIconSmall"></div>
+        <label class="info-description"> {{ tooltipContent }}</label>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="showDialog"
+  [modal]="true"
+  [style]="{ width: '50vw', padding: '20px' }"
+  [draggable]="false"
+  [resizable]="false"
+  *ngIf="showDialog"
+>
+  <img [src]="selectedPreviewFile" width="100%" style="max-height: 800px;" />
+</p-dialog>

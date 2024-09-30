@@ -1,0 +1,49 @@
+<div class="header-panel">
+  <div class="header-panel-left">
+    <ng-container *ngIf="showAvatar && (title || avatarSrc)">
+      <lib-surge-avatar
+        [label]="getInitials(title, true)"
+        *ngIf="!avatarSrc"
+        [avatarSize]="'xlarge'"
+      >
+      </lib-surge-avatar>
+      <lib-surge-avatar
+        [imageUrl]="avatarSrc"
+        *ngIf="avatarSrc"
+        [avatarSize]="'xlarge'"
+      >
+      </lib-surge-avatar>
+    </ng-container>
+    <div class="d-flex flex-column">
+      <div class="header-panel-title" *ngIf="title">
+        {{ title }}
+        <span class="header-panel-subtitle" *ngIf="subtitle">{{
+          subtitle
+        }}</span>
+      </div>
+      <div class="info-description-container" *ngIf="toolTipContent">
+        <label class="info-description"> {{ toolTipContent }}</label>
+      </div>
+      <div class="tags mt-8" *ngIf="showTags">
+        <span class="tag gray" *ngFor="let tag of tags">
+          <i class="{{ tag.icon }}" *ngIf="tag?.icon"></i>
+          <span>{{ tag.text }}</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-panel-right">
+    <button
+      type="button"
+      class="p-button p-button-default {{ buttonOption?.color }} {{
+        buttonOption?.size
+      }}"
+      (click)="onButtonClick()"
+      *ngIf="showButton"
+    >
+      <div class="svgContainer" [innerHTML]="buttonOption?.icon"></div>
+      <span>{{ buttonOption?.text }}</span>
+    </button>
+  </div>
+</div>

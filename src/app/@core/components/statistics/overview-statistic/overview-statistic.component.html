@@ -1,0 +1,75 @@
+<div
+  class="card white overview-card"
+  [ngClass]="{ 'row-overview': isRowOverview }"
+>
+  <div class="card-header">
+    <label class="card-header-title">{{ 'COMMON.OVERVIEW' | translate }}</label>
+    <div class="filter-container justify-content-end">
+      <button
+        type="button"
+        class="p-button p-button-default gray circle transparent xsmall"
+        (click)="dateMenu.toggle($event); generateDateMenuItems()"
+      >
+        {{ selectedDateRange?.label }}<i class="pi-chevron-down"></i>
+      </button>
+      <p-menu
+        #dateMenu
+        [popup]="true"
+        [model]="dateMenuItems"
+        appendTo="body"
+        class="small"
+      ></p-menu>
+    </div>
+  </div>
+  <div class="overview-items-container">
+    <app-loader
+      [loaderMessage]="loaderMessage"
+      *ngIf="overviewLoading"
+      class="base-loader"
+    ></app-loader>
+
+    <div class="overview-items">
+      <ng-container *ngIf="!overviewLoading">
+        <div class="overview-item">
+          <div class="overview-item-top">
+            <label class="title"
+              >{{ totalEnergyReportResponse | number: '1.2-2' }}
+              {{ 'PAGES.SESSIONS.KWH' | translate }}</label
+            >
+            <label class="sub-title">{{
+              'PAGES.SESSIONS.TOTAL-ENERGY' | translate
+            }}</label>
+          </div>
+          <div class="svgContainer" [innerHTML]="totalEnergyIcon"></div>
+        </div>
+
+        <div class="overview-item">
+          <div class="overview-item-top">
+            <label class="title"
+              >{{ totalRevenuesReportResponse?.currency?.symbol
+              }}{{
+                totalRevenuesReportResponse?.totalRevenue | number: '1.2-2'
+              }}</label
+            >
+            <label class="sub-title">{{
+              'PAGES.SESSIONS.TOTAL-REVENUE' | translate
+            }}</label>
+          </div>
+          <div class="svgContainer" [innerHTML]="totalRevenueIcon"></div>
+        </div>
+
+        <div class="overview-item">
+          <div class="overview-item-top">
+            <label class="title text-danger">{{
+              faultAndLosesReportResponse
+            }}</label>
+            <label class="sub-title ">{{
+              'PAGES.CHARGE-POINTS.UNAVAILABLE' | translate
+            }}</label>
+          </div>
+          <div class="svgContainer" [innerHTML]="unavailableIcon"></div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

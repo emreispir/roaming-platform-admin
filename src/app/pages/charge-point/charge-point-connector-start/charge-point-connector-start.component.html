@@ -1,0 +1,86 @@
+<div
+  [ngClass]="{
+    'page-container child-modal': config.data?.isChild,
+    'child-page': isChild
+  }"
+>
+  <div class="page-body">
+    <div class="page-body-left-dialog" *ngIf="config.data?.isChild">
+      <div class="svgContainer" [innerHTML]="cpBannerIcon"></div>
+    </div>
+
+    <div class="page-body-right">
+      <button
+        type="button"
+        tabindex="-1"
+        class="p-button p-button-default circle close transparent p-0"
+        (click)="cancel()"
+        [disabled]="buttonLoading"
+        *ngIf="config.data?.isChild"
+      >
+        <div class="svgContainer" [innerHTML]="closeIcon"></div>
+      </button>
+
+      <div class="info-header">
+        <div class="info-header-left">
+          <label>{{ 'PAGES.USERS.TITLE' | translate }}</label>
+        </div>
+      </div>
+
+      <lib-surge-form
+        [surgeFormConfig]="formConfig"
+        [surgeForm]="myForm"
+        [submitted]="submitted"
+        [loading]="buttonLoading"
+        (formSubmitTriggered)="onFormSubmit()"
+        (cancelButtonTriggered)="close()"
+        (completeMethodTriggered)="completeMethodTriggered($event)"
+        (selectTriggered)="selectTriggered($event)"
+      ></lib-surge-form>
+    </div>
+  </div>
+</div>
+
+<ng-template #tariffDropdownItemTemplate let-item>
+  <div class="panel">
+    <div class="d-flex flex-column align-items-start">
+      <label class="title me-1">
+        {{ item?.name }}
+        <span class="fw-normal ms-1">
+          ({{ item?.currency?.symbol }}{{ item?.basePrice }})</span
+        >
+      </label>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #connectorDropdownItemTemplate let-item>
+  <div class="panel">
+    <div class="d-flex flex-column align-items-start">
+      <label class="title me-1">
+        {{ 'PAGES.CONNECTORS.TITLE' | translate }} #{{ item?.connectorNumber }}
+        <span class="fw-normal ms-1"> ({{ item?.connectorType }})</span>
+      </label>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #chargePointAutocompleteItemTemplate let-item>
+  <lib-card-with-avatar
+    [showAvatar]="true"
+    [avatarSize]="avatarSizes.Large"
+    [svgElement]="chargePointIcon"
+    [title]="item?.name"
+    [subtitleFirst]="item?.readableId"
+  ></lib-card-with-avatar>
+</ng-template>
+
+<ng-template #userAutocompleteItemTemplate let-item>
+  <lib-card-with-avatar
+    [showAvatar]="true"
+    [avatarSize]="avatarSizes.Large"
+    [title]="item?.displayName"
+    [subtitleFirst]="item?.email"
+    [subtitleSecond]="item?.mobilePhone"
+  ></lib-card-with-avatar>
+</ng-template>

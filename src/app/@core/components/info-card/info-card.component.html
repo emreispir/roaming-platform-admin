@@ -1,0 +1,57 @@
+<div class="d-flex flex-column">
+  <div
+    class="action-bar sticky-action-bar {{ isCard ? 'action-bar-widget' : '' }}"
+    *ngIf="headerOption?.text"
+  >
+    <div class="action-bar-left">
+      <label class="title" *ngIf="headerOption?.text"
+        >{{ headerOption?.text }}
+      </label>
+    </div>
+    <div class="action-bar-right"></div>
+  </div>
+
+  <div class="card white {{ headerOption?.text ? 'card-with-header' : '' }}">
+    <div class="left-zone">
+      <div class="svgContainer" [innerHTML]="imgSrc" *ngIf="imgSrc"></div>
+      <label class="switch" *ngIf="showSwitch">
+        <input
+          type="checkbox"
+          (change)="toggleSwitch()"
+          [(ngModel)]="switchStatus"
+        />
+        <span class="slider"></span>
+      </label>
+      <div class="info-container">
+        <label class="title">{{ title }}</label>
+        <label class="subtitle" *ngIf="subtitle">{{ subtitle }}</label>
+      </div>
+      <p-dropdown
+        *ngIf="showDropdown"
+        [options]="dropdownOptions"
+        [(ngModel)]="selectedDropdownOption"
+        optionLabel="label"
+        optionValue="value"
+        (ngModelChange)="onDropdownSelectionChanged($event)"
+        [emptyMessage]="'COMMON.NO-RESULT' | translate"
+      >
+      </p-dropdown>
+    </div>
+
+    <button
+      type="button"
+      class="p-button p-button-default {{ buttonOption?.color }} {{
+        buttonOption?.size
+      }}"
+      *ngIf="buttonOption?.text || buttonOption?.icon"
+      (click)="onButtonClick()"
+    >
+      <div
+        class="svgContainer"
+        [innerHTML]="buttonOption?.icon"
+        *ngIf="buttonOption?.icon"
+      ></div>
+      <span>{{ buttonOption?.text }}</span>
+    </button>
+  </div>
+</div>

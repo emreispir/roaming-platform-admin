@@ -1,0 +1,77 @@
+<div class="card white ">
+  <div class="card-header mb-20">
+    <label class="card-header-title">{{
+      'PAGES.REPORTS.TOTAL-REVENUE-STATISTICS' | translate
+    }}</label>
+    <div class="filter-container justify-content-end">
+      <button
+        type="button"
+        class="p-button p-button-default gray circle transparent xsmall"
+        (click)="dateMenu.toggle($event); generateDateMenuItems()"
+      >
+        {{ selectedDateRange?.label }}<i class="pi-chevron-down"></i>
+      </button>
+      <p-menu
+        #dateMenu
+        [popup]="true"
+        [model]="dateMenuItems"
+        appendTo="body"
+        class="small"
+      ></p-menu>
+    </div>
+  </div>
+
+  <div class="page-detail-body">
+    <app-loader
+      [loaderMessage]="loaderMessage"
+      *ngIf="chartLoading"
+      class="base-loader"
+    ></app-loader>
+    <div class="graph-container">
+      <ng-container *ngIf="!chartLoading">
+        <ng-container
+          *ngIf="
+            totalRevenueChartsResponse?.length === 0;
+            else totalRevenueListing
+          "
+        >
+          <app-info-panel [title]="'PAGES.REPORTS.STATISTICS-YET' | translate" [imageUrl]="noStatisticIcon">
+          </app-info-panel>
+        </ng-container>
+        <ng-template #totalRevenueListing>
+          <ngx-charts-bar-vertical
+            [view]="null"
+            [scheme]="totalRevenueChartColors"
+            [results]="totalRevenueChartsResponse?.data"
+            [gradient]="false"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+            [xAxis]="true"
+            [yAxis]="true"
+            [xAxisLabel]="selectedDateRange?.label"
+            [yAxisLabel]="
+              'COMMON.AMOUNT'
+                | translate
+                  : {
+                      currency: totalRevenueChartsResponse?.currency?.symbol
+                    }
+            "
+            [showGridLines]="true"
+            [showGridLines]="false"
+            (select)="onSelect($event, 'totalRevenue')"
+          >
+            <ng-template #tooltipTemplate let-model="model">
+              <div>
+                <strong>{{ model.name }}</strong>
+              </div>
+              <div>
+                {{ totalRevenueChartsResponse?.currency?.symbol
+                }}{{ model.value }}
+              </div>
+            </ng-template>
+          </ngx-charts-bar-vertical>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+</div>

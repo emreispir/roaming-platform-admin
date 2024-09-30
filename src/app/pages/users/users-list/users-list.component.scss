@@ -1,0 +1,19 @@
+.table-radius {
+  border-radius: 0px !important;
+
+  &:last-child {
+    border-bottom-left-radius: 6px !important;
+    border-bottom-right-radius: 6px !important;
+    width: 1%;
+  }
+
+  overflow: hidden !important;
+}
+
+.disable-link {
+  pointer-events: none;
+  cursor: default;
+}
+.actionCell {
+  width: 5%;
+}

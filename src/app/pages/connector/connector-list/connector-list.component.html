@@ -1,0 +1,145 @@
+<div [ngClass]="isChild ? 'child-page' : 'page-container'">
+  <div class="page-header">
+    <app-header-panel
+      title="{{ 'PAGES.CONNECTORS.CONNECTORS' | translate }}"
+      *ngIf="!isChild && !isScrolled"
+    >
+    </app-header-panel>
+
+    <div
+      class="action-bar sticky-action-bar"
+      *ngIf="filteredConnectors?.length > 0 || isSearchActive === true"
+    >
+      <div class="action-bar-left">
+        <label class="title" *ngIf="showActionbarTitle">{{
+          'PAGES.CONNECTORS.CONNECTORS' | translate
+        }}</label>
+
+        <span class="p-input-icon-left" *ngIf="showActionbarSearch">
+          <div class="svgContainer" [innerHTML]="searchIcon"></div>
+          <input
+            pInputText
+            #gb
+            [formControl]="searchItem"
+            placeholder="{{ 'PAGES.CONNECTORS.SEARCH-NAME' | translate }}"
+            id="input-search"
+            class="form-control radius-border search"
+          />
+        </span>
+      </div>
+      <div class="action-bar-right">
+        <button
+          type="button"
+          class="p-button p-button-default small me-2"
+          [ngClass]="isBox ? 'gray' : 'bordered-white'"
+          (click)="getConnectors()"
+        >
+          <div class="svgContainer" [innerHTML]="refreshIcon"></div>
+          <span>{{ 'COMMON.REFRESH' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body" #pageBody>
+    <app-loader [loaderMessage]="loaderMessage" *ngIf="loading"></app-loader>
+    <ng-container *ngIf="filteredConnectors">
+      <ng-container
+        *ngIf="filteredConnectors?.length === 0; else connectorListing"
+      >
+        <ng-container *ngIf="isSearchActive === true; else emptyResponse">
+          <div class="d-flex flex-column w-100">
+            <div class="table-info">
+              <div class="svgContainer" [innerHTML]="infoIcon"></div>
+              <label [innerHTML]="'PAGES.CONNECTORS.NO-ITEM' | translate">
+              </label>
+              <ng-container *ngIf="isSearchActive === true">
+                <button
+                  type="button"
+                  class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                  (click)="resetFilter()"
+                >
+                  {{ 'COMMON.RESET' | translate }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #emptyResponse>
+          <ng-container *ngIf="!loading">
+            <app-info-panel
+              [imageUrl]="infoPanelImageUrl"
+              [title]="infoPanelTitle"
+              [description]="infoPanelDescription"
+              [showButton]="true"
+              [buttonOption]="{
+                color: 'blue',
+                size: 'xlarge',
+                text: isUserValidForPolicies([policy.ChargePointCreate])
+                  ? getTranslate('PAGES.CHARGE-POINTS.ADD-CHARGE-POINT')
+                  : null,
+                icon: plusIcon
+              }"
+              (buttonClicked)="addChargePoint()"
+              *ngIf="!isBox; else infoCard"
+            >
+            </app-info-panel>
+
+            <ng-template #infoCard>
+              <app-info-card
+                [title]="getTranslate('PAGES.CONNECTORS.DONT-HAVE')"
+                [subtitle]="
+                  getTranslate('PAGES.CHARGE-POINTS.ADD-CHARGE-POINT')
+                "
+                [imgSrc]="miniCubeSvg"
+                [headerOption]="{
+                  text: getTranslate('PAGES.CONNECTORS.CONNECTOR')
+                }"
+                [buttonOption]="{
+                  color: 'blue',
+                  size: 'large',
+                  text:  isUserValidForPolicies([policy.ChargePointCreate])
+                  ? getTranslate('PAGES.CHARGE-POINTS.ADD-CHARGE-POINT')
+                  : null,
+                }"
+                (buttonClicked)="addChargePoint()"
+                class="w-100 headered-card"
+              >
+              </app-info-card>
+            </ng-template>
+          </ng-container>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #connectorListing>
+        <div class="d-flex flex-column w-100">
+          <div class="table-info">
+            <div class="svgContainer" [innerHTML]="infoIcon"></div>
+            <label
+              [innerHTML]="
+                'PAGES.CONNECTORS.TOTAL-ITEM'
+                  | translate: { param: totalItemCount }
+              "
+            >
+            </label>
+            <ng-container *ngIf="isSearchActive === true">
+              <button
+                type="button"
+                class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                (click)="resetFilter()"
+              >
+                {{ 'COMMON.RESET' | translate }}
+              </button>
+            </ng-container>
+          </div>
+          <lib-surge-table
+            [data]="filteredConnectors"
+            [columns]="tableColumns"
+            [config]="tableConfig"
+          >
+          </lib-surge-table>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

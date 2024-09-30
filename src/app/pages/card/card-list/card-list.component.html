@@ -1,0 +1,191 @@
+<div [ngClass]="isChild ? 'child-page' : 'page-container'">
+  <div class="page-header">
+    <app-header-panel
+      title="{{ 'PAGES.RFIDS.TITLE' | translate }}"
+      [toolTipContent]="'PAGES.RFIDS.RFID-TOOLTIP' | translate"
+      *ngIf="!isChild && !isScrolled"
+    >
+    </app-header-panel>
+
+    <div
+      class="action-bar sticky-action-bar"
+      *ngIf="rfidCardsResponse?.length > 0 || isSearchActive === true"
+    >
+      <div class="action-bar-left">
+        <label class="title" *ngIf="showActionbarTitle">{{
+          'PAGES.RFIDS.TITLE' | translate
+        }}</label>
+
+        <span class="p-input-icon-left" *ngIf="showActionbarSearch">
+          <div class="svgContainer" [innerHTML]="searchIcon"></div>
+          <input
+            pInputText
+            #gb
+            [formControl]="searchItem"
+            placeholder="{{
+              'PAGES.RFIDS.SEARCH-CARD-HOLDER-NAME' | translate
+            }}"
+            id="input-search"
+            class="form-control radius-border search"
+          />
+        </span>
+
+        <button
+          type="button"
+          class="p-button p-button-default border-radius transparent small filter-btn"
+          [class.selected-filter]="selectedFilter !== null"
+          (click)="filterMenu.toggle($event); generateFilterMenuItems()"
+          *ngIf="showActionbarFilter"
+        >
+          <div class="svgContainer" [innerHTML]="filterIcon"></div>
+          <ng-container *ngIf="selectedFilter; else defaultFilter">
+            {{ 'COMMON.FILTER-PARAM' | translate: { param: selectedFilter } }}
+          </ng-container>
+          <ng-template #defaultFilter>
+            {{ 'COMMON.FILTER' | translate }}
+          </ng-template>
+        </button>
+        <p-menu
+          #filterMenu
+          [popup]="true"
+          [model]="menuItems"
+          appendTo="body"
+          styleClass="filter-menu"
+        ></p-menu>
+      </div>
+      <div class="action-bar-right">
+        <button
+          type="button"
+          class="p-button p-button-default small me-2"
+          [ngClass]="isBox ? 'gray' : 'bordered-white'"
+          (click)="getCards(this.page, this.pageSize)"
+        >
+          <div class="svgContainer" [innerHTML]="refreshIcon"></div>
+          <span>{{ 'COMMON.REFRESH' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body" #pageBody>
+    <app-loader [loaderMessage]="loaderMessage" *ngIf="loading"></app-loader>
+    <ng-container *ngIf="rfidCardsResponse">
+      <ng-container *ngIf="rfidCardsResponse?.length === 0; else cardListing">
+        <ng-container *ngIf="isSearchActive === true; else emptyResponse">
+          <div class="d-flex flex-column w-100">
+            <div class="table-info">
+              <div class="svgContainer" [innerHTML]="infoIcon"></div>
+              <label [innerHTML]="'PAGES.RFIDS.NO-ITEM' | translate"> </label>
+              <ng-container *ngIf="isSearchActive === true">
+                <button
+                  type="button"
+                  class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                  (click)="resetFilter()"
+                >
+                  {{ 'COMMON.RESET' | translate }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #emptyResponse>
+          <ng-container *ngIf="!loading">
+            <app-info-panel
+              [imageUrl]="noRfidIconGiga"
+              [title]="infoPanelTitle"
+              [description]="infoPanelDescription"
+              [showButton]="false"
+              *ngIf="!isBox; else infoCard"
+            >
+            </app-info-panel>
+
+            <ng-template #infoCard>
+              <app-info-card
+                [title]="getTranslate('PAGES.RFIDS.DONT-HAVE')"
+                [imgSrc]="noRfidIcon"
+                [headerOption]="{
+                  text: getTranslate('PAGES.RFIDS.RFID')
+                }"
+              >
+              </app-info-card>
+            </ng-template>
+          </ng-container>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #cardListing>
+        <div class="d-flex flex-column w-100">
+          <div class="table-info">
+            <div class="svgContainer" [innerHTML]="infoIcon"></div>
+            <label
+              [innerHTML]="
+                'PAGES.RFIDS.TOTAL-ITEM' | translate: { param: totalItemCount }
+              "
+            >
+            </label>
+            <ng-container *ngIf="isSearchActive === true">
+              <button
+                type="button"
+                class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                (click)="resetFilter()"
+              >
+                {{ 'COMMON.RESET' | translate }}
+              </button>
+            </ng-container>
+          </div>
+
+          <lib-surge-table
+            [data]="rfidCardsResponse"
+            [columns]="tableColumns"
+            [config]="tableConfig"
+          >
+          </lib-surge-table>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="showDialog"
+  [modal]="true"
+  [style]="{ minWidth: '320px', padding: '20px', minHeight: '130px' }"
+  [draggable]="false"
+  [resizable]="false"
+  *ngIf="showDialog"
+>
+  <ng-template pTemplate="header">
+    <label class="title bold">
+      {{ selectedRfidCard?.name }}
+      {{ 'PAGES.RFIDS.TAG' | translate }}</label
+    >
+  </ng-template>
+
+  <ng-template pTemplate="body">
+    <div class="d-flex align-items-center">
+      <button
+        type="button"
+        class="p-button p-button-default circle small transparent"
+        [ngClass]="{
+          'feedback-state': isFeedbackVisible(selectedRfidCard?.tag)
+        }"
+        (click)="onClickButton(selectedRfidCard?.tag)"
+        ngxClipboard
+        [cbContent]="selectedRfidCard?.tag"
+      >
+        <i class="pi pi-copy"></i>
+      </button>
+
+      <div class="identifier-container">
+        <label class="title" style="min-width: 170px;">{{
+          selectedRfidCard?.tag
+        }}</label>
+        <small
+          class="copy-text"
+          *ngIf="isFeedbackVisible(selectedRfidCard?.tag)"
+          >{{ 'PAGES.RFIDS.COPY-TAG' | translate }}</small
+        >
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

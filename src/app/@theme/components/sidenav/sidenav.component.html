@@ -1,0 +1,166 @@
+<p-sidebar
+  [visible]="true"
+  [dismissible]="false"
+  [showCloseIcon]="false"
+  [modal]="false"
+  [ngClass]="{
+    'minimize ': !sidebarVisible
+  }"
+>
+  <div class="d-flex">
+    <div class="logo-container">
+      <div
+        class="svgContainer"
+        [innerHTML]="sidebarVisible ? currentIcon : logoWithoutText"
+        alt="Surge"
+        routerLink="/dashboard"
+        class="logo"
+        id="logo"
+      ></div>
+    </div>
+  </div>
+
+  <ul class="list-group">
+
+    <li
+      class="list-group-item"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <a routerLink="/dashboard" class="full-size-link">
+        <div class="svgContainer" [innerHTML]="dashboardIcon"></div>
+        <span>{{ 'SIDE-NAV.DASHBOARD' | translate }}</span>
+      </a>
+    </li>
+
+    <li
+    class="list-group-item"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: false }"
+    *ngIf="
+      isUserValidForPolicies([
+        policy.AdminRead,
+        policy.DirectoryUpdate,
+        policy.WorkspaceUpdate
+      ])
+    "
+  >
+    <a routerLink="/users" class="full-size-link">
+      <div class="svgContainer" [innerHTML]="userIcon"></div>
+      <span>{{ 'SIDE-NAV.USERS' | translate }}</span>
+    </a>
+  </li>
+    <li
+      class="list-group-item"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: false }"
+      *ngIf="isUserValidForPolicies([policy.ChargePointRead])"
+    >
+      <a routerLink="/charge-points" class="full-size-link">
+        <div class="svgContainer" [innerHTML]="chargePointIcon"></div>
+        <span>{{ 'SIDE-NAV.CHARGE-POINTS' | translate }}</span></a
+      >
+    </li>
+    <li
+      class="list-group-item"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: false }"
+      *ngIf="isUserValidForPolicies([policy.ConnectorManage])"
+    >
+      <a routerLink="/connectors" class="full-size-link">
+        <div class="svgContainer" [innerHTML]="connectorIcon"></div>
+        <span>{{ 'SIDE-NAV.CONNECTORS' | translate }}</span></a
+      >
+    </li>
+    <li
+      class="list-group-item"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      *ngIf="isUserValidForPolicies([policy.CardRead])"
+    >
+      <a routerLink="/cards" class="full-size-link">
+        <div class="svgContainer" [innerHTML]="rfidIcon"></div>
+        <span>{{ 'PAGES.RFIDS.TITLE' | translate }}</span></a
+      >
+    </li>
+
+    <li
+      class="list-group-item"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      *ngIf="isUserValidForPolicies([policy.CampaignRead])"
+    >
+      <a routerLink="/campaigns" class="full-size-link">
+        <div class="svgContainer" [innerHTML]="campaignIcon"></div>
+        <span>{{ 'SIDE-NAV.CAMPAIGNS' | translate }}</span>
+      </a>
+    </li>
+
+
+
+    <hr />
+
+    <label
+      class="list-group-title"
+      *ngIf="
+        isUserValidForPolicies([
+          policy.ChargeSessionRead,
+          policy.TransactionRead
+        ])
+      "
+      >{{ 'SIDE-NAV.ACTIVITIES' | translate }}</label
+    >
+
+    <li
+      class="list-group-item"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: false }"
+      *ngIf="isUserValidForPolicies([policy.ChargeSessionRead])"
+    >
+      <a routerLink="/sessions" class="full-size-link">
+        <div class="svgContainer" [innerHTML]="sessionIcon"></div>
+        <span>{{ 'SIDE-NAV.SESSIONS' | translate }}</span>
+      </a>
+    </li>
+    <li
+      class="list-group-item"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: false }"
+      *ngIf="isUserValidForPolicies([policy.TransactionRead])"
+    >
+      <a routerLink="/transactions" class="full-size-link">
+        <div class="svgContainer" [innerHTML]="transactionIcon"></div>
+        <span>{{ 'PAGES.TRANSACTIONS.TITLE' | translate }}</span>
+      </a>
+    </li>
+
+    <!-- <hr
+      *ngIf="
+        isUserValidForPolicies([
+          policy.AdminRead,
+          policy.DirectoryUpdate,
+          policy.WorkspaceUpdate
+        ])
+      "
+    /> -->
+
+    <!-- <label
+      class="list-group-title"
+      *ngIf="
+        isUserValidForPolicies([
+          policy.AdminRead,
+          policy.DirectoryUpdate,
+          policy.WorkspaceUpdate
+        ])
+      "
+      >{{ 'SIDE-NAV.CONFIGURATION' | translate }}</label
+    > -->
+
+
+
+  </ul>
+
+  <ng-template pTemplate="footer">
+    <label>v.{{ version }}</label>
+  </ng-template>
+</p-sidebar>

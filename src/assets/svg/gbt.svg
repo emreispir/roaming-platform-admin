@@ -1,0 +1,13 @@
+<svg width="40" height="40" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4.20632 3C1.96861 5.71984 0.625 9.20301 0.625 13C0.625 21.6985 7.67652 28.75 16.375 28.75C25.0735 28.75 32.125 21.6985 32.125 13C32.125 9.20301 30.7814 5.71984 28.5437 3H26.527C29.0612 5.57249 30.625 9.10362 30.625 13C30.625 20.8701 24.2451 27.25 16.375 27.25C8.50494 27.25 2.125 20.8701 2.125 13C2.125 9.10362 3.68881 5.57249 6.22303 3H4.20632Z" fill="#000000"/>
+<path d="M4.375 3.75H28.375" stroke="#000000" stroke-width="1.5"/>
+<ellipse cx="10.125" cy="15.25" rx="3.25002" ry="3.25" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+<ellipse cx="22.625" cy="15.25" rx="3.25002" ry="3.25" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+<circle cx="16.375" cy="23.25" r="1.75" stroke="#000000" stroke-linecap="round"/>
+<circle cx="16.625" cy="11.25" r="1.25" stroke="#000000" stroke-width="0.8"/>
+<circle cx="11.125" cy="22.25" r="1.25" stroke="#000000" stroke-width="0.8"/>
+<circle cx="21.625" cy="22.25" r="1.25" stroke="#000000" stroke-width="0.8"/>
+<circle cx="16.625" cy="7.25" r="1.25" stroke="#000000" stroke-width="0.8"/>
+<circle cx="21.625" cy="7.25" r="1.25" stroke="#000000" stroke-width="0.8"/>
+<circle cx="11.625" cy="7.25" r="1.25" stroke="#000000" stroke-width="0.8"/>
+</svg>
