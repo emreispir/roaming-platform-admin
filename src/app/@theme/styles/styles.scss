@@ -1230,9 +1230,6 @@ i {
     content: url(../../../assets/svg/plus.svg);
   }
 
-  &.s-setting:before {
-    content: url(../../../assets/svg/setting.svg);
-  }
 
   &.s-dark-plus:before {
     content: url(../../../assets/svg/dark-plus.svg);
@@ -1264,12 +1261,6 @@ i {
 
   &.s-search:before {
     content: url(../../../assets/svg/search.svg);
-  }
-
-  &.s-light-info:after {
-    content: url(../../../assets/svg/light-info.svg);
-    position: relative;
-    top: 3px;
   }
 }
 

@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import { DirectionRouteLegDto } from './directionRouteLegDto';
-import { ChargePointInterestSimpleDto } from './chargePointInterestSimpleDto';
+import { RoamingPointSimpleDto } from './roamingPointSimpleDto';
 import { Location } from './location';
 
 
@@ -20,6 +20,6 @@ export interface DirectionRouteDto {
     totalDurationInSeconds?: number;
     totalDistanceInMeters?: number;
     legs?: Array<DirectionRouteLegDto> | null;
-    chargePointsOnRoad?: Array<ChargePointInterestSimpleDto> | null;
+    chargePointsOnRoad?: Array<RoamingPointSimpleDto> | null;
 }
 

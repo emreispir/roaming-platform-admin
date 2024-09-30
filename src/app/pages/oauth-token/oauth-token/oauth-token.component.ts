@@ -44,11 +44,8 @@ export class OauthTokenComponent extends BaseComponent
     let activeAccount = this.msalService.instance.getActiveAccount();
 
     if (activeAccount) {
-      if (this.isUserValidForPolicies([Policy.AdminRead])) {
-        this.router.navigate(['/manage']);
-      } else {
-        this.router.navigate(['/dashboard']);
-      }
+      this.router.navigate(['/dashboard']);
+      this.sharedService.toggleSidebarVisible();
     }
   }
 
@@ -158,18 +155,20 @@ export class OauthTokenComponent extends BaseComponent
         )
         .subscribe({
           next: v => {
-            this.sharedService.setUserPoliciesData(v);
+            // TODO:
+            let userPoliciesData = v;
+            let index = userPoliciesData.indexOf(Policy.UserRead);
+            if (index > -1) {
+              userPoliciesData.splice(index, 1);
+            }
+            this.sharedService.setUserPoliciesData(userPoliciesData);
           },
           error: e => {
             this.notificationService.showErrorToast(this.handleError(e));
             this.loading = false;
           },
           complete: () => {
-            if (this.isUserValidForPolicies([Policy.AdminRead])) {
-              this.router.navigate(['/manage']);
-            } else {
-              this.router.navigate(['/dashboard']);
-            }
+            this.router.navigate(['/dashboard']);
             this.loading = false;
           }
         })

@@ -45,5 +45,17 @@
       <div class="svgContainer" [innerHTML]="buttonOption?.icon"></div>
       <span>{{ buttonOption?.text }}</span>
     </button>
+
+    <button
+    type="button"
+    class="p-button p-button-default {{ secondaryButtonOption?.color }} {{
+      secondaryButtonOption?.size
+    }}"
+    (click)="onSecondaryButtonClick()"
+    *ngIf="showSecondaryButton"
+  >
+    <div class="svgContainer" [innerHTML]="secondaryButtonOption?.icon"></div>
+    <span>{{ secondaryButtonOption?.text }}</span>
+  </button>
   </div>
 </div>

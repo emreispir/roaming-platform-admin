@@ -3,14 +3,14 @@ import {
   ActivatedRouteSnapshot,
   Router,
   RouterStateSnapshot,
-  UrlTree,
+  UrlTree
 } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
 import { Observable } from 'rxjs';
 import { Keys } from '../constants/keys';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class MsalGuard {
   constructor(private msalService: MsalService, private router: Router) {}
@@ -51,6 +51,6 @@ export class MsalGuard {
     }
 
     this.router.navigate(['/dashboard']);
-    return true;
+    return false;
   }
 }

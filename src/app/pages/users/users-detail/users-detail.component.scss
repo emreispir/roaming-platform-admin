@@ -81,7 +81,7 @@ app-total-session-statistic {
   .first-section {
     // display: flex;
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 24px;
 
     @media screen and (max-width: 768px) {
@@ -384,7 +384,7 @@ app-total-session-statistic {
     // display: flex;
     // flex-direction: row;
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 24px;
 
     @media screen and (max-width: 768px) {

@@ -41,7 +41,6 @@ export class BaseComponent {
   buttonLoading: boolean;
   loaderMessage = this.getTranslate('COMMON.LOADING');
   searchItem = new UntypedFormControl();
-  dataViewTypes = DataViewType;
   stepTypes = StepType;
   page: any = 1;
   pageSize: any = 50;
@@ -65,8 +64,6 @@ export class BaseComponent {
   tabs: TabResponse[];
   menuItems: MenuItem[];
   filterMenuItems: MenuItem[];
-  adminMenuItems: MenuItem[];
-  roleMenuItems: MenuItem[];
   stepNumber = 1;
   selectedFilter: string = null;
   selectedFilters: any[] = [];

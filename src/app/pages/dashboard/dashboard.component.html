@@ -1,23 +1,43 @@
-<div class="page-container detail dashboard">
+<div class="page-container detail">
   <div class="page-detail-header">
     <app-header-panel
       title="{{ 'PAGES.DASHBOARD.TITLE' | translate }}"
-      [buttonOption]="{
-        color: 'blue',
-        size: 'large',
-        text: getTranslate('PAGES.CHARGE-POINTS.START-CHARGE'),
-        icon: sessionIcon,
-      }"
-      (buttonClicked)="startChargeConfirmation()"
-      [showButton]="
-        isUserValidForPolicies([policy.ChargePointRemoteStart]) ? true : false
-      "
       *ngIf="!isScrolled"
     >
     </app-header-panel>
   </div>
 
-  <div class="page-body flex-column"  #pageBody>
+  <div class="page-detail-body justify-content-center" #pageBody>
+    <div class="child-page">
+      <div class="page-body" >
+        <div class="section">
+          <ng-container *ngIf="!userResponse; else notAuthenticatedCond">
+              <div class="page-body-right">
+                <div class="info-header">
+                  <div class="info-header-left">
+                    <label>{{ 'PAGES.OTP.USER-VERIFICATION' | translate }} </label>
+                  </div>
+                </div>
+                <app-otp-verification></app-otp-verification>
+              </div>
+          </ng-container>
 
+          <ng-template #notAuthenticatedCond>
+            <app-info-card
+              [headerOption]="{
+                text: getTranslate('PAGES.OTP.USER-VERIFICATION')
+              }"
+              [subtitle]="'PAGES.OTP.CONTINUE-SESSION-TOOLTIP' | translate: {name: userResponse?.displayName}"
+              [buttonOption]="{
+                color: 'orange',
+                size: 'large',
+                text: getTranslate('PAGES.OTP.GO-TO-USER')
+              }"
+              (buttonClicked)="navigateUserDetail()" >
+            </app-info-card>
+          </ng-template>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -11,8 +11,8 @@
  */
 import { UserDetailsDto } from './userDetailsDto';
 import { ChargeSessionStatus } from './chargeSessionStatus';
-import { MemberBillingInfoDto } from './memberBillingInfoDto';
 import { TariffIdleFee } from './tariffIdleFee';
+import { UserBillingInfoDto } from './userBillingInfoDto';
 import { TariffStartingFee } from './tariffStartingFee';
 import { TransactionStatus } from './transactionStatus';
 import { TariffChargingFee } from './tariffChargingFee';
@@ -68,7 +68,7 @@ export interface TransactionDto {
     chargeSessionStatus?: ChargeSessionStatus;
     creditCardNumber?: string | null;
     isInvoiceDownloadable?: boolean;
-    memberBillingInfo?: MemberBillingInfoDto;
+    memberBillingInfo?: UserBillingInfoDto;
     invoice?: InvoiceDto;
     metadata?: string | null;
 }

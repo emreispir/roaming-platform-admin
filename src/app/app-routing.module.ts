@@ -6,9 +6,9 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./pages/pages.module').then((m) => m.PagesModule),
+      import('./pages/pages-routing.module').then(m => m.PagesRoutingModule)
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '' }
 ];
 
 const config: ExtraOptions = {
@@ -16,11 +16,11 @@ const config: ExtraOptions = {
   initialNavigation:
     !BrowserUtils.isInIframe() && !BrowserUtils.isInPopup()
       ? 'enabledNonBlocking'
-      : 'disabled',
+      : 'disabled'
 };
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, config)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

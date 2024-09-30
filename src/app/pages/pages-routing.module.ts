@@ -52,71 +52,12 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'charge-points',
-    canActivate: [MsalGuard],
-    component: LayoutComponent,
-    loadChildren: () =>
-      import('./charge-point/charge-point-routing.module').then(
-        x => x.ChargePointRoutingModule
-      )
-  },
-  {
-    path: 'sessions',
-    component: LayoutComponent,
-    loadChildren: () =>
-      import('./session/session-routing.module').then(
-        x => x.SessionRoutingModule
-      )
-  },
-  {
-    path: 'transactions',
-    component: LayoutComponent,
-    loadChildren: () =>
-      import('./transaction/transaction-routing.module').then(
-        x => x.TransactionRoutingModule
-      )
-  },
-  {
-    path: 'connectors',
-    data: {
-      policies: [Policy.ConnectorManage]
-    },
-    canActivate: [MsalGuard],
-    component: LayoutComponent,
-    children: [
-      {
-        path: '',
-        loadComponent: () =>
-          import('./connector/connector-list/connector-list.component').then(
-            m => m.ConnectorListComponent
-          ),
-        data: {
-          policies: [Policy.ConnectorManage]
-        }
-      }
-    ]
-  },
-  {
-    path: 'cards',
-    component: LayoutComponent,
-    canActivate: [MsalGuard],
-    children: [
-      {
-        path: '',
-        loadComponent: () =>
-          import('./card/card-list/card-list.component').then(
-            mod => mod.CardListComponent
-          ),
-        data: {
-          policies: [Policy.CardRead]
-        }
-      }
-    ]
-  },
-  {
     path: 'users',
     canActivate: [MsalGuard],
     component: LayoutComponent,
+    data: {
+      policies: [Policy.UserRead]
+    },
     loadChildren: () =>
       import('./users/users-routing.module').then(x => x.UsersRoutingModule)
   },

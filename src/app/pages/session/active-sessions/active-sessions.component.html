@@ -1,0 +1,56 @@
+<div class="card white active-sessions">
+  <div class="card-header">
+    <label class="card-header-title">{{
+      'PAGES.SESSIONS.ACTIVE-SESSIONS' | translate
+    }}</label>
+  </div>
+  <div class="page-detail-body">
+    <app-loader
+      [loaderMessage]="loaderMessage"
+      *ngIf="lastActiveSessionsLoading"
+      class="base-loader"
+    ></app-loader>
+
+    <ng-container *ngIf="!lastActiveSessionsLoading">
+      <ng-container
+        *ngIf="lastActiveSessionsResponse?.length > 0; else noActiveSession"
+      >
+        <ng-container *ngFor="let activeSession of lastActiveSessionsResponse">
+          <ng-container *ngIf="isChargePoint; else isUserActiveSessions">
+            <app-overwiew-card
+              [infoImgSrc]="activeSession?.user?.imageUrl"
+              [infoText]="
+                activeSession?.user?.firstName +
+                ' ' +
+                activeSession?.user?.lastName
+              "
+              infoTextRoute="/sessions/{{ activeSession?.id }}"
+              [subInfoText]="activeSession?.user?.email"
+              [tags]="generateTagsResponse(activeSession)"
+            >
+            </app-overwiew-card>
+          </ng-container>
+          <ng-template #isUserActiveSessions>
+            <app-overwiew-card
+              [infoImgSrc]="chargePointIcon"
+              [infoText]="activeSession?.chargePoint?.name"
+              infoTextRoute="/sessions/{{ activeSession?.id }}"
+              [subInfoText]="activeSession?.readableId"
+              [tags]="generateTagsResponse(activeSession)"
+            >
+            </app-overwiew-card>
+          </ng-template>
+        </ng-container>
+      </ng-container>
+
+      <ng-template #noActiveSession>
+        <app-info-card
+          [title]="getTranslate('PAGES.SESSIONS.NO-ACTIVE-SESSIONS')"
+          [imgSrc]="stationSvg"
+          class="w-100"
+        >
+        </app-info-card>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

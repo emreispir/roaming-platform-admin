@@ -32,7 +32,6 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Icons, IconsArray } from '../../../../assets/svg/svg-variables';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
-import { ExportFileComponent } from '../../../@core/export-file/export-file.component';
 import * as moment from 'moment';
 import { ConfirmationDialogComponent } from '../../../@core/components/confirmation-dialog/confirmation-dialog.component';
 import { ScrollableComponent } from '../../../@core/components/scrollable/scrollable.component';
@@ -51,7 +50,6 @@ import {
   NgIf,
   NgTemplateOutlet
 } from '@angular/common';
-import { TransactionManualCompleteComponent } from '../transaction-manual-complete/transaction-manual-complete.component';
 import { RoundPipe } from '../../../@theme/pipes';
 import {
   CardWithAvatarComponent,
@@ -212,8 +210,6 @@ export class TransactionListComponent extends ScrollableComponent
     });
 
     this.components = {
-      exportFile: ExportFileComponent,
-      completeManually: TransactionManualCompleteComponent,
       confirmationDialog: ConfirmationDialogComponent
     };
   }
@@ -368,7 +364,7 @@ export class TransactionListComponent extends ScrollableComponent
           title: 'readableId'
         },
         templateConfig: {
-          routePath: '/transactions/{{id}}',
+          // routePath: '/transactions/{{id}}',
           showAvatar: true,
           svgElement: this.receiptIcon
         }
@@ -405,25 +401,25 @@ export class TransactionListComponent extends ScrollableComponent
         visible: !this.chargePointId ? true : false,
         templateComponent: CardWithAvatarComponent,
         templateConfig: {
-          routePath: '/charge-points/{{chargePointId}}'
+          // routePath: '/charge-points/{{chargePointId}}'
         },
         templateInputs: {
           title: '{{ chargePointName }}'
         }
       },
-      {
-        field: 'user',
-        header: this.getTranslate('PAGES.TRANSACTIONS.USER'),
-        visible: !this.userId ? true : false,
-        templateComponent: CardWithAvatarComponent,
-        templateConfig: {
-          routePath: '/users/{{user.id}}'
-        },
-        templateInputs: {
-          title: '{{user.firstName}} {{user.lastName}}',
-          subtitleFirst: (item: TransactionDto) => item.plateNo || '-'
-        }
-      },
+      // {
+      //   field: 'user',
+      //   header: this.getTranslate('PAGES.TRANSACTIONS.USER'),
+      //   visible: !this.userId ? true : false,
+      //   templateComponent: CardWithAvatarComponent,
+      //   templateConfig: {
+      //     // routePath: '/users/{{user.id}}'
+      //   },
+      //   templateInputs: {
+      //     title: '{{user.firstName}} {{user.lastName}}',
+      //     subtitleFirst: (item: TransactionDto) => item.plateNo || '-'
+      //   }
+      // },
       {
         field: 'chargeSessionData',
         header: this.getTranslate('PAGES.SESSIONS.DURATION'),
@@ -517,18 +513,18 @@ export class TransactionListComponent extends ScrollableComponent
           binaryValue: true,
           disabledValue: true
         }
-      },
-      {
-        field: null,
-        header: null,
-        visible: true,
-        templateComponent: DynamicMenuComponent,
-        templateConfig: {
-          dynamicMenuItems: item => {
-            return this.generateMenuItems(item);
-          }
-        }
       }
+      // {
+      //   field: null,
+      //   header: null,
+      //   visible: true,
+      //   templateComponent: DynamicMenuComponent,
+      //   templateConfig: {
+      //     dynamicMenuItems: item => {
+      //       return this.generateMenuItems(item);
+      //     }
+      //   }
+      // }
     ];
 
     this.loading = false;
@@ -542,38 +538,38 @@ export class TransactionListComponent extends ScrollableComponent
       routerLink: ['/transactions', item?.id]
     });
 
-    if (
-      item.status === TransactionStatus.Failed ||
-      item.status === TransactionStatus.Pending
-    ) {
-      menuItems.push({
-        label: this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT'),
-        command: () => {
-          this.retryPaymentConfirmation(item);
-        }
-      });
-    }
+    // if (
+    //   item.status === TransactionStatus.Failed ||
+    //   item.status === TransactionStatus.Pending
+    // ) {
+    //   menuItems.push({
+    //     label: this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT'),
+    //     command: () => {
+    //       this.retryPaymentConfirmation(item);
+    //     }
+    //   });
+    // }
 
-    if (
-      item.status === TransactionStatus.Failed ||
-      item.status === TransactionStatus.Pending
-    ) {
-      menuItems.push({
-        label: this.getTranslate('PAGES.TRANSACTIONS.COMPLETE-MANUALLY'),
-        command: () => {
-          this.completeManuallyConfirmation(item);
-        }
-      });
-    }
+    // if (
+    //   item.status === TransactionStatus.Failed ||
+    //   item.status === TransactionStatus.Pending
+    // ) {
+    //   menuItems.push({
+    //     label: this.getTranslate('PAGES.TRANSACTIONS.COMPLETE-MANUALLY'),
+    //     command: () => {
+    //       this.completeManuallyConfirmation(item);
+    //     }
+    //   });
+    // }
 
-    if (item.status === TransactionStatus.Success && item?.invoiceId == null) {
-      menuItems.push({
-        label: this.getTranslate('PAGES.INVOICES.RETRY-CREATE-INVOICE'),
-        command: () => {
-          this.retryCreateInvoice(item);
-        }
-      });
-    }
+    // if (item.status === TransactionStatus.Success && item?.invoiceId == null) {
+    //   menuItems.push({
+    //     label: this.getTranslate('PAGES.INVOICES.RETRY-CREATE-INVOICE'),
+    //     command: () => {
+    //       this.retryCreateInvoice(item);
+    //     }
+    //   });
+    // }
 
     return menuItems;
   }
@@ -679,94 +675,94 @@ export class TransactionListComponent extends ScrollableComponent
     this.searchItem.setValue(null);
   }
 
-  retryPayment(transaction: TransactionSimpleDto) {
-    this.loading = true;
-    this.retryPaymentRequest.transactionId = transaction.id;
-    this.subscription.add(
-      this.transactionService
-        .transactionsIdRetryPaymentPost(
-          transaction.id,
-          this.xApplicationClientId,
-          this.retryPaymentRequest
-        )
-        .subscribe({
-          next: v => {
-            this.notificationService.showSuccessToast(
-              this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT-SUCCESS')
-            );
-            this.getTransactions(this.page, this.pageSize);
-            this.close();
-          },
-          error: e => {
-            this.notificationService.showErrorToast(this.handleError(e));
-            this.loading = false;
-            this.close();
-          },
-          complete: () => {
-            this.loading = false;
-            this.close();
-          }
-        })
-    );
-  }
+  // retryPayment(transaction: TransactionSimpleDto) {
+  //   this.loading = true;
+  //   this.retryPaymentRequest.transactionId = transaction.id;
+  //   this.subscription.add(
+  //     this.transactionService
+  //       .transactionsIdRetryPaymentPost(
+  //         transaction.id,
+  //         this.xApplicationClientId,
+  //         this.retryPaymentRequest
+  //       )
+  //       .subscribe({
+  //         next: v => {
+  //           this.notificationService.showSuccessToast(
+  //             this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT-SUCCESS')
+  //           );
+  //           this.getTransactions(this.page, this.pageSize);
+  //           this.close();
+  //         },
+  //         error: e => {
+  //           this.notificationService.showErrorToast(this.handleError(e));
+  //           this.loading = false;
+  //           this.close();
+  //         },
+  //         complete: () => {
+  //           this.loading = false;
+  //           this.close();
+  //         }
+  //       })
+  //   );
+  // }
 
-  retryPaymentConfirmation(item: TransactionSimpleDto) {
-    this.dialogConfig.data = {
-      description: this.getTranslate(
-        'PAGES.TRANSACTIONS.RETRY-PAYMENT-DESCRIPTION'
-      ),
-      buttonText: this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT'),
-      confirmEventCallback: (eventData: any) => {
-        this.retryPayment(item);
-      }
-    };
+  // retryPaymentConfirmation(item: TransactionSimpleDto) {
+  //   this.dialogConfig.data = {
+  //     description: this.getTranslate(
+  //       'PAGES.TRANSACTIONS.RETRY-PAYMENT-DESCRIPTION'
+  //     ),
+  //     buttonText: this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT'),
+  //     confirmEventCallback: (eventData: any) => {
+  //       this.retryPayment(item);
+  //     }
+  //   };
 
-    this.open(this.components.confirmationDialog);
-  }
+  //   this.open(this.components.confirmationDialog);
+  // }
 
-  retryCreateInvoice(transaction: TransactionSimpleDto) {
-    this.loading = true;
-    let retryCommand: RetryCreateInvoiceCommand = {
-      transactionId: transaction?.id
-    };
-    this.subscription.add(
-      this.transactionService
-        .transactionsIdRetryCreateInvoicePost(
-          transaction?.id,
-          this.xApplicationClientId,
-          retryCommand
-        )
-        .subscribe({
-          next: v => {
-            this.notificationService.showSuccessToast(
-              this.getTranslate('PAGES.INVOICES.RETRY-CREATE-INVOICE-SUCCESS')
-            );
-            this.getTransactions(this.page, this.pageSize);
-          },
-          error: e => {
-            this.notificationService.showErrorToast(this.handleError(e));
-            this.loading = false;
-          },
-          complete: () => {}
-        })
-    );
-  }
+  // retryCreateInvoice(transaction: TransactionSimpleDto) {
+  //   this.loading = true;
+  //   let retryCommand: RetryCreateInvoiceCommand = {
+  //     transactionId: transaction?.id
+  //   };
+  //   this.subscription.add(
+  //     this.transactionService
+  //       .transactionsIdRetryCreateInvoicePost(
+  //         transaction?.id,
+  //         this.xApplicationClientId,
+  //         retryCommand
+  //       )
+  //       .subscribe({
+  //         next: v => {
+  //           this.notificationService.showSuccessToast(
+  //             this.getTranslate('PAGES.INVOICES.RETRY-CREATE-INVOICE-SUCCESS')
+  //           );
+  //           this.getTransactions(this.page, this.pageSize);
+  //         },
+  //         error: e => {
+  //           this.notificationService.showErrorToast(this.handleError(e));
+  //           this.loading = false;
+  //         },
+  //         complete: () => {}
+  //       })
+  //   );
+  // }
 
-  completeManuallyConfirmation(transaction: TransactionSimpleDto) {
-    this.dialogConfig.data = {
-      isChild: true,
-      transactionId: transaction.id,
-      confirmEventCallback: () => {
-        this.getTransactions(this.page, this.pageSize);
-        this.close();
-      },
-      cancelEventCallback: () => {
-        this.close();
-      }
-    };
+  // completeManuallyConfirmation(transaction: TransactionSimpleDto) {
+  //   this.dialogConfig.data = {
+  //     isChild: true,
+  //     transactionId: transaction.id,
+  //     confirmEventCallback: () => {
+  //       this.getTransactions(this.page, this.pageSize);
+  //       this.close();
+  //     },
+  //     cancelEventCallback: () => {
+  //       this.close();
+  //     }
+  //   };
 
-    this.open(this.components.completeManually);
-  }
+  //   this.open(this.components.completeManually);
+  // }
 
   closeCalendar() {
     this.datePicker.overlayVisible = false;

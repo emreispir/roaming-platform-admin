@@ -29,8 +29,6 @@ import { ChargePointDto } from '../model/chargePointDto';
 // @ts-ignore
 import { ChargePointDtoPaginatedList } from '../model/chargePointDtoPaginatedList';
 // @ts-ignore
-import { ChargePointInterestSimpleDto } from '../model/chargePointInterestSimpleDto';
-// @ts-ignore
 import { ChargePointMemberDto } from '../model/chargePointMemberDto';
 // @ts-ignore
 import { ChargePointStatus } from '../model/chargePointStatus';
@@ -80,6 +78,8 @@ import { RemoteStopTransactionCommand } from '../model/remoteStopTransactionComm
 import { RemoveChargePointPhotosCommand } from '../model/removeChargePointPhotosCommand';
 // @ts-ignore
 import { ResetCommand } from '../model/resetCommand';
+// @ts-ignore
+import { RoamingPointSimpleDto } from '../model/roamingPointSimpleDto';
 // @ts-ignore
 import { SiteHostChargePointDtoPaginatedList } from '../model/siteHostChargePointDtoPaginatedList';
 // @ts-ignore
@@ -2478,14 +2478,15 @@ export class ChargePointsService {
      * @param isGreenEnergy 
      * @param hasCampaign 
      * @param campaignId 
+     * @param isCarPlayQuery 
      * @param xApplicationClientId ApplicationClientId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public chargePointsNearbyGet(chargingPowerTypes?: Array<ChargingPowerType>, statuses?: Array<ChargePointStatus>, chargingLevels?: Array<ChargingLevel>, accessibilities?: Array<ChargePointAccessibility>, connectorTypes?: Array<ConnectorType>, minPrice?: number, maxPrice?: number, minLatitude?: number, maxLatitude?: number, minLongitude?: number, maxLongitude?: number, q?: string, latitude?: number, longitude?: number, radius?: number, surgeAvailable?: boolean, isGreenEnergy?: boolean, hasCampaign?: boolean, campaignId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<ChargePointInterestSimpleDto>>;
-    public chargePointsNearbyGet(chargingPowerTypes?: Array<ChargingPowerType>, statuses?: Array<ChargePointStatus>, chargingLevels?: Array<ChargingLevel>, accessibilities?: Array<ChargePointAccessibility>, connectorTypes?: Array<ConnectorType>, minPrice?: number, maxPrice?: number, minLatitude?: number, maxLatitude?: number, minLongitude?: number, maxLongitude?: number, q?: string, latitude?: number, longitude?: number, radius?: number, surgeAvailable?: boolean, isGreenEnergy?: boolean, hasCampaign?: boolean, campaignId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<ChargePointInterestSimpleDto>>>;
-    public chargePointsNearbyGet(chargingPowerTypes?: Array<ChargingPowerType>, statuses?: Array<ChargePointStatus>, chargingLevels?: Array<ChargingLevel>, accessibilities?: Array<ChargePointAccessibility>, connectorTypes?: Array<ConnectorType>, minPrice?: number, maxPrice?: number, minLatitude?: number, maxLatitude?: number, minLongitude?: number, maxLongitude?: number, q?: string, latitude?: number, longitude?: number, radius?: number, surgeAvailable?: boolean, isGreenEnergy?: boolean, hasCampaign?: boolean, campaignId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<ChargePointInterestSimpleDto>>>;
-    public chargePointsNearbyGet(chargingPowerTypes?: Array<ChargingPowerType>, statuses?: Array<ChargePointStatus>, chargingLevels?: Array<ChargingLevel>, accessibilities?: Array<ChargePointAccessibility>, connectorTypes?: Array<ConnectorType>, minPrice?: number, maxPrice?: number, minLatitude?: number, maxLatitude?: number, minLongitude?: number, maxLongitude?: number, q?: string, latitude?: number, longitude?: number, radius?: number, surgeAvailable?: boolean, isGreenEnergy?: boolean, hasCampaign?: boolean, campaignId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public chargePointsNearbyGet(chargingPowerTypes?: Array<ChargingPowerType>, statuses?: Array<ChargePointStatus>, chargingLevels?: Array<ChargingLevel>, accessibilities?: Array<ChargePointAccessibility>, connectorTypes?: Array<ConnectorType>, minPrice?: number, maxPrice?: number, minLatitude?: number, maxLatitude?: number, minLongitude?: number, maxLongitude?: number, q?: string, latitude?: number, longitude?: number, radius?: number, surgeAvailable?: boolean, isGreenEnergy?: boolean, hasCampaign?: boolean, campaignId?: string, isCarPlayQuery?: boolean, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<RoamingPointSimpleDto>>;
+    public chargePointsNearbyGet(chargingPowerTypes?: Array<ChargingPowerType>, statuses?: Array<ChargePointStatus>, chargingLevels?: Array<ChargingLevel>, accessibilities?: Array<ChargePointAccessibility>, connectorTypes?: Array<ConnectorType>, minPrice?: number, maxPrice?: number, minLatitude?: number, maxLatitude?: number, minLongitude?: number, maxLongitude?: number, q?: string, latitude?: number, longitude?: number, radius?: number, surgeAvailable?: boolean, isGreenEnergy?: boolean, hasCampaign?: boolean, campaignId?: string, isCarPlayQuery?: boolean, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<RoamingPointSimpleDto>>>;
+    public chargePointsNearbyGet(chargingPowerTypes?: Array<ChargingPowerType>, statuses?: Array<ChargePointStatus>, chargingLevels?: Array<ChargingLevel>, accessibilities?: Array<ChargePointAccessibility>, connectorTypes?: Array<ConnectorType>, minPrice?: number, maxPrice?: number, minLatitude?: number, maxLatitude?: number, minLongitude?: number, maxLongitude?: number, q?: string, latitude?: number, longitude?: number, radius?: number, surgeAvailable?: boolean, isGreenEnergy?: boolean, hasCampaign?: boolean, campaignId?: string, isCarPlayQuery?: boolean, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<RoamingPointSimpleDto>>>;
+    public chargePointsNearbyGet(chargingPowerTypes?: Array<ChargingPowerType>, statuses?: Array<ChargePointStatus>, chargingLevels?: Array<ChargingLevel>, accessibilities?: Array<ChargePointAccessibility>, connectorTypes?: Array<ConnectorType>, minPrice?: number, maxPrice?: number, minLatitude?: number, maxLatitude?: number, minLongitude?: number, maxLongitude?: number, q?: string, latitude?: number, longitude?: number, radius?: number, surgeAvailable?: boolean, isGreenEnergy?: boolean, hasCampaign?: boolean, campaignId?: string, isCarPlayQuery?: boolean, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (chargingPowerTypes) {
@@ -2574,6 +2575,10 @@ export class ChargePointsService {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>campaignId, 'CampaignId');
         }
+        if (isCarPlayQuery !== undefined && isCarPlayQuery !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>isCarPlayQuery, 'IsCarPlayQuery');
+        }
 
         let localVarHeaders = this.defaultHeaders;
         if (xApplicationClientId !== undefined && xApplicationClientId !== null) {
@@ -2619,7 +2624,7 @@ export class ChargePointsService {
         }
 
         let localVarPath = `/charge-points/nearby`;
-        return this.httpClient.request<Array<ChargePointInterestSimpleDto>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<RoamingPointSimpleDto>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

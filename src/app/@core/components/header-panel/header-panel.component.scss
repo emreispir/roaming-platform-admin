@@ -20,6 +20,9 @@
   }
 
   .header-panel-right {
+    display: flex;
+    column-gap:10px;
+
     @media screen and (max-width: 550px) {
       margin-top: 10px;
     }

@@ -29,9 +29,11 @@ export class HeaderPanelComponent extends BaseComponent implements OnDestroy {
   @Input() avatarSrc: any;
   @Input() showButton: boolean;
   @Input() buttonOption: ButtonOption;
-  @Input() helpButton: boolean;
+  @Input() showSecondaryButton: boolean;
+  @Input() secondaryButtonOption: ButtonOption;
 
   @Output() buttonClicked = new EventEmitter<void>();
+  @Output() secondaryButtonClicked = new EventEmitter<void>();
 
   infoIconSmall: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
     this.getIconWithClass(
@@ -58,6 +60,10 @@ export class HeaderPanelComponent extends BaseComponent implements OnDestroy {
 
   onButtonClick(): void {
     this.buttonClicked.emit();
+  }
+
+  onSecondaryButtonClick(): void {
+    this.secondaryButtonClicked.emit();
   }
 
   ngOnDestroy() {

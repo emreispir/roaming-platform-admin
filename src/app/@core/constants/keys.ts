@@ -1,5 +1,6 @@
 export const Keys = {
   USER_TOKEN: 'USER_KEY',
+  AUTHENTICATED_USER_DATA: 'AUTHENTICATED_USER_DATA',
   USER_DATA: 'USER_DATA',
   USER_ROLES_DATA: 'USER_ROLES_DATA',
   USER_POLICIES_DATA: 'USER_POLICIES_DATA',
@@ -7,9 +8,9 @@ export const Keys = {
   COUNTRIES: 'COUNTRIES',
   CURRENCIES: 'CURRENCIES',
   ROLES: 'ROLES',
-  IsAutoTourStarted: 'isAutoTourStarted',
+  IsAutoTourStarted: 'isAutoTourStarted'
 };
 
 export const Patterns = {
-  EMAIL_PATTERNS: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$',
+  EMAIL_PATTERNS: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
 };

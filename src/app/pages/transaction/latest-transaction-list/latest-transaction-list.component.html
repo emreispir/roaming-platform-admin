@@ -1,0 +1,34 @@
+<div class="last-transaction card white">
+  <app-loader
+    [loaderMessage]="loaderMessage"
+    *ngIf="transactionLoading"
+    class="base-loader"
+  ></app-loader>
+  <div class="card-header mb-20">
+    <label class="card-header-title">{{
+      'PAGES.TRANSACTIONS.LAST-TRANSACTIONS' | translate
+    }}</label>
+  </div>
+  <div class="page-detail-body">
+    <ng-container *ngIf="!transactionLoading">
+      <ng-container
+        *ngIf="transactionsResponse?.length === 0; else transactionListing"
+      >
+        <app-info-card
+          [title]="getTranslate('PAGES.TRANSACTIONS.NO-TRANSACTION')"
+          [imgSrc]="noTransactionIcon"
+          class="w-100"
+        >
+        </app-info-card>
+      </ng-container>
+      <ng-template #transactionListing>
+        <lib-surge-table
+          [data]="transactionsResponse"
+          [columns]="tableColumns"
+          [config]="tableConfig"
+        >
+        </lib-surge-table>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

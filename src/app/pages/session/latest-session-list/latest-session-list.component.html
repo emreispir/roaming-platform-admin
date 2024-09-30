@@ -1,0 +1,32 @@
+<div class="card white last-session">
+  <app-loader
+    [loaderMessage]="loaderMessage"
+    *ngIf="chargeSessionsLoading"
+    class="base-loader"
+  ></app-loader>
+  <div class="card-header mb-20">
+    <label class="card-header-title">{{
+      'PAGES.SESSIONS.LAST-SESSIONS' | translate
+    }}</label>
+  </div>
+  <div class="page-detail-body">
+    <ng-container *ngIf="!chargeSessionsLoading">
+      <ng-container *ngIf="sessionsResponse?.length === 0; else sessionListing">
+        <app-info-card
+          [title]="getTranslate('PAGES.SESSIONS.NO-SESSION')"
+          [imgSrc]="noSessionIcon"
+          class="w-100"
+        >
+        </app-info-card>
+      </ng-container>
+      <ng-template #sessionListing>
+        <lib-surge-table
+          [data]="sessionsResponse"
+          [columns]="tableColumns"
+          [config]="tableConfig"
+        >
+        </lib-surge-table>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

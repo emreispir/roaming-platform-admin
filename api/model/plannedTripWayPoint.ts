@@ -9,13 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ChargePointInterestDto } from './chargePointInterestDto';
+import { RoamingPointDto } from './roamingPointDto';
 import { Location } from './location';
 
 
 export interface PlannedTripWayPoint { 
     location?: Location;
-    chargePointOfInterest?: ChargePointInterestDto;
+    chargePointOfInterest?: RoamingPointDto;
     chargingMinutesAtPoint?: number;
     estimatedChargingInMeters?: number;
     estimatedBatteryLeftInMeters?: number;

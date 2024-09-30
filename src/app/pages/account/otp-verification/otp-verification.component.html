@@ -1,0 +1,20 @@
+<ng-container *ngIf="stepNumber === 1">
+  <lib-surge-form
+    [surgeFormConfig]="otpInfoFormConfig"
+    [surgeForm]="myForm.get('otpInfo')"
+    [submitted]="submitted"
+    [loading]="buttonLoading"
+    (customButtonTriggered)="nextStep($event)"
+    (cancelButtonTriggered)="close()"
+  ></lib-surge-form>
+</ng-container>
+<ng-container *ngIf="stepNumber === 2">
+  <lib-surge-form
+    [surgeFormConfig]="otpCodeInfoFormConfig"
+    [surgeForm]="myForm.get('otpCodeInfo')"
+    [submitted]="submitted"
+    [loading]="buttonLoading"
+    (customButtonTriggered)="nextStep($event)"
+    (cancelButtonTriggered)="close()"
+  ></lib-surge-form>
+</ng-container>

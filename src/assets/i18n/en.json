@@ -758,6 +758,22 @@
     "CONFIGURATION": {
       "TITLE": "Configuration"
     },
+    "OTP": {
+      "TYPE-PHONE-NUMBER-WITH-COUNTRY-CODE": "Enter phone number with country code",
+      "SEND-OTP-CODE": "Send OTP Code",
+      "USER-VERIFICATION": "User Verification",
+      "PHONE-NUMBER": "Phone Number",
+      "OTP-CODE": "OTP Code",
+      "TYPE-OTP-CODE": "Enter OTP Code",
+      "RESEND-OTP-CODE": "Resend ({{ time }}s)",
+      "RESEND-OTP-CODE-SUCCESS": "You have successfully resend the OTP code",
+      "VALIDATE-OTP-CODE": "Validate OTP Code",
+      "OTP-INFO-TOOLTIP": "Complete the OTP steps to verify the user's identity. The OTP code is sent to the user's phone number, and after verifying the user's identity, you will be directed to the screen where you can access their information.",
+      "EXIT-USER": "Exit User",
+      "EXIT-CONFIRMATION-DESCRIPTION": "You are about to close the screen where you are viewing the information of the user {{ name }}. Are you sure you want to continue?",
+      "CONTINUE-SESSION-TOOLTIP": "You can go the the {{name}} user screen by clicking the 'Go to User' button.",
+      "GO-TO-USER": "Go to User"
+    },
     "RFIDS": {
       "TITLE": "RFID Cards",
       "RFID": "Card",

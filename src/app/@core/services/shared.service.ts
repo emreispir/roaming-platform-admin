@@ -46,10 +46,6 @@ export class SharedService implements OnDestroy {
   changedToken: ReplaySubject<any> = new ReplaySubject<1>();
   breadcrumbData: ReplaySubject<any> = new ReplaySubject<1>();
   selectedTabIndex = new BehaviorSubject<number>(0);
-  private workspaceNameSource = new BehaviorSubject<string>(
-    localStorage.getItem('workspaceName') || ''
-  );
-  workspaceName$ = this.workspaceNameSource.asObservable();
 
   sidebarVisible$ = new BehaviorSubject<boolean>(true);
   renderer: any;
@@ -89,10 +85,23 @@ export class SharedService implements OnDestroy {
   }
 
   setUserPoliciesData(data: string[]) {
+    // let userPolicies = localStorage.getItem(Keys.USER_POLICIES_DATA);
+    // if (userPolicies) {
+    //   localStorage.removeItem(Keys.USER_POLICIES_DATA);
+    // }
+
     localStorage.setItem(Keys.USER_POLICIES_DATA, JSON.stringify(data));
     this.userPoliciesData = JSON.parse(
       localStorage.getItem(Keys.USER_POLICIES_DATA)
     );
+  }
+
+  getUserPolicies(): string[] {
+    let policies = localStorage.getItem(Keys.USER_POLICIES_DATA);
+
+    return policies
+      ? JSON.parse(localStorage.getItem(Keys.USER_POLICIES_DATA))
+      : [];
   }
 
   changedUserToken(userToken: string) {
@@ -108,11 +117,6 @@ export class SharedService implements OnDestroy {
   changedUserRolesData(userRolesData: GetUserRolesResponse) {
     this.changedUserRoles.next(userRolesData);
     this.setUserRolesData(userRolesData);
-  }
-
-  setWorkspaceName(workspaceName: string) {
-    this.workspaceNameSource.next(workspaceName);
-    localStorage.setItem('workspaceName', workspaceName);
   }
 
   changedBreadcrumbData(items: any[]) {
@@ -311,6 +315,7 @@ export class SharedService implements OnDestroy {
     this.authService.logoutRedirect(logoutRequest);
 
     localStorage.removeItem(Keys.USER_DATA);
+    localStorage.removeItem(Keys.AUTHENTICATED_USER_DATA);
     localStorage.removeItem(Keys.USER_ROLES_DATA);
     localStorage.removeItem(Keys.USER_TOKEN);
     localStorage.removeItem(Keys.USER_POLICIES_DATA);
@@ -327,7 +332,6 @@ export class SharedService implements OnDestroy {
     this.changedToken.complete();
     this.breadcrumbData.complete();
     this.selectedTabIndex.complete();
-    this.workspaceNameSource.complete();
     this.subscription.unsubscribe();
   }
 }

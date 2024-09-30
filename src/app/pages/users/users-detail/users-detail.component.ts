@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
+  SimpleChanges,
   ViewChildren
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -41,6 +42,14 @@ import { HeaderPanelComponent } from '../../../@core/components/header-panel/hea
 import { SessionListComponent } from '../../session/session-list/session-list.component';
 import { TransactionListComponent } from '../../transaction/transaction-list/transaction-list.component';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { ConfirmationDialogComponent } from '../../../@core/components/confirmation-dialog/confirmation-dialog.component';
+import { LoaderComponent } from '../../../@core/components/loader/loader.component';
+import { LatestSessionListComponent } from '../../session/latest-session-list/latest-session-list.component';
+import { LatestTransactionListComponent } from '../../transaction/latest-transaction-list/latest-transaction-list.component';
+import { ActiveSessionsComponent } from '../../session/active-sessions/active-sessions.component';
+import { InfoCardComponent } from '../../../@core/components/info-card/info-card.component';
+import { ChargePointConnectorStartComponent } from '../../charge-point/charge-point-connector-start/charge-point-connector-start.component';
+import { Keys } from '../../../@core/constants/keys';
 
 @Component({
   selector: 'app-users-detail',
@@ -55,15 +64,19 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
     TransactionListComponent,
     AsyncPipe,
     NgIf,
-    NgFor
+    NgFor,
+    LoaderComponent,
+    LatestSessionListComponent,
+    LatestTransactionListComponent,
+    ActiveSessionsComponent,
+    InfoCardComponent
   ]
 })
 export class UsersDetailComponent extends ScrollableComponent
   implements AfterViewChecked, OnInit, OnDestroy, AfterViewInit {
   @ViewChildren('sectionContainer') sectionContainers!: QueryList<ElementRef>;
-
-  userLoading: boolean;
   userId: string;
+
   userResponse: UserDetailsDto;
   userRoleResponse: UserRoleResponse;
   roleTypes = RoleType;
@@ -89,6 +102,14 @@ export class UsersDetailComponent extends ScrollableComponent
       'regular dark-gray filled-path',
       true
     )
+  );
+
+  closeIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
+    this.getIconWithClass(IconsArray.CloseOutlinedIcon.name, 'medium ', true)
+  );
+
+  sessionIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
+    this.getIconWithClass(Icons.SessionIcon.name, 'regular')
   );
 
   noTransactionIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
@@ -142,7 +163,15 @@ export class UsersDetailComponent extends ScrollableComponent
     super.ngAfterViewInit();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['userId'] && changes['userId'].currentValue) {
+      this.getUser();
+    }
+  }
+
   init() {
+    this.loading = true;
+
     this.directoryId = this.getDecodedUserToken()?.extension_DirectoryId
       ? this.getDecodedUserToken()?.extension_DirectoryId
       : null;
@@ -150,11 +179,18 @@ export class UsersDetailComponent extends ScrollableComponent
     this.subscription.add(
       this.activatedRoute.params.subscribe(params => {
         this.userId = params['id'];
-        this.getUser();
+        if (!this.userResponse || this.userResponse?.id !== this.userId) {
+          this.getUser();
+        }
       })
     );
 
     this.generateTabs();
+
+    this.components = {
+      confirmationDialog: ConfirmationDialogComponent,
+      connectorStart: ChargePointConnectorStartComponent
+    };
   }
 
   generateTabs() {
@@ -168,47 +204,47 @@ export class UsersDetailComponent extends ScrollableComponent
       }
     ];
 
-    if (this.isUserValidForPolicies([Policy.ChargeSessionRead])) {
-      this.tabs.push({
-        label: this.getTranslate('PAGES.SESSIONS.TITLE'),
-        content: null,
-        routeTab: 'sessions'
-      });
-    } else {
-      this.tabs.push({
-        label: null,
-        content: null,
-        routeTab: null
-      });
-    }
+    // if (this.isUserValidForPolicies([Policy.ChargeSessionRead])) {
+    this.tabs.push({
+      label: this.getTranslate('PAGES.SESSIONS.TITLE'),
+      content: null,
+      routeTab: 'sessions'
+    });
+    // } else {
+    //   this.tabs.push({
+    //     label: null,
+    //     content: null,
+    //     routeTab: null
+    //   });
+    // }
 
-    if (this.isUserValidForPolicies([Policy.TransactionRead])) {
-      this.tabs.push({
-        label: this.getTranslate('PAGES.TRANSACTIONS.TITLE'),
-        content: null,
-        routeTab: 'transactions'
-      });
-    } else {
-      this.tabs.push({
-        label: null,
-        content: null,
-        routeTab: null
-      });
-    }
+    // if (this.isUserValidForPolicies([Policy.TransactionRead])) {
+    this.tabs.push({
+      label: this.getTranslate('PAGES.TRANSACTIONS.TITLE'),
+      content: null,
+      routeTab: 'transactions'
+    });
+    // } else {
+    //   this.tabs.push({
+    //     label: null,
+    //     content: null,
+    //     routeTab: null
+    //   });
+    // }
 
-    if (this.isUserValidForPolicies([Policy.ReviewRead])) {
-      this.tabs.push({
-        label: this.getTranslate('PAGES.CAMPAIGNS.TITLE'),
-        content: null,
-        routeTab: 'campaigns'
-      });
-    } else {
-      this.tabs.push({
-        label: null,
-        content: null,
-        routeTab: null
-      });
-    }
+    // if (this.isUserValidForPolicies([Policy.ReviewRead])) {
+    this.tabs.push({
+      label: this.getTranslate('PAGES.CAMPAIGNS.TITLE'),
+      content: null,
+      routeTab: 'campaigns'
+    });
+    // } else {
+    //   this.tabs.push({
+    //     label: null,
+    //     content: null,
+    //     routeTab: null
+    //   });
+    // }
 
     this.sharedService.changeSelectedTab(0);
   }
@@ -227,7 +263,7 @@ export class UsersDetailComponent extends ScrollableComponent
   }
 
   getUser() {
-    this.userLoading = true;
+    this.loading = true;
     this.subscription.add(
       this.usersService.usersIdGet(this.userId).subscribe({
         next: v => {
@@ -240,8 +276,8 @@ export class UsersDetailComponent extends ScrollableComponent
               routerLink: '/dashboard'
             },
             {
-              label: this.getTranslate('SIDE-NAV.USERS'),
-              routerLink: '/users'
+              label: this.getTranslate('PAGES.USERS.USER'),
+              routerLink: null
             },
             { label: this.userResponse?.displayName }
           ];
@@ -259,15 +295,19 @@ export class UsersDetailComponent extends ScrollableComponent
             }
           ];
 
+          localStorage.setItem(
+            Keys.AUTHENTICATED_USER_DATA,
+            JSON.stringify(this.userResponse)
+          );
+
           this.loadData();
+          this.loading = false;
         },
         error: e => {
           this.notificationService.showErrorToast(this.handleError(e));
-          this.userLoading = false;
+          this.loading = false;
         },
-        complete: () => {
-          this.userLoading = false;
-        }
+        complete: () => {}
       })
     );
   }
@@ -282,18 +322,20 @@ export class UsersDetailComponent extends ScrollableComponent
     };
 
     if (this.sharedService?.selectedTabIndex?.value === 0) {
-      if (this.isUserValidForPolicies([Policy.CampaignRead])) {
-        this.getCampaigns(this.page, 3);
-      }
+      // if (this.isUserValidForPolicies([Policy.CampaignRead])) {
+      this.getCampaigns(this.page, 3);
+      // }
 
-      if (this.isUserValidForPolicies([Policy.TransactionRead])) {
-        this.getTransactions();
-      }
+      // if (this.isUserValidForPolicies([Policy.TransactionRead])) {
+      this.getTransactions();
+      // }
 
-      if (this.isUserValidForPolicies([Policy.ChargeSessionRead])) {
-        this.getSessions(this.page, 7);
-      }
+      // if (this.isUserValidForPolicies([Policy.ChargeSessionRead])) {
+      this.getSessions(this.page, 7);
+      // }
     }
+
+    // this.loading = false;
   }
 
   generateCurrenciesData(currencies: CurrencyDto[]): any {
@@ -308,7 +350,7 @@ export class UsersDetailComponent extends ScrollableComponent
 
   getCampaigns(page: number, pageSize: number) {
     // this.campaignsLoading = true;
-    // this.campaignsResponse = [];
+    this.campaignsResponse = [];
     // this.subscription.add();
   }
 
@@ -388,6 +430,53 @@ export class UsersDetailComponent extends ScrollableComponent
           }
         })
     );
+  }
+
+  startChargeConfirmation() {
+    this.dialogConfig.data = {
+      isChild: true,
+      userResponse: this.userResponse,
+      confirmEventCallback: (eventData: any) => {
+        this.close();
+      },
+      cancelEventCallback: (eventData: any) => {
+        this.close();
+      }
+    };
+
+    this.open(this.components.connectorStart);
+  }
+
+  exitUserConfirmation() {
+    this.dialogConfig.data = {
+      description: this.getTranslate(
+        'PAGES.OTP.EXIT-CONFIRMATION-DESCRIPTION',
+        {
+          name: this.userResponse?.displayName
+        }
+      ),
+      buttonText: this.getTranslate('PAGES.OTP.EXIT-USER'),
+      confirmEventCallback: (eventData: any) => {
+        this.exitUser();
+      }
+    };
+
+    this.open(this.components.confirmationDialog);
+  }
+
+  exitUser() {
+    // TODO:
+    let userPoliciesData = this.sharedService.getUserPolicies();
+    let index = userPoliciesData.indexOf(Policy.UserRead);
+    if (index > -1) {
+      userPoliciesData.splice(index, 1);
+    }
+    this.sharedService.setUserPoliciesData(userPoliciesData);
+
+    localStorage.removeItem(Keys.AUTHENTICATED_USER_DATA);
+
+    this.close(true);
+    this.router.navigate(['/dashboard']);
   }
 
   ngOnDestroy() {

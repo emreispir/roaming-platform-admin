@@ -695,6 +695,22 @@
     "CONFIGURATION": {
       "TITLE": "Yapılandırma"
     },
+    "OTP": {
+      "TYPE-PHONE-NUMBER-WITH-COUNTRY-CODE": "Ülke koduyla birlikte telefon numarası girin",
+      "SEND-OTP-CODE": "OTP Kodu Gönder",
+      "USER-VERIFICATION": "Kullanıcı Doğrulama",
+      "PHONE-NUMBER": "Telefon Numarası",
+      "OTP-CODE": "OTP Kodu",
+      "TYPE-OTP-CODE": "OTP Kodunu Girin",
+      "RESEND-OTP-CODE": "Tekrar Gönder ({{ time }})",
+      "RESEND-OTP-CODE-SUCCESS": "OTP Kodu başarıyla tekrar gönderildi",
+      "VALIDATE-OTP-CODE": "OTP Kodunu Doğrula",
+      "OTP-INFO-TOOLTIP": "Kllanıcının kimliğini doğrulamak için otp adımlarını tamamlayın. Otp kodu, kullanıcının telefon numarasına gönderilir ve kullanıcının kimliğini doğruladıktan sonra bilgilerine erişeceğiniz ekrana yönlendirileceksiniz.",
+      "EXIT-USER": "Kullanıcıdan Çık",
+      "EXIT-CONFIRMATION-DESCRIPTION": "{{ name }} kullanıcısının bilgilerini görüntülediğiniz ekranı kapatmak üzeresiniz. Devam etmek istediğinizden emin misiniz?",
+      "CONTINUE-SESSION-TOOLTIP": "{{ name }} kullanıcısının bilgilerini görüntülemeye devam etmek için 'Kullanıcıya Git' butonuna tıklayın",
+      "GO-TO-USER": "Kullanıcıya Git"
+    },
     "RFIDS": {
       "TITLE": "RFID Kartlar",
       "RFID": "Kart",
