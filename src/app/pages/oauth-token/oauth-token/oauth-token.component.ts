@@ -8,14 +8,13 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BaseComponent } from '../../../shared/base.component';
-import { Policy } from '../../../@core/models/policy';
 import { NgIf } from '@angular/common';
 import { SharedService } from '../../../@core/services/shared.service';
 import { MsalService } from '@azure/msal-angular';
-import { Subject, catchError, switchMap } from 'rxjs';
-import { UsersService } from '../../../../../api';
+import { Subject } from 'rxjs';
 import { NotificationService } from '../../../@core/services/notification.service';
 import { LoaderComponent } from '../../../@core/components/loader/loader.component';
+import { RoamingUsersService } from '../../../../../api';
 
 @Component({
   selector: 'app-oauth-token',
@@ -30,7 +29,7 @@ export class OauthTokenComponent extends BaseComponent
 
   constructor(
     private msalService: MsalService,
-    private userService: UsersService,
+    private userService: RoamingUsersService,
     protected notificationService: NotificationService,
     protected router: Router,
     protected translateService: TranslateService,
@@ -45,7 +44,6 @@ export class OauthTokenComponent extends BaseComponent
 
     if (activeAccount) {
       this.router.navigate(['/dashboard']);
-      this.sharedService.toggleSidebarVisible();
     }
   }
 
@@ -57,9 +55,9 @@ export class OauthTokenComponent extends BaseComponent
     await this.subscription.add(
       this.msalService.handleRedirectObservable().subscribe({
         next: response => {
-          if (response !== null && response.account !== null) {
+          if (response !== null && response?.account !== null) {
             this.sharedService.setUserToken(response?.accessToken);
-            this.msalService.instance.setActiveAccount(response.account);
+            this.msalService.instance.setActiveAccount(response?.account);
             this.getDecodedUserToken(response?.accessToken);
             this.getMe();
           } else {
@@ -72,6 +70,7 @@ export class OauthTokenComponent extends BaseComponent
           }
         },
         error: error => {
+          this.notificationService.showErrorToast(error.message);
           this.sharedService.logOut();
         }
       })
@@ -85,7 +84,16 @@ export class OauthTokenComponent extends BaseComponent
         next: v => {
           this.sharedService.setUserData(v);
 
-          this.getUserRoles();
+          this.subscription.add(
+            this.sharedService.setCurrencies().subscribe({
+              next: t => {
+                this.router.navigate(['/dashboard']);
+              },
+              error: e => {
+                this.notificationService.showErrorToast(this.handleError(e));
+              }
+            })
+          );
         },
         error: e => {
           this.notificationService.showErrorToast(this.handleError(e));
@@ -93,85 +101,6 @@ export class OauthTokenComponent extends BaseComponent
         },
         complete: () => {}
       })
-    );
-  }
-
-  getUserRoles() {
-    this.loading = true;
-    this.subscription.add(
-      this.userService
-        .usersIdRolesGet(this.getDecodedUserToken()?.oid)
-        .subscribe({
-          next: v => {
-            this.sharedService.setUserRolesData(v);
-
-            this.sharedService.setRoles();
-
-            this.subscription.add(
-              this.sharedService
-                .setCountries()
-                .pipe(
-                  switchMap(x => {
-                    return this.sharedService.setCurrencies();
-                  }),
-                  switchMap(() => {
-                    return this.sharedService.setRoles();
-                  }),
-                  catchError(err => {
-                    this.notificationService.showErrorToast(
-                      this.handleError(err)
-                    );
-                    throw err;
-                  })
-                )
-                .subscribe({
-                  next: t => {
-                    this.getUserPolicies();
-                  },
-                  error: e => {
-                    this.notificationService.showErrorToast(
-                      this.handleError(e)
-                    );
-                  }
-                })
-            );
-          },
-          error: e => {
-            this.notificationService.showErrorToast(this.handleError(e));
-            this.loading = false;
-          },
-          complete: () => {}
-        })
-    );
-  }
-
-  getUserPolicies() {
-    this.loading = true;
-    this.subscription.add(
-      this.userService
-        .usersPoliciesGet(
-          this.getDecodedUserToken()?.oid,
-          this.getDecodedUserToken()?.extension_DirectoryId
-        )
-        .subscribe({
-          next: v => {
-            // TODO:
-            let userPoliciesData = v;
-            let index = userPoliciesData.indexOf(Policy.UserRead);
-            if (index > -1) {
-              userPoliciesData.splice(index, 1);
-            }
-            this.sharedService.setUserPoliciesData(userPoliciesData);
-          },
-          error: e => {
-            this.notificationService.showErrorToast(this.handleError(e));
-            this.loading = false;
-          },
-          complete: () => {
-            this.router.navigate(['/dashboard']);
-            this.loading = false;
-          }
-        })
     );
   }
 

@@ -111,9 +111,9 @@ export class ReviewsService {
     }
 
     /**
-     * @param xApplicationClientId ApplicationClientId
      * @param chargePointId 
      * @param rating 
+     * @param xApplicationClientId ApplicationClientId
      * @param comment 
      * @param chargeSessionId 
      * @param photos 
@@ -121,10 +121,16 @@ export class ReviewsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reviewsCreateWithPhotosPost(xApplicationClientId?: string, chargePointId?: string, rating?: number, comment?: string, chargeSessionId?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public reviewsCreateWithPhotosPost(xApplicationClientId?: string, chargePointId?: string, rating?: number, comment?: string, chargeSessionId?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public reviewsCreateWithPhotosPost(xApplicationClientId?: string, chargePointId?: string, rating?: number, comment?: string, chargeSessionId?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public reviewsCreateWithPhotosPost(xApplicationClientId?: string, chargePointId?: string, rating?: number, comment?: string, chargeSessionId?: string, photos?: Array<object>, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public reviewsCreateWithPhotosPost(chargePointId: string, rating: number, xApplicationClientId?: string, comment?: string, chargeSessionId?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public reviewsCreateWithPhotosPost(chargePointId: string, rating: number, xApplicationClientId?: string, comment?: string, chargeSessionId?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public reviewsCreateWithPhotosPost(chargePointId: string, rating: number, xApplicationClientId?: string, comment?: string, chargeSessionId?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public reviewsCreateWithPhotosPost(chargePointId: string, rating: number, xApplicationClientId?: string, comment?: string, chargeSessionId?: string, photos?: Array<object>, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (chargePointId === null || chargePointId === undefined) {
+            throw new Error('Required parameter chargePointId was null or undefined when calling reviewsCreateWithPhotosPost.');
+        }
+        if (rating === null || rating === undefined) {
+            throw new Error('Required parameter rating was null or undefined when calling reviewsCreateWithPhotosPost.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
         if (xApplicationClientId !== undefined && xApplicationClientId !== null) {

@@ -101,10 +101,19 @@ export class SubscriptionsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public subscriptionsApplySubscriptionPost(directoryId?: string, subscriptionId?: string, creditCardId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public subscriptionsApplySubscriptionPost(directoryId?: string, subscriptionId?: string, creditCardId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public subscriptionsApplySubscriptionPost(directoryId?: string, subscriptionId?: string, creditCardId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public subscriptionsApplySubscriptionPost(directoryId?: string, subscriptionId?: string, creditCardId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public subscriptionsApplySubscriptionPost(directoryId: string, subscriptionId: string, creditCardId: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public subscriptionsApplySubscriptionPost(directoryId: string, subscriptionId: string, creditCardId: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public subscriptionsApplySubscriptionPost(directoryId: string, subscriptionId: string, creditCardId: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public subscriptionsApplySubscriptionPost(directoryId: string, subscriptionId: string, creditCardId: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (directoryId === null || directoryId === undefined) {
+            throw new Error('Required parameter directoryId was null or undefined when calling subscriptionsApplySubscriptionPost.');
+        }
+        if (subscriptionId === null || subscriptionId === undefined) {
+            throw new Error('Required parameter subscriptionId was null or undefined when calling subscriptionsApplySubscriptionPost.');
+        }
+        if (creditCardId === null || creditCardId === undefined) {
+            throw new Error('Required parameter creditCardId was null or undefined when calling subscriptionsApplySubscriptionPost.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (directoryId !== undefined && directoryId !== null) {
@@ -342,10 +351,19 @@ export class SubscriptionsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public subscriptionsSubmitEnterpriseApplicationPost(contactName?: string, contactEmail?: string, contactPhone?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public subscriptionsSubmitEnterpriseApplicationPost(contactName?: string, contactEmail?: string, contactPhone?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public subscriptionsSubmitEnterpriseApplicationPost(contactName?: string, contactEmail?: string, contactPhone?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public subscriptionsSubmitEnterpriseApplicationPost(contactName?: string, contactEmail?: string, contactPhone?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public subscriptionsSubmitEnterpriseApplicationPost(contactName: string, contactEmail: string, contactPhone: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public subscriptionsSubmitEnterpriseApplicationPost(contactName: string, contactEmail: string, contactPhone: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public subscriptionsSubmitEnterpriseApplicationPost(contactName: string, contactEmail: string, contactPhone: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public subscriptionsSubmitEnterpriseApplicationPost(contactName: string, contactEmail: string, contactPhone: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (contactName === null || contactName === undefined) {
+            throw new Error('Required parameter contactName was null or undefined when calling subscriptionsSubmitEnterpriseApplicationPost.');
+        }
+        if (contactEmail === null || contactEmail === undefined) {
+            throw new Error('Required parameter contactEmail was null or undefined when calling subscriptionsSubmitEnterpriseApplicationPost.');
+        }
+        if (contactPhone === null || contactPhone === undefined) {
+            throw new Error('Required parameter contactPhone was null or undefined when calling subscriptionsSubmitEnterpriseApplicationPost.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (contactName !== undefined && contactName !== null) {

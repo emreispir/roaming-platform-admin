@@ -20,7 +20,6 @@ import { NgIf } from '@angular/common';
 import { HelperService } from '../../../@core/services/helper.service';
 import { UsersService } from '../../../../../api/api/users.service';
 import { IconsArray } from '../../../../assets/svg/svg-variables';
-import { Policy } from '../../../@core/models/policy';
 import { ScrollableComponent } from '../../../@core/components/scrollable/scrollable.component';
 import { LoaderComponent } from '../../../@core/components/loader/loader.component';
 import { HeaderPanelComponent } from '../../../@core/components/header-panel/header-panel.component';
@@ -79,10 +78,6 @@ export class ProfileComponent extends ScrollableComponent
     this.breadcrumbMenuItems = [
       { label: this.getTranslate('SURGE'), routerLink: '/dashboard' },
       {
-        label: this.getDecodedUserToken()?.extension_Directory?.name,
-        routerLink: '/dashboard'
-      },
-      {
         label: this.getTranslate('COMMON.PROFILE'),
         routerLink: '/profile'
       }
@@ -94,7 +89,7 @@ export class ProfileComponent extends ScrollableComponent
 
   init() {
     this.menuItems = [
-      {
+       {
         label: this.getTranslate('COMMON.PROFILE'),
         icon: 'icon-system-user',
         command: () =>

@@ -3,7 +3,7 @@ import {
   Component,
   Input,
   AfterViewChecked,
-  OnDestroy,
+  OnDestroy
 } from '@angular/core';
 import { NotificationService } from '../../../../@core/services/notification.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -14,24 +14,24 @@ import {
   FormsModule,
   ReactiveFormsModule,
   UntypedFormBuilder,
-  Validators,
+  Validators
 } from '@angular/forms';
 import { HelperService } from '../../../../@core/services/helper.service';
 import {
   DialogService,
   DynamicDialogConfig,
-  DynamicDialogRef,
+  DynamicDialogRef
 } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
-import { UpdateUserCommand, UsersService } from '../../../../../../api';
+import { RoamingUsersService, UpdateRoamingUserCommand } from '../../../../../../api';
 import {
   SurgeFormComponent,
   FormElementType,
   InputType,
-  ButtonType,
   ButtonColor,
+  ButtonType,
   ButtonSize,
-  Position,
+  Position
 } from 'surge-components';
 
 @Component({
@@ -45,14 +45,15 @@ import {
     NgIf,
     FormsModule,
     ReactiveFormsModule,
-    SurgeFormComponent,
-  ],
+    SurgeFormComponent
+  ]
 })
 export class ProfileEditComponent extends BaseComponent
   implements AfterViewChecked, OnDestroy {
   @Input() isChild: boolean;
 
-  userRequest = <UpdateUserCommand>{
+  userRequest = <UpdateRoamingUserCommand>{
+    id: null,
     firstName: null,
     lastName: null,
     email: null,
@@ -63,7 +64,7 @@ export class ProfileEditComponent extends BaseComponent
   };
 
   constructor(
-    protected userService: UsersService,
+    protected userService: RoamingUsersService,
     protected sharedService: SharedService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
@@ -193,7 +194,6 @@ export class ProfileEditComponent extends BaseComponent
       formSubtitle: this.getTranslate('PAGES.USERS.EDIT-USER-DESCRIPTION'),
     };
   }
-
   onFormSubmit(): void {
     const formValues = this.myForm.value.userInfo;
 
@@ -213,7 +213,6 @@ export class ProfileEditComponent extends BaseComponent
       this.userService
         .usersIdPut(
           this.sharedService?.userData?.id,
-          this.xApplicationClientId,
           this.userRequest
         )
         .subscribe({

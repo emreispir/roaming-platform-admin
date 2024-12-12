@@ -481,19 +481,25 @@ export class ChargePointsService {
     }
 
     /**
+     * @param startDate 
+     * @param endDate 
      * @param pageNumber 
      * @param pageSize 
      * @param chargePointId 
-     * @param startDate 
-     * @param endDate 
      * @param xApplicationClientId ApplicationClientId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public chargePointsDiagnosticsGet(pageNumber?: number, pageSize?: number, chargePointId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<OCPPLogDtoPaginatedList>;
-    public chargePointsDiagnosticsGet(pageNumber?: number, pageSize?: number, chargePointId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<OCPPLogDtoPaginatedList>>;
-    public chargePointsDiagnosticsGet(pageNumber?: number, pageSize?: number, chargePointId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<OCPPLogDtoPaginatedList>>;
-    public chargePointsDiagnosticsGet(pageNumber?: number, pageSize?: number, chargePointId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public chargePointsDiagnosticsGet(startDate: string, endDate: string, pageNumber?: number, pageSize?: number, chargePointId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<OCPPLogDtoPaginatedList>;
+    public chargePointsDiagnosticsGet(startDate: string, endDate: string, pageNumber?: number, pageSize?: number, chargePointId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<OCPPLogDtoPaginatedList>>;
+    public chargePointsDiagnosticsGet(startDate: string, endDate: string, pageNumber?: number, pageSize?: number, chargePointId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<OCPPLogDtoPaginatedList>>;
+    public chargePointsDiagnosticsGet(startDate: string, endDate: string, pageNumber?: number, pageSize?: number, chargePointId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        if (startDate === null || startDate === undefined) {
+            throw new Error('Required parameter startDate was null or undefined when calling chargePointsDiagnosticsGet.');
+        }
+        if (endDate === null || endDate === undefined) {
+            throw new Error('Required parameter endDate was null or undefined when calling chargePointsDiagnosticsGet.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (pageNumber !== undefined && pageNumber !== null) {
@@ -2783,21 +2789,24 @@ export class ChargePointsService {
     }
 
     /**
+     * @param workspaceId 
      * @param pageNumber 
      * @param pageSize 
      * @param q 
      * @param name 
      * @param directoryId 
-     * @param workspaceId 
      * @param siteHostId 
      * @param xApplicationClientId ApplicationClientId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public chargePointsSiteHostChargePointsGet(pageNumber?: number, pageSize?: number, q?: string, name?: string, directoryId?: string, workspaceId?: string, siteHostId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<SiteHostChargePointDtoPaginatedList>;
-    public chargePointsSiteHostChargePointsGet(pageNumber?: number, pageSize?: number, q?: string, name?: string, directoryId?: string, workspaceId?: string, siteHostId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<SiteHostChargePointDtoPaginatedList>>;
-    public chargePointsSiteHostChargePointsGet(pageNumber?: number, pageSize?: number, q?: string, name?: string, directoryId?: string, workspaceId?: string, siteHostId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<SiteHostChargePointDtoPaginatedList>>;
-    public chargePointsSiteHostChargePointsGet(pageNumber?: number, pageSize?: number, q?: string, name?: string, directoryId?: string, workspaceId?: string, siteHostId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public chargePointsSiteHostChargePointsGet(workspaceId: string, pageNumber?: number, pageSize?: number, q?: string, name?: string, directoryId?: string, siteHostId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<SiteHostChargePointDtoPaginatedList>;
+    public chargePointsSiteHostChargePointsGet(workspaceId: string, pageNumber?: number, pageSize?: number, q?: string, name?: string, directoryId?: string, siteHostId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<SiteHostChargePointDtoPaginatedList>>;
+    public chargePointsSiteHostChargePointsGet(workspaceId: string, pageNumber?: number, pageSize?: number, q?: string, name?: string, directoryId?: string, siteHostId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<SiteHostChargePointDtoPaginatedList>>;
+    public chargePointsSiteHostChargePointsGet(workspaceId: string, pageNumber?: number, pageSize?: number, q?: string, name?: string, directoryId?: string, siteHostId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        if (workspaceId === null || workspaceId === undefined) {
+            throw new Error('Required parameter workspaceId was null or undefined when calling chargePointsSiteHostChargePointsGet.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (pageNumber !== undefined && pageNumber !== null) {

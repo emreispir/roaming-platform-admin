@@ -37,17 +37,14 @@ import {
   MsalGuardConfiguration,
   MsalRedirectComponent
 } from '@azure/msal-angular';
-
+import { ToastModule } from 'primeng/toast';
 import { protectedResources, loginRequest, msalConfig } from '../auth-config';
 import { ApiModule, Configuration, ConfigurationParameters } from '../../api';
 import { environment } from '../environments/environment';
 import { AuthInterceptor } from './auth-interceptor';
-import { TourNgxBootstrapModule } from 'ngx-ui-tour-ngx-bootstrap';
 import { GptComponent } from './@core/components/gpt/gpt.component';
-import { ToastModule } from 'primeng/toast';
-import { RouterModule } from '@angular/router';
 import { LoaderComponent } from './@core/components/loader/loader.component';
-import { DialogModule } from 'primeng/dialog';
+import { RouterModule } from '@angular/router';
 
 const isIframe = window !== window.parent && !window.opener;
 
@@ -105,6 +102,7 @@ export function apiConfigFactory(): Configuration {
     HttpClientModule,
     ApiModule.forRoot(apiConfigFactory),
     ServicesModule,
+    RouterModule,
 
     TranslateModule.forRoot({
       loader: {
@@ -114,14 +112,12 @@ export function apiConfigFactory(): Configuration {
       }
     }),
 
+    LoaderComponent,
+
     MsalModule,
     AppRoutingModule,
-    TourNgxBootstrapModule,
-    GptComponent,
     ToastModule,
-    RouterModule,
-    LoaderComponent,
-    DialogModule
+    GptComponent
   ],
   providers: [
     {

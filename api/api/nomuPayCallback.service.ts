@@ -105,21 +105,39 @@ export class NomuPayCallbackService {
     }
 
     /**
-     * @param redirectUrl 
-     * @param xApplicationClientId ApplicationClientId
      * @param orderId 
      * @param mPAY 
      * @param statusCode 
      * @param resultCode 
      * @param resultMessage 
      * @param extraParam 
+     * @param redirectUrl 
+     * @param xApplicationClientId ApplicationClientId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public nomupaySaleWithTicketErrorPost(redirectUrl?: string, xApplicationClientId?: string, orderId?: string, mPAY?: string, statusCode?: number, resultCode?: string, resultMessage?: string, extraParam?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public nomupaySaleWithTicketErrorPost(redirectUrl?: string, xApplicationClientId?: string, orderId?: string, mPAY?: string, statusCode?: number, resultCode?: string, resultMessage?: string, extraParam?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public nomupaySaleWithTicketErrorPost(redirectUrl?: string, xApplicationClientId?: string, orderId?: string, mPAY?: string, statusCode?: number, resultCode?: string, resultMessage?: string, extraParam?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public nomupaySaleWithTicketErrorPost(redirectUrl?: string, xApplicationClientId?: string, orderId?: string, mPAY?: string, statusCode?: number, resultCode?: string, resultMessage?: string, extraParam?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public nomupaySaleWithTicketErrorPost(orderId: string, mPAY: string, statusCode: number, resultCode: string, resultMessage: string, extraParam: string, redirectUrl?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public nomupaySaleWithTicketErrorPost(orderId: string, mPAY: string, statusCode: number, resultCode: string, resultMessage: string, extraParam: string, redirectUrl?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public nomupaySaleWithTicketErrorPost(orderId: string, mPAY: string, statusCode: number, resultCode: string, resultMessage: string, extraParam: string, redirectUrl?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public nomupaySaleWithTicketErrorPost(orderId: string, mPAY: string, statusCode: number, resultCode: string, resultMessage: string, extraParam: string, redirectUrl?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (orderId === null || orderId === undefined) {
+            throw new Error('Required parameter orderId was null or undefined when calling nomupaySaleWithTicketErrorPost.');
+        }
+        if (mPAY === null || mPAY === undefined) {
+            throw new Error('Required parameter mPAY was null or undefined when calling nomupaySaleWithTicketErrorPost.');
+        }
+        if (statusCode === null || statusCode === undefined) {
+            throw new Error('Required parameter statusCode was null or undefined when calling nomupaySaleWithTicketErrorPost.');
+        }
+        if (resultCode === null || resultCode === undefined) {
+            throw new Error('Required parameter resultCode was null or undefined when calling nomupaySaleWithTicketErrorPost.');
+        }
+        if (resultMessage === null || resultMessage === undefined) {
+            throw new Error('Required parameter resultMessage was null or undefined when calling nomupaySaleWithTicketErrorPost.');
+        }
+        if (extraParam === null || extraParam === undefined) {
+            throw new Error('Required parameter extraParam was null or undefined when calling nomupaySaleWithTicketErrorPost.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (redirectUrl !== undefined && redirectUrl !== null) {
@@ -217,8 +235,6 @@ export class NomuPayCallbackService {
     }
 
     /**
-     * @param redirectUrl 
-     * @param xApplicationClientId ApplicationClientId
      * @param orderId 
      * @param mPAY 
      * @param statusCode 
@@ -232,13 +248,54 @@ export class NomuPayCallbackService {
      * @param customerIPAddress 
      * @param currencyCode 
      * @param extraParam 
+     * @param redirectUrl 
+     * @param xApplicationClientId ApplicationClientId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public nomupaySaleWithTicketSuccessPost(redirectUrl?: string, xApplicationClientId?: string, orderId?: string, mPAY?: string, statusCode?: number, resultCode?: string, resultMessage?: string, lastTransactionDate?: string, maskedCCNo?: string, cCTokenId?: string, price?: number, installmentCount?: number, customerIPAddress?: string, currencyCode?: string, extraParam?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public nomupaySaleWithTicketSuccessPost(redirectUrl?: string, xApplicationClientId?: string, orderId?: string, mPAY?: string, statusCode?: number, resultCode?: string, resultMessage?: string, lastTransactionDate?: string, maskedCCNo?: string, cCTokenId?: string, price?: number, installmentCount?: number, customerIPAddress?: string, currencyCode?: string, extraParam?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public nomupaySaleWithTicketSuccessPost(redirectUrl?: string, xApplicationClientId?: string, orderId?: string, mPAY?: string, statusCode?: number, resultCode?: string, resultMessage?: string, lastTransactionDate?: string, maskedCCNo?: string, cCTokenId?: string, price?: number, installmentCount?: number, customerIPAddress?: string, currencyCode?: string, extraParam?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public nomupaySaleWithTicketSuccessPost(redirectUrl?: string, xApplicationClientId?: string, orderId?: string, mPAY?: string, statusCode?: number, resultCode?: string, resultMessage?: string, lastTransactionDate?: string, maskedCCNo?: string, cCTokenId?: string, price?: number, installmentCount?: number, customerIPAddress?: string, currencyCode?: string, extraParam?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public nomupaySaleWithTicketSuccessPost(orderId: string, mPAY: string, statusCode: number, resultCode: string, resultMessage: string, lastTransactionDate: string, maskedCCNo: string, cCTokenId: string, price: number, installmentCount: number, customerIPAddress: string, currencyCode: string, extraParam: string, redirectUrl?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public nomupaySaleWithTicketSuccessPost(orderId: string, mPAY: string, statusCode: number, resultCode: string, resultMessage: string, lastTransactionDate: string, maskedCCNo: string, cCTokenId: string, price: number, installmentCount: number, customerIPAddress: string, currencyCode: string, extraParam: string, redirectUrl?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public nomupaySaleWithTicketSuccessPost(orderId: string, mPAY: string, statusCode: number, resultCode: string, resultMessage: string, lastTransactionDate: string, maskedCCNo: string, cCTokenId: string, price: number, installmentCount: number, customerIPAddress: string, currencyCode: string, extraParam: string, redirectUrl?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public nomupaySaleWithTicketSuccessPost(orderId: string, mPAY: string, statusCode: number, resultCode: string, resultMessage: string, lastTransactionDate: string, maskedCCNo: string, cCTokenId: string, price: number, installmentCount: number, customerIPAddress: string, currencyCode: string, extraParam: string, redirectUrl?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (orderId === null || orderId === undefined) {
+            throw new Error('Required parameter orderId was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (mPAY === null || mPAY === undefined) {
+            throw new Error('Required parameter mPAY was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (statusCode === null || statusCode === undefined) {
+            throw new Error('Required parameter statusCode was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (resultCode === null || resultCode === undefined) {
+            throw new Error('Required parameter resultCode was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (resultMessage === null || resultMessage === undefined) {
+            throw new Error('Required parameter resultMessage was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (lastTransactionDate === null || lastTransactionDate === undefined) {
+            throw new Error('Required parameter lastTransactionDate was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (maskedCCNo === null || maskedCCNo === undefined) {
+            throw new Error('Required parameter maskedCCNo was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (cCTokenId === null || cCTokenId === undefined) {
+            throw new Error('Required parameter cCTokenId was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (price === null || price === undefined) {
+            throw new Error('Required parameter price was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (installmentCount === null || installmentCount === undefined) {
+            throw new Error('Required parameter installmentCount was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (customerIPAddress === null || customerIPAddress === undefined) {
+            throw new Error('Required parameter customerIPAddress was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (currencyCode === null || currencyCode === undefined) {
+            throw new Error('Required parameter currencyCode was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
+        if (extraParam === null || extraParam === undefined) {
+            throw new Error('Required parameter extraParam was null or undefined when calling nomupaySaleWithTicketSuccessPost.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (redirectUrl !== undefined && redirectUrl !== null) {
@@ -357,20 +414,35 @@ export class NomuPayCallbackService {
     }
 
     /**
-     * @param redirectUrl 
-     * @param xApplicationClientId ApplicationClientId
      * @param statusCode 
      * @param resultCode 
      * @param resultMessage 
      * @param tokenId 
      * @param tokenCustomerId 
+     * @param redirectUrl 
+     * @param xApplicationClientId ApplicationClientId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public nomupayTokenizeCcErrorPost(redirectUrl?: string, xApplicationClientId?: string, statusCode?: number, resultCode?: string, resultMessage?: string, tokenId?: string, tokenCustomerId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public nomupayTokenizeCcErrorPost(redirectUrl?: string, xApplicationClientId?: string, statusCode?: number, resultCode?: string, resultMessage?: string, tokenId?: string, tokenCustomerId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public nomupayTokenizeCcErrorPost(redirectUrl?: string, xApplicationClientId?: string, statusCode?: number, resultCode?: string, resultMessage?: string, tokenId?: string, tokenCustomerId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public nomupayTokenizeCcErrorPost(redirectUrl?: string, xApplicationClientId?: string, statusCode?: number, resultCode?: string, resultMessage?: string, tokenId?: string, tokenCustomerId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public nomupayTokenizeCcErrorPost(statusCode: number, resultCode: string, resultMessage: string, tokenId: string, tokenCustomerId: string, redirectUrl?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public nomupayTokenizeCcErrorPost(statusCode: number, resultCode: string, resultMessage: string, tokenId: string, tokenCustomerId: string, redirectUrl?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public nomupayTokenizeCcErrorPost(statusCode: number, resultCode: string, resultMessage: string, tokenId: string, tokenCustomerId: string, redirectUrl?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public nomupayTokenizeCcErrorPost(statusCode: number, resultCode: string, resultMessage: string, tokenId: string, tokenCustomerId: string, redirectUrl?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (statusCode === null || statusCode === undefined) {
+            throw new Error('Required parameter statusCode was null or undefined when calling nomupayTokenizeCcErrorPost.');
+        }
+        if (resultCode === null || resultCode === undefined) {
+            throw new Error('Required parameter resultCode was null or undefined when calling nomupayTokenizeCcErrorPost.');
+        }
+        if (resultMessage === null || resultMessage === undefined) {
+            throw new Error('Required parameter resultMessage was null or undefined when calling nomupayTokenizeCcErrorPost.');
+        }
+        if (tokenId === null || tokenId === undefined) {
+            throw new Error('Required parameter tokenId was null or undefined when calling nomupayTokenizeCcErrorPost.');
+        }
+        if (tokenCustomerId === null || tokenCustomerId === undefined) {
+            throw new Error('Required parameter tokenCustomerId was null or undefined when calling nomupayTokenizeCcErrorPost.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (redirectUrl !== undefined && redirectUrl !== null) {
@@ -465,11 +537,11 @@ export class NomuPayCallbackService {
     }
 
     /**
-     * @param redirectUrl 
-     * @param xApplicationClientId ApplicationClientId
      * @param tokenId 
      * @param tokenCustomerId 
      * @param maskedCCNo 
+     * @param redirectUrl 
+     * @param xApplicationClientId ApplicationClientId
      * @param holderPlatform 
      * @param externalUserId 
      * @param isPrimary 
@@ -477,10 +549,19 @@ export class NomuPayCallbackService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public nomupayTokenizeCcSuccessPost(redirectUrl?: string, xApplicationClientId?: string, tokenId?: string, tokenCustomerId?: string, maskedCCNo?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public nomupayTokenizeCcSuccessPost(redirectUrl?: string, xApplicationClientId?: string, tokenId?: string, tokenCustomerId?: string, maskedCCNo?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public nomupayTokenizeCcSuccessPost(redirectUrl?: string, xApplicationClientId?: string, tokenId?: string, tokenCustomerId?: string, maskedCCNo?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public nomupayTokenizeCcSuccessPost(redirectUrl?: string, xApplicationClientId?: string, tokenId?: string, tokenCustomerId?: string, maskedCCNo?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public nomupayTokenizeCcSuccessPost(tokenId: string, tokenCustomerId: string, maskedCCNo: string, redirectUrl?: string, xApplicationClientId?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public nomupayTokenizeCcSuccessPost(tokenId: string, tokenCustomerId: string, maskedCCNo: string, redirectUrl?: string, xApplicationClientId?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public nomupayTokenizeCcSuccessPost(tokenId: string, tokenCustomerId: string, maskedCCNo: string, redirectUrl?: string, xApplicationClientId?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public nomupayTokenizeCcSuccessPost(tokenId: string, tokenCustomerId: string, maskedCCNo: string, redirectUrl?: string, xApplicationClientId?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (tokenId === null || tokenId === undefined) {
+            throw new Error('Required parameter tokenId was null or undefined when calling nomupayTokenizeCcSuccessPost.');
+        }
+        if (tokenCustomerId === null || tokenCustomerId === undefined) {
+            throw new Error('Required parameter tokenCustomerId was null or undefined when calling nomupayTokenizeCcSuccessPost.');
+        }
+        if (maskedCCNo === null || maskedCCNo === undefined) {
+            throw new Error('Required parameter maskedCCNo was null or undefined when calling nomupayTokenizeCcSuccessPost.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (redirectUrl !== undefined && redirectUrl !== null) {

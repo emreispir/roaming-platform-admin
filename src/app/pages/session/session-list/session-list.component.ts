@@ -17,29 +17,22 @@ import {
   DynamicDialogConfig,
   DynamicDialogRef
 } from 'primeng/dynamicdialog';
-import { ChargeSessionsService } from '../../../../../api/api/chargeSessions.service';
 import { NotificationService } from '../../../@core/services/notification.service';
 import { SharedService } from '../../../@core/services/shared.service';
 import {
-  CancelChargeSessionCommand,
-  ChargePointDto,
   ChargePointStatus,
-  ChargePointsService,
-  ChargeSessionDto,
-  ChargeSessionStatus,
-  ConnectorDto,
   ConnectorStatus,
   ConnectorType,
-  OrderBy,
-  RemoteStopTransactionCommand,
-  ResetCommand,
-  UnlockConnectorCommand
+  RoamingConnectorDto,
+  RoamingPointsService,
+  RoamingSessionDto,
+  RoamingSessionsService,
+  RoamingSessionStatus
 } from '../../../../../api';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { Icons, IconsArray } from '../../../../assets/svg/svg-variables';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { ConfirmationDialogComponent } from '../../../@core/components/confirmation-dialog/confirmation-dialog.component';
-import { Policy } from '../../../@core/models/policy';
 import { ExportFileComponent } from '../../../@core/export-file/export-file.component';
 import * as moment from 'moment';
 import { ScrollableComponent } from '../../../@core/components/scrollable/scrollable.component';
@@ -50,13 +43,7 @@ import {
   Validators
 } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription, takeUntil } from 'rxjs';
-import {
-  DatePipe,
-  NgClass,
-  NgFor,
-  NgIf,
-  NgTemplateOutlet
-} from '@angular/common';
+import { DatePipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { RoundPipe } from '../../../@theme/pipes';
 import {
   CardWithAvatarComponent,
@@ -70,7 +57,6 @@ import { HeaderPanelComponent } from '../../../@core/components/header-panel/hea
 import { InfoCardComponent } from '../../../@core/components/info-card/info-card.component';
 import { LoaderComponent } from '../../../@core/components/loader/loader.component';
 import { InfoPanelComponent } from '../../../@core/components/info-panel/info-panel.component';
-import { ConnectorActionType } from '../../../@core/models/common';
 
 @Component({
   selector: 'app-session-list',
@@ -105,8 +91,7 @@ export class SessionListComponent extends ScrollableComponent
   @Input() showActionbarFilter: boolean = true;
   @Input() showActionbarButton: boolean;
   @Input() isPaginated: boolean = true;
-  @Input() directoryId: string = null;
-  @Input() workspaceId: string = null;
+  @Input() hubPlatformId: string = null;
   @Input() chargePointId: string = null;
   @Input() userId: string;
 
@@ -159,20 +144,27 @@ export class SessionListComponent extends ScrollableComponent
   );
 
   chargePointStatusTypes = ChargePointStatus;
-  sessionsResponse: ChargeSessionDto[];
-  statusTypes = ChargeSessionStatus;
+  sessionsResponse: RoamingSessionDto[];
+  statusTypes = RoamingSessionStatus;
   connectorStatusTypes = ConnectorStatus;
   connectorTypes = ConnectorType;
-  stopChargeRequest: RemoteStopTransactionCommand = {};
-  cancelSessionCommand: CancelChargeSessionCommand = {};
+  // stopChargeRequest: RemoteStopTransactionCommand = {
+  //   chargePointId: null,
+  //   chargeSessionId: null,
+  //   connectorId: null
+  // };
+  // cancelSessionCommand: CancelChargeSessionCommand = {
+  //   id: null,
+  //   stopReason: null
+  // };
 
-  unlockConnectorRequest = <UnlockConnectorCommand>{};
+  // unlockConnectorRequest = <UnlockConnectorCommand>{};
 
   roundPipe = new RoundPipe();
 
   constructor(
-    protected chargeSessionsService: ChargeSessionsService,
-    protected chargePointService: ChargePointsService,
+    protected chargeSessionsService: RoamingSessionsService,
+    protected chargePointService: RoamingPointsService,
     protected sharedService: SharedService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
@@ -191,7 +183,6 @@ export class SessionListComponent extends ScrollableComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      (changes.workspaceId && changes.workspaceId.currentValue) ||
       (changes.chargePointId && changes.chargePointId.currentValue) ||
       (changes.userId && changes.userId.currentValue)
     ) {
@@ -204,10 +195,6 @@ export class SessionListComponent extends ScrollableComponent
       this.breadcrumbMenuItems = [
         { label: this.getTranslate('SURGE'), routerLink: '/dashboard' },
         {
-          label: this.getDecodedUserToken()?.extension_Directory?.name,
-          routerLink: '/dashboard'
-        },
-        {
           label: this.getTranslate('PAGES.SESSIONS.TITLE'),
           routerLink: '/sessions'
         }
@@ -215,6 +202,7 @@ export class SessionListComponent extends ScrollableComponent
 
       this.sharedService.changedBreadcrumbData(this.breadcrumbMenuItems);
     }
+
     super.ngAfterViewInit();
   }
 
@@ -223,10 +211,6 @@ export class SessionListComponent extends ScrollableComponent
   }
 
   init() {
-    this.directoryId = this.getDecodedUserToken()?.extension_DirectoryId
-      ? this.getDecodedUserToken()?.extension_DirectoryId
-      : null;
-
     this.myForm = this.formBuilder.group({
       rangeDate: [
         [
@@ -312,16 +296,13 @@ export class SessionListComponent extends ScrollableComponent
 
   getSessions(page: number, size: number) {
     this.loading = true;
-    this.dateNow = moment();
-
     this.subscription.add(
       this.chargeSessionsService
-        .chargeSessionsGet(
+        .sessionsGet(
           page,
           size,
           this.searchItem.value,
-          this.directoryId,
-          this.workspaceId,
+          this.hubPlatformId,
           this.chargePointId,
           this.userId,
           this.myForm.get('rangeDate').value
@@ -333,9 +314,7 @@ export class SessionListComponent extends ScrollableComponent
             ? moment(this.myForm.get('rangeDate')?.value[1])
                 ?.endOf('day')
                 .format('YYYY-MM-DDTHH:mm:ss.SSSZ')
-            : null,
-          this.filter,
-          this.xApplicationClientId
+            : null
         )
         .subscribe({
           next: v => {
@@ -366,11 +345,11 @@ export class SessionListComponent extends ScrollableComponent
         templateInputs: {
           title: '{{readableId}}',
           tagValue: item =>
-            this.getEnumTypeTranslation(ChargeSessionStatus, item.status),
+            this.getEnumTypeTranslation(RoamingSessionStatus, item.status),
           tagClass: item => item.status?.toLowerCase()
         },
         templateConfig: {
-          // routePath: '/sessions/{{id}}',
+          routePath: '/sessions/{{id}}',
           showAvatar: true,
           svgElement: this.sessionIcon,
           showTag: true,
@@ -378,23 +357,23 @@ export class SessionListComponent extends ScrollableComponent
         }
       },
       {
-        field: 'chargePoint',
+        field: 'chargePointInterest',
         header: this.getTranslate('PAGES.CHARGE-POINTS.CHARGE-POINT'),
         visible: !this.chargePointId ? true : false,
         templateComponent: CardWithAvatarComponent,
         templateInputs: {
-          title: (item: ChargeSessionDto) => item?.chargePoint?.name,
-          subtitleFirst: (item: ChargeSessionDto) =>
-            item?.chargePoint?.readableId,
+          title: (item: RoamingSessionDto) => item?.chargePointInterest?.name,
+          subtitleFirst: (item: RoamingSessionDto) =>
+            item?.chargePointInterest?.externalId,
           tagValue: item =>
             this.getEnumTypeTranslation(
               ChargePointStatus,
-              item.chargePoint.status
+              item.chargePointInterest.status
             ),
-          tagClass: item => item.chargePoint.status?.toLowerCase()
+          tagClass: item => item.chargePointInterest.status?.toLowerCase()
         },
         templateConfig: {
-          // routePath: '/charge-points/{{chargePointId}}',
+          routePath: '/charge-points/{{chargePointInterestId}}',
           showTag: item =>
             item.status === this.statusTypes.Charging ? true : false,
           backgroundedTag: true
@@ -408,7 +387,7 @@ export class SessionListComponent extends ScrollableComponent
         templateInputs: {
           title: item =>
             this.getTranslate('PAGES.CONNECTORS.CONNECTOR-PARAM', {
-              param: `${this.getConnector(item)?.connectorNumber}`
+              param: `${this.getConnector(item)?.connectorNo}`
             }),
           subtitleFirst: item =>
             `${this.getEnumTypeTranslation(
@@ -423,25 +402,22 @@ export class SessionListComponent extends ScrollableComponent
           tagClass: item => this.getConnector(item).status?.toLowerCase()
         },
         templateConfig: {
-          // routePath: '/charge-points/{{chargePointId}}/connectors',
+          routePath: '/charge-points/{{chargePointInterestId}}/connectors',
           showTag: item =>
             item.status === this.statusTypes.Charging ? true : false,
           backgroundedTag: true
         }
       },
-      // {
-      //   field: 'user',
-      //   header: this.getTranslate('PAGES.SESSIONS.USER'),
-      //   visible: !this.userId ? true : false,
-      //   templateComponent: CardWithAvatarComponent,
-      //   templateConfig: {
-      //     routePath: '/users/{{user.id}}'
-      //   },
-      //   templateInputs: {
-      //     title: '{{user.firstName}} {{user.lastName}}',
-      //     subtitleFirst: item => item.plateNo || '-'
-      //   }
-      // },
+      {
+        field: 'userId',
+        header: this.getTranslate('PAGES.SESSIONS.USER'),
+        visible: !this.userId ? true : false,
+        templateComponent: CardWithAvatarComponent,
+        templateInputs: {
+          title: '{{user.userId}}',
+          subtitleFirst: item => item.plateNo || '-'
+        }
+      },
       {
         field: 'chargeSessionData',
         header: this.getTranslate('PAGES.SESSIONS.STARTED'),
@@ -513,7 +489,7 @@ export class SessionListComponent extends ScrollableComponent
         visible: true,
         templateComponent: CardWithAvatarComponent,
         templateInputs: {
-          title: (item: ChargeSessionDto) =>
+          title: (item: RoamingSessionDto) =>
             `${this.roundPipe.transform(
               item?.chargeSessionData?.calculatedKWH,
               3
@@ -526,7 +502,7 @@ export class SessionListComponent extends ScrollableComponent
         visible: true,
         templateComponent: CardWithAvatarComponent,
         templateInputs: {
-          title: (item: ChargeSessionDto) => {
+          title: (item: RoamingSessionDto) => {
             const startCharge = item.chargeSessionData?.stateOfChargeStart;
             const stopCharge = item.chargeSessionData?.stateOfChargeStop;
 
@@ -577,9 +553,16 @@ export class SessionListComponent extends ScrollableComponent
     this.loading = false;
   }
 
+  getConnector(chargeSession: RoamingSessionDto): RoamingConnectorDto {
+    let connector: any = chargeSession.chargePointInterest?.sockets?.find(
+      c => c.id == chargeSession.chargePointInterestSocketId
+    );
+    return connector as RoamingConnectorDto;
+  }
+
   loadLazy(e: LazyLoadEvent) {
     this.sort_by = e.sortField ? e.sortField : 'startDate';
-    this.order_by = e.sortOrder === 1 ? OrderBy.Asc : OrderBy.Desc;
+    // this.order_by = e.sortOrder === 1 ? OrderBy.Asc : OrderBy.Desc;
     var currentPage = e.first / this.pageSize + 1;
 
     if (currentPage !== this.page) {
@@ -592,67 +575,33 @@ export class SessionListComponent extends ScrollableComponent
     this.first = 0;
   }
 
-  generateMenuItems(item: ChargeSessionDto): MenuItem[] {
+  generateMenuItems(item: RoamingSessionDto): MenuItem[] {
     const menuItems: MenuItem[] = [];
 
-    // menuItems.push({
-    //   label: this.getTranslate('COMMON.VIEW-DETAILS'),
-    //   routerLink: ['/sessions', item?.id]
-    // });
-
-    if (this.isUserValidForPolicies([Policy.ChargePointRemoteStop])) {
-      menuItems.push({
-        label: this.getTranslate('PAGES.CHARGE-POINTS.CANCEL-CHARGE'),
-        disabled:
-          item?.status !== ChargeSessionStatus.Charging ||
-          item?.status !== ChargeSessionStatus.Accepted,
-        command: () => this.cancelChargeConfirmation(item)
-      });
-    }
-    if (this.isUserValidForPolicies([Policy.ChargePointRemoteStop])) {
-      menuItems.push({
-        label: this.getTranslate('PAGES.CHARGE-POINTS.STOP-CHARGE'),
-        disabled:
-          item?.status !== ChargeSessionStatus.Charging ||
-          item?.status !== ChargeSessionStatus.Accepted,
-        command: () => {
-          this.stopChargeRequest.chargePointId = item?.chargePointId;
-          this.stopChargeRequest.connectorId = item?.connectorId;
-          this.stopChargeConfirmation(item);
-        }
-      });
-    }
-
-    let sessionConnector: ConnectorDto = this.getConnector(item);
-
     menuItems.push({
-      label: this.getTranslate(
-        `ENUM.${ConnectorActionType.UNLOCK_CONNECTOR.toUpperCase()}`
-      ),
-      disabled:
-        !this.isUserValidForPolicies([Policy.ChargePointUnlock]) ||
-        sessionConnector.status === ConnectorStatus.Available ||
-        sessionConnector.status === ConnectorStatus.Faulted ||
-        sessionConnector.status === ConnectorStatus.Reserved ||
-        sessionConnector.status === ConnectorStatus.Undefined ||
-        sessionConnector.status === ConnectorStatus.Unavailable,
-      command: () => {
-        this.unlockConnectorRequest.chargePointId =
-          sessionConnector?.chargePointId;
-        this.unlockConnectorRequest.connectorNumber =
-          sessionConnector?.connectorNumber;
-        this.unlockConnectorRequest.connectorId = sessionConnector?.id;
-        this.unlockConnectorConfirmation(sessionConnector);
-      }
+      label: this.getTranslate('COMMON.VIEW-DETAILS'),
+      routerLink: ['/sessions', item?.id]
     });
 
-    if (this.isUserValidForPolicies([Policy.ChargePointReset])) {
-      menuItems.push({
-        label: this.getTranslate('PAGES.CHARGE-POINTS.REBOOT'),
-        disabled: !item?.chargePoint?.isPaired,
-        command: () => this.resetChargePointConfirmation(item?.chargePoint)
-      });
-    }
+    menuItems.push({
+      label: this.getTranslate('PAGES.CHARGE-POINTS.CANCEL-CHARGE'),
+      disabled:
+        item?.status !== RoamingSessionStatus.Charging &&
+        item?.status !== RoamingSessionStatus.Accepted,
+      command: () => this.cancelChargeConfirmation(item)
+    });
+
+    menuItems.push({
+      label: this.getTranslate('PAGES.CHARGE-POINTS.STOP-CHARGE'),
+      disabled:
+        item?.status !== RoamingSessionStatus.Charging &&
+        item?.status !== RoamingSessionStatus.Accepted,
+      command: () => {
+        // this.stopChargeRequest.chargePointId = item?.chargePointInterestId;
+        // this.stopChargeRequest.connectorId = item?.chargePointInterestSocketId;
+        // this.stopChargeConfirmation(item);
+      }
+    });
 
     return menuItems;
   }
@@ -674,13 +623,13 @@ export class SessionListComponent extends ScrollableComponent
         .filter(status => status !== 'Undefined')
         .map(status => {
           return {
-            label: this.getEnumTypeTranslation(ChargeSessionStatus, status),
+            label: this.getEnumTypeTranslation(RoamingSessionStatus, status),
             icon: this.filter.status === status ? 'filter-icon' : null,
             command: () => {
               this.filter.status = status;
               this.getSessions(this.page, this.pageSize);
               this.selectedFilter = this.getEnumTypeTranslation(
-                ChargeSessionStatus,
+                RoamingSessionStatus,
                 status
               );
             }
@@ -701,13 +650,13 @@ export class SessionListComponent extends ScrollableComponent
     this.subscription.unsubscribe();
   }
 
-  cancelChargeConfirmation(item: ChargeSessionDto) {
+  cancelChargeConfirmation(item: RoamingSessionDto) {
     this.dialogConfig.data = {
       title: this.getTranslate('PAGES.CHARGE-POINTS.CANCEL-CHARGE'),
       description: this.getTranslate(
         'PAGES.CHARGE-POINTS.CANCEL-CHARGE-DESCRIPTION',
         {
-          connectorNumber: item?.connectorNumber
+          connectorNumber: item?.connectorNo
         }
       ),
       confirmWithDescription: true,
@@ -716,56 +665,50 @@ export class SessionListComponent extends ScrollableComponent
       ),
       buttonText: this.getTranslate('PAGES.CHARGE-POINTS.CANCEL-CHARGE'),
       confirmEventCallback: message => {
-        this.cancelSessionCommand.id = item?.id;
-        this.cancelSessionCommand.stopReason = message?.description;
-
-        this.cancelCharge(item);
+        // this.cancelSessionCommand.id = item?.id;
+        // this.cancelSessionCommand.stopReason = message?.description;
+        // this.cancelCharge(item);
       }
     };
     this.open(this.components.confirmationDialog);
   }
 
-  cancelCharge(item: ChargeSessionDto) {
-    this.buttonLoading = true;
-    this.chargeSessionsService
-      .chargeSessionsIdCancelPost(
-        item?.id,
-        this.xApplicationClientId,
-        this.cancelSessionCommand
-      )
-      .subscribe({
-        next: v => {
-          this.notificationService.showSuccessToast(
-            this.getTranslate('PAGES.CHARGE-POINTS.CANCELLING-CHARGE')
-          );
-          this.close();
-          this.buttonLoading = false;
-        },
-        error: e => {
-          this.notificationService.showErrorToast(this.handleError(e));
-          this.close();
-          this.buttonLoading = false;
-        },
-        complete: () => {
-          this.getSessions(this.page, this.pageSize);
-        }
-      });
+  cancelCharge(item: RoamingSessionDto) {
+    // this.buttonLoading = true;
+    // this.chargeSessionsService
+    //   .chargeSessionsIdCancelPost(
+    //     item?.id,
+    //     this.xApplicationClientId,
+    //     this.cancelSessionCommand
+    //   )
+    //   .subscribe({
+    //     next: v => {
+    //       this.notificationService.showSuccessToast(
+    //         this.getTranslate('PAGES.CHARGE-POINTS.CANCELLING-CHARGE')
+    //       );
+    //       this.close();
+    //       this.buttonLoading = false;
+    //     },
+    //     error: e => {
+    //       this.notificationService.showErrorToast(this.handleError(e));
+    //       this.close();
+    //       this.buttonLoading = false;
+    //     },
+    //     complete: () => {
+    //       setTimeout(() => {
+    //         this.getSessions(this.page, this.pageSize);
+    //       }, 600);
+    //     }
+    //   });
   }
 
-  getConnector(chargeSession: ChargeSessionDto): ConnectorDto {
-    let connector: any = chargeSession.chargePoint?.connectors?.find(
-      c => c.id == chargeSession.connectorId
-    );
-    return connector as ConnectorDto;
-  }
-
-  stopChargeConfirmation(item: ChargeSessionDto) {
+  stopChargeConfirmation(item: RoamingSessionDto) {
     this.dialogConfig.data = {
       title: this.getTranslate('PAGES.CHARGE-POINTS.STOP-CHARGE'),
       description: this.getTranslate(
         'PAGES.CHARGE-POINTS.STOP-CHARGE-DESCRIPTION',
         {
-          connectorNumber: item?.connectorNumber
+          connectorNumber: item?.connectorNo
         }
       ),
       buttonText: this.getTranslate('PAGES.CHARGE-POINTS.STOP-CHARGE'),
@@ -777,132 +720,35 @@ export class SessionListComponent extends ScrollableComponent
     this.open(this.components.confirmationDialog);
   }
 
-  stopCharge(item: ChargeSessionDto) {
-    this.buttonLoading = true;
-    this.subscription.add(
-      this.chargePointService
-        .chargePointsIdStopPost(
-          item?.chargePointId,
-          this.xApplicationClientId,
-          this.stopChargeRequest
-        )
-        .subscribe({
-          next: v => {
-            this.notificationService.showSuccessToast(
-              this.getTranslate('PAGES.CHARGE-POINTS.STOPPING-CHARGE')
-            );
-            this.buttonLoading = false;
-          },
-          error: e => {
-            this.notificationService.showErrorToast(this.handleError(e));
-            this.close();
-
-            this.buttonLoading = false;
-          },
-          complete: () => {
-            this.close();
-            this.getSessions(this.page, this.pageSize);
-          }
-        })
-    );
-  }
-
-  unlockConnectorConfirmation(connector: any) {
-    this.dialogConfig.data = {
-      title: this.getTranslate('PAGES.CHARGE-POINTS.UNLOCK-CONNECTOR'),
-      description: this.getTranslate(
-        'PAGES.CHARGE-POINTS.UNLOCK-CONNECTOR-DESCRIPTION',
-        {
-          connectorNumber: connector?.connectorNumber
-        }
-      ),
-      buttonText: this.getTranslate('PAGES.CHARGE-POINTS.UNLOCK-CONNECTOR'),
-      confirmEventCallback: (eventData: any) => {
-        this.unlockConnector(connector);
-      },
-      cancelEventCallback: (eventData: any) => {}
-    };
-    this.open(this.components.confirmationDialog);
-  }
-
-  unlockConnector(connector: any) {
-    this.buttonLoading = true;
-    this.subscription.add(
-      this.chargePointService
-        .chargePointsIdUnlockPost(
-          connector?.chargePointId,
-          this.xApplicationClientId,
-          this.unlockConnectorRequest
-        )
-        .subscribe({
-          next: v => {
-            this.notificationService.showSuccessToast(
-              this.getTranslate('PAGES.CHARGE-POINTS.UNLOCKED-CONNECTOR')
-            );
-            this.buttonLoading = false;
-          },
-          error: e => {
-            this.notificationService.showErrorToast(this.handleError(e));
-            this.close();
-            this.buttonLoading = false;
-          },
-          complete: () => {
-            this.close();
-            this.getSessions(this.page, this.pageSize);
-          }
-        })
-    );
-  }
-
-  resetChargePointConfirmation(item: ChargePointDto) {
-    this.dialogConfig.data = {
-      title: this.getTranslate('PAGES.CHARGE-POINTS.RESET-CHARGE-POINT'),
-      description: this.getTranslate(
-        'PAGES.CHARGE-POINTS.RESET-CHARGE-POINT-DESCRIPTION',
-        { name: item?.name }
-      ),
-      buttonText: this.getTranslate('PAGES.CHARGE-POINTS.RESET-CHARGE-POINT'),
-      confirmEventCallback: (eventData: any) => {
-        this.resetChargePoint(item);
-      }
-    };
-
-    this.open(this.components.confirmationDialog);
-  }
-
-  resetChargePoint(item: ChargePointDto) {
-    this.buttonLoading = true;
-    let resetRequest = {
-      chargePointId: item?.id
-    } as ResetCommand;
-
-    this.subscription.add(
-      this.chargePointService
-        .chargePointsIdResetPost(
-          item?.id,
-          this.xApplicationClientId,
-          resetRequest
-        )
-        .subscribe({
-          next: v => {
-            this.notificationService.showSuccessToast(
-              this.getTranslate(
-                'PAGES.CHARGE-POINTS.RESET-CHARGE-POINT-SUCCESS'
-              )
-            );
-            this.buttonLoading = false;
-            this.close();
-          },
-          error: e => {
-            this.notificationService.showErrorToast(this.handleError(e));
-            this.close();
-            this.buttonLoading = false;
-          },
-          complete: () => {
-            this.getSessions(this.page, this.pageSize);
-          }
-        })
-    );
+  stopCharge(item: RoamingSessionDto) {
+    // this.buttonLoading = true;
+    // this.subscription.add(
+    //   this.chargePointService
+    //     .chargePointsIdStopPost(
+    //       item?.chargePointId,
+    //       this.xApplicationClientId,
+    //       this.stopChargeRequest
+    //     )
+    //     .subscribe({
+    //       next: v => {
+    //         this.notificationService.showSuccessToast(
+    //           this.getTranslate('PAGES.CHARGE-POINTS.STOPPING-CHARGE')
+    //         );
+    //         this.buttonLoading = false;
+    //       },
+    //       error: e => {
+    //         this.notificationService.showErrorToast(this.handleError(e));
+    //         this.close();
+    //         this.buttonLoading = false;
+    //       },
+    //       complete: () => {
+    //         this.close();
+    //         setTimeout(() => {
+    //           this.getSessions(this.page, this.pageSize);
+    //         }, 600);
+    //       }
+    //     })
+    // );
   }
 
   closeCalendar() {

@@ -39,52 +39,17 @@ export class SidenavComponent extends BaseComponent
   dashboardIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
     this.getIconWithClass(Icons.DashboardIcon.name, 'regular')
   );
-  userIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(Icons.UserIcon.name, 'regular')
-  );
-  transactionIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(Icons.TransactionIcon.name, 'regular')
-  );
-  settingIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(Icons.SettingIcon.name, 'regular')
-  );
-  paymentIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(Icons.PaymentIcon.name, 'regular white filled-path')
-  );
-  receiptIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(Icons.ReceiptIcon.name, 'regular')
-  );
   chargePointIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
     this.getIconWithClass(Icons.ChargePointIcon.name, 'regular')
-  );
-  connectorIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(
-      IconsArray.ConnectorIcon.name,
-      'regular white filled-path',
-      true
-    )
   );
   sessionIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
     this.getIconWithClass(Icons.SessionIcon.name, 'regular')
   );
-  // reservationIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-  //   this.getIconWithClass(Icons.ReservationIcon.name, 'regular')
-  // );
-  mapIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(Icons.MapIcon.name, 'regular')
+  transactionIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
+    this.getIconWithClass(Icons.TransactionIcon.name, 'regular')
   );
-  rfidIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(Icons.RfidIcon.name, 'regular')
-  );
-  workspaceIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(Icons.WorkspaceIcon.name, 'regular')
-  );
-  campaignIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(
-      IconsArray.CampaignIcon.name,
-      'regular white filled-path',
-      true
-    )
+  userIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
+    this.getIconWithClass(Icons.UserIcon.name, 'regular')
   );
   logoWithText: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
     this.getIconWithClass(
@@ -100,25 +65,6 @@ export class SidenavComponent extends BaseComponent
       true
     )
   );
-  plusIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(Icons.PlusIcon.name, 'regular')
-  );
-
-  integrationIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(
-      IconsArray.IntegrationIcon.name,
-      'regular white filled-path',
-      true
-    )
-  );
-  notificationIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
-    this.getIconWithClass(
-      IconsArray.NotificationIcon.name,
-      'regular white filled-path',
-      true
-    )
-  );
-
   currentIcon: SafeHtml = this.logoWithText;
 
   constructor(
@@ -131,13 +77,6 @@ export class SidenavComponent extends BaseComponent
     protected dialogRef: DynamicDialogRef
   ) {
     super(translateService);
-    this.init();
-  }
-
-  init() {
-    this.components = {
-      // sendNotificationComponent: SendNotificationComponent,
-    };
   }
 
   @HostListener('window:resize', ['$event'])

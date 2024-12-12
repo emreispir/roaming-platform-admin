@@ -1,0 +1,131 @@
+<div [ngClass]="isChild ? 'child-page' : 'page-container'">
+  <div class="page-header">
+    <app-header-panel
+      title="{{ 'PAGES.CHARGE-POINTS.TITLE' | translate }}"
+      [toolTipContent]="'PAGES.CHARGE-POINTS.CHARGE-POINTS-TOOLTIP' | translate"
+      *ngIf="!isChild && !isScrolled"
+      #headerPanel
+    >
+    </app-header-panel>
+
+    <div
+      class="action-bar sticky-action-bar"
+      *ngIf="chargePointsResponse?.length > 0 || isSearchActive === true"
+    >
+      <div class="action-bar-left">
+        <label class="title" *ngIf="showActionbarTitle">{{
+          'PAGES.CHARGE-POINTS.TITLE' | translate
+        }}</label>
+
+        <span class="p-input-icon-left" *ngIf="showActionbarSearch">
+          <div class="svgContainer" [innerHTML]="searchIcon"></div>
+          <input
+            pInputText
+            #gb
+            [formControl]="searchItem"
+            placeholder="{{ 'COMMON.SEARCH-NAME' | translate }}"
+            id="input-search"
+            class="form-control radius-border search"
+          />
+        </span>
+      </div>
+      <div class="action-bar-right">
+        <button
+          type="button"
+          class="p-button p-button-default small me-2"
+          [ngClass]="isBox ? 'gray' : 'bordered-white'"
+          (click)="getChargePoints(this.page, this.pageSize)"
+        >
+          <div class="svgContainer" [innerHTML]="refreshIcon"></div>
+          <span>{{ 'COMMON.REFRESH' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body" #pageBody>
+    <app-loader [loaderMessage]="loaderMessage" *ngIf="loading"></app-loader>
+
+    <ng-container *ngIf="chargePointsResponse">
+      <ng-container
+        *ngIf="chargePointsResponse?.length === 0; else chargePointListing"
+      >
+        <ng-container *ngIf="isSearchActive === true; else emptyResponse">
+          <div class="d-flex flex-column w-100">
+            <div class="table-info">
+              <div class="svgContainer" [innerHTML]="infoIcon"></div>
+              <label [innerHTML]="'PAGES.CHARGE-POINTS.NO-ITEM' | translate">
+              </label>
+              <ng-container *ngIf="isSearchActive === true">
+                <button
+                  type="button"
+                  class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                  (click)="resetFilter()"
+                >
+                  {{ 'COMMON.RESET' | translate }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #emptyResponse>
+          <ng-container *ngIf="!loading">
+            <app-info-panel
+              [imageUrl]="noChargePointIconGiga"
+              [title]="infoPanelTitle"
+              [description]="infoPanelDescription"
+              *ngIf="!isBox; else infoCard"
+            >
+            </app-info-panel>
+
+            <ng-template #infoCard>
+              <app-info-card
+                [title]="getTranslate('PAGES.CHARGE-POINTS.DONT-HAVE')"
+                [imgSrc]="noChargePointIcon"
+                [headerOption]="{
+                  text: getTranslate('PAGES.CHARGE-POINTS.CHARGE-POINT')
+                }"
+                class="w-100 headered-card"
+              >
+              </app-info-card>
+            </ng-template>
+          </ng-container>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #chargePointListing>
+        <div class="d-flex flex-column w-100">
+          <div class="table-info">
+            <div class="svgContainer" [innerHTML]="infoIcon"></div>
+            <label
+              [innerHTML]="
+                'PAGES.CHARGE-POINTS.TOTAL-ITEM'
+                  | translate
+                    : {
+                        count: totalItemCount,
+                      }
+              "
+            >
+            </label>
+            <ng-container *ngIf="isSearchActive === true">
+              <button
+                type="button"
+                class="p-button p-button-rounded p-button-secondary p-button-sm filter-reset"
+                (click)="resetFilter()"
+              >
+                {{ 'COMMON.RESET' | translate }}
+              </button>
+            </ng-container>
+          </div>
+
+          <lib-surge-table
+            [data]="chargePointsResponse"
+            [columns]="tableColumns"
+            [config]="tableConfig"
+          >
+          </lib-surge-table>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

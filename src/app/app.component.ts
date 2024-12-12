@@ -9,15 +9,20 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Language } from './@core/models/common';
 import { NotificationService } from './@core/services/notification.service';
-import { SignalRService } from './@core/services/signalr.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  template: `
+    <app-gpt></app-gpt>
+    <div>
+      <p-toast></p-toast>
+      <app-loader *ngIf="loading"></app-loader>
+      <router-outlet></router-outlet>
+    </div>
+  `
 })
 export class AppComponent extends BaseComponent implements OnInit {
   constructor(
-    protected signalRService: SignalRService,
     protected translateService: TranslateService,
     protected router: Router,
     private config: PrimeNGConfig,
@@ -45,46 +50,6 @@ export class AppComponent extends BaseComponent implements OnInit {
       }
       window.scrollTo(0, 0);
     });
-
-    if (this.sharedService?.userData && !this.signalRService.connectionExists) {
-      if (this.subscription) {
-        this.subscription.unsubscribe();
-      }
-
-      if (!this.signalRService.isConnected()) {
-        this.subscription.add(
-          this.signalRService.connectHub().subscribe(connected => {
-            if (connected) {
-              this.subscribeToSignalrData();
-            } else {
-              console.error('SignalR connection could not be established.');
-            }
-          })
-        );
-      } else {
-        this.subscribeToSignalrData();
-      }
-    }
-  }
-
-  subscribeToSignalrData() {
-    this.subscription.add(
-      this.signalRService
-        .invokeData(
-          'subscribe',
-          `${
-            this.getDecodedUserToken()?.extension_DirectoryId
-          }/directory-admin`,
-          this.sharedService?.userData?.id
-        )
-        .subscribe({
-          next: v => {},
-          error: e => {
-            console.error('Failed to receive data:', e);
-          },
-          complete: () => {}
-        })
-    );
   }
 
   ngOnDestroy() {

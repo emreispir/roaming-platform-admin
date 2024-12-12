@@ -2,16 +2,18 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MsalGuard } from '../../@core/services/msal.guard';
 import { SessionListComponent } from './session-list/session-list.component';
-import { Policy } from '../../@core/models/policy';
+import { SessionDetailComponent } from './session-detail/session-detail.component';
 
 const routes: Routes = [
   {
     path: '',
     canActivate: [MsalGuard],
-    component: SessionListComponent,
-    data: {
-      policies: [Policy.ChargeSessionRead]
-    }
+    component: SessionListComponent
+  },
+  {
+    path: ':id',
+    canActivate: [MsalGuard],
+    component: SessionDetailComponent
   }
 ];
 

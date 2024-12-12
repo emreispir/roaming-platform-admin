@@ -45,7 +45,7 @@ steps:
 
   - script: |
       ng build --configuration production
-    displayName: 'Surge Call Center BackOffice - SurgeMobility'
+    displayName: 'Surge Roaming BackOffice - SurgeMobility'
 
   - task: PublishBuildArtifacts@1
     inputs:

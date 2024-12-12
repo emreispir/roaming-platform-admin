@@ -2,13 +2,11 @@ import {
   AfterViewChecked,
   ChangeDetectorRef,
   Component,
-  Input,
   OnDestroy
 } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedService } from '../../@core/services/shared.service';
-import { UserDetailsDto } from '../../../../api';
 import { NgIf } from '@angular/common';
 import { ScrollableComponent } from '../../@core/components/scrollable/scrollable.component';
 import {
@@ -18,39 +16,29 @@ import {
 } from 'primeng/dynamicdialog';
 import { HeaderPanelComponent } from '../../@core/components/header-panel/header-panel.component';
 import { FormBuilder } from '@angular/forms';
-import { SurgeFormComponent } from 'surge-components';
-import { LoaderComponent } from '../../@core/components/loader/loader.component';
-import { OtpVerificationComponent } from '../account/otp-verification/otp-verification.component';
-import { InfoCardComponent } from '../../@core/components/info-card/info-card.component';
-import { Keys } from '../../@core/constants/keys';
+import { ChargePointConnectorStartComponent } from '../charge-point/charge-point-connector-start/charge-point-connector-start.component';
+import { Icons } from '../../../assets/svg/svg-variables';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [
-    NgIf,
-    TranslateModule,
-    RouterModule,
-    HeaderPanelComponent,
-    SurgeFormComponent,
-    LoaderComponent,
-    OtpVerificationComponent,
-    InfoCardComponent
-  ]
+  imports: [NgIf, TranslateModule, RouterModule, HeaderPanelComponent]
 })
 export class DashboardComponent extends ScrollableComponent
   implements AfterViewChecked, OnDestroy {
-  @Input() directoryId: string;
-
-  userResponse: UserDetailsDto;
+  sessionIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
+    this.getIconWithClass(Icons.SessionIcon.name, 'regular')
+  );
 
   constructor(
     public sharedService: SharedService,
     protected translateService: TranslateService,
     protected router: Router,
     private cd: ChangeDetectorRef,
+    protected sanitizer: DomSanitizer,
     protected config: DynamicDialogConfig,
     protected dialogService: DialogService,
     protected dialogRef: DynamicDialogRef,
@@ -69,16 +57,8 @@ export class DashboardComponent extends ScrollableComponent
   }
 
   init() {
-    this.directoryId = this.getDecodedUserToken()?.extension_DirectoryId
-      ? this.getDecodedUserToken()?.extension_DirectoryId
-      : null;
-
     this.breadcrumbMenuItems = [
       { label: this.getTranslate('SURGE'), routerLink: '/dashboard' },
-      {
-        label: this.getDecodedUserToken()?.extension_Directory?.name,
-        routerLink: '/dashboard'
-      },
       {
         label: this.getTranslate('PAGES.DASHBOARD.TITLE'),
         routerLink: '/dashboard'
@@ -87,12 +67,23 @@ export class DashboardComponent extends ScrollableComponent
 
     this.sharedService.changedBreadcrumbData(this.breadcrumbMenuItems);
 
-    let userResponse = localStorage.getItem(Keys.AUTHENTICATED_USER_DATA);
-    this.userResponse = userResponse ? JSON.parse(userResponse) : null;
+    this.components = {
+      connectorStart: ChargePointConnectorStartComponent
+    };
   }
 
-  navigateUserDetail() {
-    this.router.navigate(['/users', this.userResponse?.id]);
+  startChargeConfirmation(connector: any) {
+    this.dialogConfig.data = {
+      isChild: true,
+      confirmEventCallback: (eventData: any) => {
+        this.close();
+      },
+      cancelEventCallback: (eventData: any) => {
+        this.close();
+      }
+    };
+
+    this.open(this.components.connectorStart);
   }
 
   ngOnDestroy() {

@@ -36,7 +36,7 @@ steps:
 
   - script: |
       rm -rf ./api/api.ts && rm -rf ./api/model
-      openapi-generator-cli generate -o ./api -i https://surge-mobility-api-dev.azurewebsites.net/swagger/v1/swagger.json -g typescript-angular --additional-properties useEnumExtension=true,modelPropertyNaming=original,enumValueNaming=UPPERCASE
+      openapi-generator-cli generate -o ./api -i ~/Desktop/swagger.json -g typescript-angular --additional-properties useEnumExtension=true,modelPropertyNaming=original,enumValueNaming=UPPERCASE
     displayName: 'Generate API with OpenAPI Generator'
 
   - script: |
@@ -45,7 +45,7 @@ steps:
 
   - script: |
       ng build --aot
-    displayName: 'Surge Call Center BackOffice - SurgeMobilityDev'
+    displayName: 'Surge Roaming BackOffice - SurgeMobilityDev'
 
   - task: PublishBuildArtifacts@1
     inputs:

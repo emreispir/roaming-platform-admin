@@ -109,11 +109,11 @@ export class CreditCardsService {
     }
 
     /**
-     * @param redirectUrl 
-     * @param xApplicationClientId ApplicationClientId
      * @param tokenId 
      * @param tokenCustomerId 
      * @param maskedCCNo 
+     * @param redirectUrl 
+     * @param xApplicationClientId ApplicationClientId
      * @param holderPlatform 
      * @param externalUserId 
      * @param isPrimary 
@@ -121,10 +121,19 @@ export class CreditCardsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public creditCardsCreatedTokenizedPost(redirectUrl?: string, xApplicationClientId?: string, tokenId?: string, tokenCustomerId?: string, maskedCCNo?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public creditCardsCreatedTokenizedPost(redirectUrl?: string, xApplicationClientId?: string, tokenId?: string, tokenCustomerId?: string, maskedCCNo?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public creditCardsCreatedTokenizedPost(redirectUrl?: string, xApplicationClientId?: string, tokenId?: string, tokenCustomerId?: string, maskedCCNo?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public creditCardsCreatedTokenizedPost(redirectUrl?: string, xApplicationClientId?: string, tokenId?: string, tokenCustomerId?: string, maskedCCNo?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public creditCardsCreatedTokenizedPost(tokenId: string, tokenCustomerId: string, maskedCCNo: string, redirectUrl?: string, xApplicationClientId?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public creditCardsCreatedTokenizedPost(tokenId: string, tokenCustomerId: string, maskedCCNo: string, redirectUrl?: string, xApplicationClientId?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public creditCardsCreatedTokenizedPost(tokenId: string, tokenCustomerId: string, maskedCCNo: string, redirectUrl?: string, xApplicationClientId?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public creditCardsCreatedTokenizedPost(tokenId: string, tokenCustomerId: string, maskedCCNo: string, redirectUrl?: string, xApplicationClientId?: string, holderPlatform?: HolderPlatform, externalUserId?: string, isPrimary?: boolean, directoryId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (tokenId === null || tokenId === undefined) {
+            throw new Error('Required parameter tokenId was null or undefined when calling creditCardsCreatedTokenizedPost.');
+        }
+        if (tokenCustomerId === null || tokenCustomerId === undefined) {
+            throw new Error('Required parameter tokenCustomerId was null or undefined when calling creditCardsCreatedTokenizedPost.');
+        }
+        if (maskedCCNo === null || maskedCCNo === undefined) {
+            throw new Error('Required parameter maskedCCNo was null or undefined when calling creditCardsCreatedTokenizedPost.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (redirectUrl !== undefined && redirectUrl !== null) {

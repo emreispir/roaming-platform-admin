@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { MsalGuard } from '../@core/services/msal.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutComponent } from '../@theme/layouts/main-layout/layout.component';
-import { Policy } from '../@core/models/policy';
 import { HomeComponent } from './home/home.component';
 import { OauthTokenComponent } from './oauth-token/oauth-token/oauth-token.component';
 
@@ -52,14 +51,33 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'users',
+    path: 'sessions',
     canActivate: [MsalGuard],
     component: LayoutComponent,
-    data: {
-      policies: [Policy.UserRead]
-    },
     loadChildren: () =>
-      import('./users/users-routing.module').then(x => x.UsersRoutingModule)
+      import('./session/session-routing.module').then(
+        x => x.SessionRoutingModule
+      )
+  },
+
+  {
+    path: 'transactions',
+    canActivate: [MsalGuard],
+    component: LayoutComponent,
+    loadChildren: () =>
+      import('./transaction/transaction-routing.module').then(
+        x => x.TransactionRoutingModule
+      )
+  },
+
+  {
+    path: 'charge-points',
+    canActivate: [MsalGuard],
+    component: LayoutComponent,
+    loadChildren: () =>
+      import('./charge-point/charge-point-routing.module').then(
+        x => x.ChargePointRoutingModule
+      )
   },
 
   { path: '', redirectTo: '/oauth-token', pathMatch: 'full' },

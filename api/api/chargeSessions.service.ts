@@ -31,7 +31,7 @@ import { ChargeSessionStatus } from '../model/chargeSessionStatus';
 // @ts-ignore
 import { ExportChargeSessionCsvFileCommand } from '../model/exportChargeSessionCsvFileCommand';
 // @ts-ignore
-import { TransactionDto } from '../model/transactionDto';
+import { PlugTransactionDto } from '../model/plugTransactionDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -379,9 +379,9 @@ export class ChargeSessionsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public chargeSessionsIdEstimatedTransactionGet(id: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<TransactionDto>;
-    public chargeSessionsIdEstimatedTransactionGet(id: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<TransactionDto>>;
-    public chargeSessionsIdEstimatedTransactionGet(id: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<TransactionDto>>;
+    public chargeSessionsIdEstimatedTransactionGet(id: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<PlugTransactionDto>;
+    public chargeSessionsIdEstimatedTransactionGet(id: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<PlugTransactionDto>>;
+    public chargeSessionsIdEstimatedTransactionGet(id: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<PlugTransactionDto>>;
     public chargeSessionsIdEstimatedTransactionGet(id: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling chargeSessionsIdEstimatedTransactionGet.');
@@ -431,7 +431,7 @@ export class ChargeSessionsService {
         }
 
         let localVarPath = `/charge-sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/estimated-transaction`;
-        return this.httpClient.request<TransactionDto>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PlugTransactionDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

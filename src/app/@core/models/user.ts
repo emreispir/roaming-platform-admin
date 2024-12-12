@@ -3,5 +3,4 @@ export enum RoleType {
   DirectoryAdmin = 'directory-admin',
   WorkspaceAdmin = 'workspace-admin',
   Member = 'member',
-  CallCenter = 'call-center'
 }

@@ -8,37 +8,35 @@ import {
   OnInit,
   Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 import {
-  ChargePointDto,
-  ChargePointsService,
-  ConnectorDto,
   ConnectorType,
-  RemoteStartTransactionForAdminCommand,
-  TariffDto,
-  TariffsService,
-  UserDetailsDto,
-  UsersService
+  RoamingConnectorDto,
+  RoamingPointDto,
+  RoamingPointsService,
+  RoamingTariffDto,
+  RoamingTariffsService,
+  RoamingUserDetailDto,
+  RoamingUsersService,
 } from '../../../../../api';
 import { BaseComponent } from '../../../shared/base.component';
 import {
   FormsModule,
   ReactiveFormsModule,
   UntypedFormBuilder,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import {
   DialogService,
   DynamicDialogRef,
-  DynamicDialogConfig
+  DynamicDialogConfig,
 } from 'primeng/dynamicdialog';
 import { Subject, debounceTime } from 'rxjs';
 import { Icons, IconsArray } from '../../../../assets/svg/svg-variables';
-import { RoleType } from '../../../@core/models/user';
 import { HelperService } from '../../../@core/services/helper.service';
 import { NotificationService } from '../../../@core/services/notification.service';
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
@@ -51,7 +49,7 @@ import {
   ButtonStyle,
   ButtonSize,
   Position,
-  ButtonColor
+  ButtonColor,
 } from 'surge-components';
 
 @Component({
@@ -66,10 +64,10 @@ import {
     NgIf,
     SurgeFormComponent,
     NgTemplateOutlet,
-    CardWithAvatarComponent
+    CardWithAvatarComponent,
   ],
   templateUrl: './charge-point-connector-start.component.html',
-  styleUrls: ['./charge-point-connector-start.component.scss']
+  styleUrls: ['./charge-point-connector-start.component.scss'],
 })
 export class ChargePointConnectorStartComponent extends BaseComponent
   implements OnInit, OnDestroy, AfterViewInit {
@@ -82,19 +80,19 @@ export class ChargePointConnectorStartComponent extends BaseComponent
 
   @ViewChild('connectorDropdownItemTemplate', {
     static: true,
-    read: TemplateRef
+    read: TemplateRef,
   })
   connectorDropdownItemTemplate: TemplateRef<any>;
 
   @ViewChild('chargePointAutocompleteItemTemplate', {
     static: true,
-    read: TemplateRef
+    read: TemplateRef,
   })
   chargePointAutocompleteItemTemplate: TemplateRef<any>;
 
   @ViewChild('userAutocompleteItemTemplate', {
     static: true,
-    read: TemplateRef
+    read: TemplateRef,
   })
   userAutocompleteItemTemplate: TemplateRef<any>;
 
@@ -113,27 +111,27 @@ export class ChargePointConnectorStartComponent extends BaseComponent
     this.getIconWithClass(IconsArray.CpIconStroked.name, 'xxxlarge white', true)
   );
 
-  filteredUsers: UserDetailsDto[];
+  filteredUsers: RoamingUserDetailDto[];
   filterUserSubject = new Subject<any>();
 
-  filterChargePoints: ChargePointDto[];
+  filterChargePoints: RoamingPointDto[];
   filterChargePointSubject = new Subject<any>();
 
   workspaceId: string;
 
-  connectorResponse: ConnectorDto;
-  connectorsResponse: ConnectorDto[];
-  tariffsResponse: TariffDto[];
-  userResponse: UserDetailsDto;
+  connectorResponse: RoamingConnectorDto;
+  connectorsResponse: RoamingConnectorDto[];
+  tariffsResponse: RoamingTariffDto[];
+  userResponse: RoamingUserDetailDto;
   connectorTypes = ConnectorType;
 
-  startChargeRequest = <RemoteStartTransactionForAdminCommand>{};
+  // startChargeRequest = <RemoteStartTransactionForAdminCommand>{};
   avatarSizes = AvatarSize;
 
   constructor(
-    protected tariffService: TariffsService,
-    protected userService: UsersService,
-    protected chargePointService: ChargePointsService,
+    protected tariffService: RoamingTariffsService,
+    protected userService: RoamingUsersService,
+    protected chargePointService: RoamingPointsService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
     protected helperService: HelperService,
@@ -159,7 +157,7 @@ export class ChargePointConnectorStartComponent extends BaseComponent
       fromSurgeApp: [false, Validators.required],
       connector: [null, Validators.required],
       tariffId: [null],
-      couponId: [null]
+      couponId: [null],
     });
 
     this.setFormValues();
@@ -167,7 +165,7 @@ export class ChargePointConnectorStartComponent extends BaseComponent
     this.subscription.add(
       this.filterUserSubject
         .pipe(debounceTime(400))
-        .subscribe(event => this.getUsers(event))
+        .subscribe((event) => this.getUsers(event))
     );
 
     if (this.workspaceId) {
@@ -178,7 +176,7 @@ export class ChargePointConnectorStartComponent extends BaseComponent
       this.subscription.add(
         this.filterChargePointSubject
           .pipe(debounceTime(400))
-          .subscribe(event => this.getChargePoints(event))
+          .subscribe((event) => this.getChargePoints(event))
       );
     }
 
@@ -190,7 +188,6 @@ export class ChargePointConnectorStartComponent extends BaseComponent
       chargePoint: this.config?.data?.chargePoint || null,
       connector: this.connectorResponse || null,
       tariffId: this.connectorResponse?.tariff?.id || null,
-      user: this.userResponse || null
     });
   }
 
@@ -206,11 +203,11 @@ export class ChargePointConnectorStartComponent extends BaseComponent
     this.cancelEvent.subscribe(this.cancelEventCallback);
 
     this.formConfig.fields.find(
-      t => t.formControlName === 'tariffId'
+      (t) => t.formControlName === 'tariffId'
     ).dropdownItemContentTemplate = this.tariffDropdownItemTemplate;
 
     let chargePointFormControl = this.formConfig.fields.find(
-      t => t.formControlName === 'chargePoint'
+      (t) => t.formControlName === 'chargePoint'
     );
 
     if (chargePointFormControl) {
@@ -218,11 +215,11 @@ export class ChargePointConnectorStartComponent extends BaseComponent
     }
 
     this.formConfig.fields.find(
-      t => t.formControlName === 'user'
+      (t) => t.formControlName === 'user'
     ).dropdownItemContentTemplate = this.userAutocompleteItemTemplate;
 
     let connectorFormControl = this.formConfig.fields.find(
-      t => t.formControlName === 'connector'
+      (t) => t.formControlName === 'connector'
     );
 
     if (connectorFormControl) {
@@ -249,7 +246,7 @@ export class ChargePointConnectorStartComponent extends BaseComponent
                 hideTransitionOptions: '0ms',
                 validationMessages: this.getTranslate('COMMON.REQUIRED'),
                 autocompleteField: 'name',
-                dropdownEmptyMessage: this.getTranslate('COMMON.NO-RESULT')
+                dropdownEmptyMessage: this.getTranslate('COMMON.NO-RESULT'),
               },
               {
                 type: FormElementType.Dropdown,
@@ -259,8 +256,8 @@ export class ChargePointConnectorStartComponent extends BaseComponent
                 options: this.connectorsResponse,
                 validationMessages: this.getTranslate('COMMON.REQUIRED'),
                 dropdownOptionLabel: 'connectorNumber',
-                dropdownShowClear: true
-              }
+                dropdownShowClear: true,
+              },
             ]
           : []),
 
@@ -277,7 +274,6 @@ export class ChargePointConnectorStartComponent extends BaseComponent
           validationMessages: this.getTranslate('COMMON.REQUIRED'),
           autocompleteField: 'displayName',
           dropdownEmptyMessage: this.getTranslate('COMMON.NO-RESULT'),
-          styleClass: 'disabled'
         },
         {
           type: FormElementType.Dropdown,
@@ -289,8 +285,8 @@ export class ChargePointConnectorStartComponent extends BaseComponent
           dropdownOptionLabel: 'name',
           dropdownOptionValue: 'id',
           dropdownShowClear: true,
-          dropdownEmptyMessage: this.getTranslate('COMMON.NO-RESULT')
-        }
+          dropdownEmptyMessage: this.getTranslate('COMMON.NO-RESULT'),
+        },
       ],
       buttons: [
         {
@@ -298,7 +294,7 @@ export class ChargePointConnectorStartComponent extends BaseComponent
           text: this.getTranslate('COMMON.CANCEL'),
           class: ButtonStyle.Text,
           size: ButtonSize.Large,
-          position: Position.Right
+          position: Position.Right,
         },
         {
           type: ButtonType.Submit,
@@ -306,18 +302,18 @@ export class ChargePointConnectorStartComponent extends BaseComponent
           progressText: this.getTranslate('COMMON.PLEASE-WAIT'),
           color: ButtonColor.Blue,
           size: ButtonSize.Large,
-          position: Position.Right
-        }
+          position: Position.Right,
+        },
       ],
       showInfoTitle: true,
       formTitle: this.getTranslate('PAGES.CHARGE-POINTS.START-CHARGE'),
       formSubtitle: this.config?.data?.chargePoint
         ? this.getTranslate('PAGES.CHARGE-POINTS.START-CHARGE-DESCRIPTION', {
-            connectorNumber: this.connectorResponse?.connectorNumber
+            connectorNumber: this.connectorResponse?.connectorNo,
           })
         : this.getTranslate(
             'PAGES.CHARGE-POINTS.START-CHARGE-DESCRIPTION-WITHOUT-NUMBER'
-          )
+          ),
     };
   }
 
@@ -352,18 +348,18 @@ export class ChargePointConnectorStartComponent extends BaseComponent
       this.tariffService
         .tariffsGet(page, size, this.workspaceId, this.searchItem.value)
         .subscribe({
-          next: v => {
+          next: (v) => {
             this.tariffsResponse = [];
             this.tariffsResponse = v.items;
-            this.tariffsResponse.push(<TariffDto>{
+            this.tariffsResponse.push(<RoamingTariffDto>{
               id: null,
               name: this.getTranslate('PAGES.TARIFFS.FREE'),
               basePrice: 0,
-              currency: v.items[0]?.currency
+              currency: v.items[0]?.currency,
             });
 
             let connectorFormControl = this.formConfig.fields.find(
-              t => t.formControlName === 'connector'
+              (t) => t.formControlName === 'connector'
             );
 
             if (connectorFormControl) {
@@ -371,16 +367,16 @@ export class ChargePointConnectorStartComponent extends BaseComponent
             }
 
             this.formConfig.fields.find(
-              x => x.formControlName === 'tariffId'
+              (x) => x.formControlName === 'tariffId'
             ).options = this.tariffsResponse;
           },
-          error: e => {
+          error: (e) => {
             this.notificationService.showErrorToast(this.handleError(e));
             this.loading = false;
           },
           complete: () => {
             this.loading = false;
-          }
+          },
         })
     );
   }
@@ -395,30 +391,24 @@ export class ChargePointConnectorStartComponent extends BaseComponent
         .usersGet(
           this.page,
           1000,
-          this.getDecodedUserToken()?.extension_DirectoryId,
-          this.getDecodedUserToken()?.extension_Roles !==
-            RoleType.WorkspaceAdmin
-            ? null
-            : this.workspaceId,
-          null,
           event.query
         )
         .subscribe({
-          next: v => {
+          next: (v) => {
             this.filteredUsers = [];
             this.filteredUsers = v.items;
 
             this.formConfig.fields.find(
-              x => x.formControlName === 'user'
+              (x) => x.formControlName === 'user'
             ).suggestions = this.filteredUsers;
           },
-          error: e => {
+          error: (e) => {
             this.notificationService.showErrorToast(this.handleError(e));
             this.loading = false;
           },
           complete: () => {
             this.loading = false;
-          }
+          },
         })
     );
   }
@@ -427,10 +417,9 @@ export class ChargePointConnectorStartComponent extends BaseComponent
     this.filterChargePointSubject.next(event);
   }
 
-  onChargePointSelect(chargePoint: ChargePointDto) {
+  onChargePointSelect(chargePoint: RoamingPointDto) {
     this.connectorsResponse = [];
-    this.connectorsResponse = chargePoint.connectors;
-    this.workspaceId = chargePoint.workspaceId;
+    this.connectorsResponse = chargePoint.sockets;
 
     this.getTariffs(this.page, 100000);
   }
@@ -438,35 +427,36 @@ export class ChargePointConnectorStartComponent extends BaseComponent
   getChargePoints(event: any) {
     this.subscription.add(
       this.chargePointService
-        .chargePointsGet(
+        .roamingPointsGet(
           this.page,
           1000,
-          event.query,
-          event.query,
-          this.getDecodedUserToken()?.extension_DirectoryId,
-          this.getDecodedUserToken()?.extension_Roles !==
-            RoleType.WorkspaceAdmin
-            ? null
-            : this.workspaceId
         )
         .subscribe({
-          next: v => {
+          next: (v) => {
             this.filterChargePoints = [];
             this.filterChargePoints = v.items;
 
             this.formConfig.fields.find(
-              x => x.formControlName === 'chargePoint'
+              (x) => x.formControlName === 'chargePoint'
             ).suggestions = this.filterChargePoints;
           },
-          error: e => {
+          error: (e) => {
             this.notificationService.showErrorToast(this.handleError(e));
             this.loading = false;
           },
           complete: () => {
             this.loading = false;
-          }
+          },
         })
     );
+  }
+
+  onConnectorChange(event: any) {
+    let connector = event?.value;
+
+    this.myForm.patchValue({
+      tariffId: connector?.tariff?.id || null,
+    });
   }
 
   cancel() {
@@ -474,58 +464,57 @@ export class ChargePointConnectorStartComponent extends BaseComponent
   }
 
   onFormSubmit(): void {
-    this.startChargeRequest.userId = this.myForm.get('user')?.value?.id || null;
+    // this.startChargeRequest.userId = this.myForm.get('user')?.value?.id || null;
 
-    if (this.startChargeRequest.userId) {
-      this.startChargeRequest.chargePointId =
-        this.myForm.get('chargePoint')?.value?.id || null;
+    // if (this.startChargeRequest.userId) {
+    //   this.startChargeRequest.chargePointId =
+    //     this.myForm.get('chargePoint')?.value?.id || null;
 
-      this.startChargeRequest.connectorId =
-        this.myForm.get('connector')?.value?.id || null;
+    //   this.startChargeRequest.connectorId =
+    //     this.myForm.get('connector')?.value?.id || null;
 
-      this.startChargeRequest.connectorNumber =
-        this.myForm.get('connector')?.value?.connectorNumber || null;
+    //   this.startChargeRequest.connectorNumber =
+    //     this.myForm.get('connector')?.value?.connectorNumber || null;
 
-      this.startChargeRequest.fromSurgeApp = this.myForm.get(
-        'fromSurgeApp'
-      ).value;
-      this.startChargeRequest.tariffId = this.myForm.get('tariffId').value;
-      this.startChargeRequest.couponId = this.myForm.get('couponId').value;
+    //   this.startChargeRequest.fromSurgeApp = this.myForm.get(
+    //     'fromSurgeApp'
+    //   ).value;
+    //   this.startChargeRequest.tariffId = this.myForm.get('tariffId').value;
+    //   this.startChargeRequest.couponId = this.myForm.get('couponId').value;
 
       this.startCharge();
-    }
+    // }
   }
 
   startCharge() {
-    this.buttonLoading = true;
-    this.myForm.disable();
+    // this.buttonLoading = true;
+    // this.myForm.disable();
 
-    this.subscription.add(
-      this.chargePointService
-        .chargePointsIdAdminStartPost(
-          this.startChargeRequest?.chargePointId,
-          this.xApplicationClientId,
-          this.startChargeRequest
-        )
-        .subscribe({
-          next: v => {
-            this.confirmEvent.emit();
-            this.notificationService.showSuccessToast(
-              this.getTranslate('PAGES.CHARGE-POINTS.STARTING-CHARGE')
-            );
-            this.submitted = false;
-            this.buttonLoading = false;
-            this.myForm.enable();
-            this.close(true);
-          },
-          error: e => {
-            this.notificationService.showErrorToast(this.handleError(e));
-            this.myForm.enable();
-            this.buttonLoading = false;
-          },
-          complete: () => {}
-        })
-    );
+    // this.subscription.add(
+    //   this.chargePointService
+    //     .chargePointsIdAdminStartPost(
+    //       this.startChargeRequest?.chargePointId,
+    //       this.startChargeRequest
+    //     )
+    //     .subscribe({
+    //       next: (v) => {
+    //         this.confirmEvent.emit();
+    //         this.notificationService.showSuccessToast(
+    //           this.getTranslate('PAGES.CHARGE-POINTS.STARTING-CHARGE')
+    //         );
+    //         this.submitted = false;
+    //         this.buttonLoading = false;
+    //         this.myForm.enable();
+    //         this.close(true);
+    //       },
+    //       error: (e) => {
+    //         this.notificationService.showErrorToast(this.handleError(e));
+    //         this.myForm.enable();
+    //         this.buttonLoading = false;
+    //       },
+    //       complete: () => {},
+    //     })
+    // );
   }
 
   ngOnDestroy() {

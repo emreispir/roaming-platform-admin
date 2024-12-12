@@ -23,13 +23,13 @@ import { ExportTransactionCsvFileCommand } from '../model/exportTransactionCsvFi
 // @ts-ignore
 import { ManualCompleteTransactionCommand } from '../model/manualCompleteTransactionCommand';
 // @ts-ignore
+import { PlugTransactionDto } from '../model/plugTransactionDto';
+// @ts-ignore
+import { PlugTransactionSimpleDtoPaginatedList } from '../model/plugTransactionSimpleDtoPaginatedList';
+// @ts-ignore
 import { RetryCreateInvoiceCommand } from '../model/retryCreateInvoiceCommand';
 // @ts-ignore
 import { RetryTransactionPaymentCommand } from '../model/retryTransactionPaymentCommand';
-// @ts-ignore
-import { TransactionDto } from '../model/transactionDto';
-// @ts-ignore
-import { TransactionSimpleDtoPaginatedList } from '../model/transactionSimpleDtoPaginatedList';
 // @ts-ignore
 import { TransactionStatus } from '../model/transactionStatus';
 
@@ -189,9 +189,9 @@ export class TransactionsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public transactionsGet(pageNumber?: number, pageSize?: number, q?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, startDate?: string, endDate?: string, userId?: string, readableId?: string, paymentMethodId?: string, status?: TransactionStatus, isInvoiceCreated?: boolean, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<TransactionSimpleDtoPaginatedList>;
-    public transactionsGet(pageNumber?: number, pageSize?: number, q?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, startDate?: string, endDate?: string, userId?: string, readableId?: string, paymentMethodId?: string, status?: TransactionStatus, isInvoiceCreated?: boolean, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<TransactionSimpleDtoPaginatedList>>;
-    public transactionsGet(pageNumber?: number, pageSize?: number, q?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, startDate?: string, endDate?: string, userId?: string, readableId?: string, paymentMethodId?: string, status?: TransactionStatus, isInvoiceCreated?: boolean, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<TransactionSimpleDtoPaginatedList>>;
+    public transactionsGet(pageNumber?: number, pageSize?: number, q?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, startDate?: string, endDate?: string, userId?: string, readableId?: string, paymentMethodId?: string, status?: TransactionStatus, isInvoiceCreated?: boolean, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<PlugTransactionSimpleDtoPaginatedList>;
+    public transactionsGet(pageNumber?: number, pageSize?: number, q?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, startDate?: string, endDate?: string, userId?: string, readableId?: string, paymentMethodId?: string, status?: TransactionStatus, isInvoiceCreated?: boolean, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<PlugTransactionSimpleDtoPaginatedList>>;
+    public transactionsGet(pageNumber?: number, pageSize?: number, q?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, startDate?: string, endDate?: string, userId?: string, readableId?: string, paymentMethodId?: string, status?: TransactionStatus, isInvoiceCreated?: boolean, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<PlugTransactionSimpleDtoPaginatedList>>;
     public transactionsGet(pageNumber?: number, pageSize?: number, q?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, startDate?: string, endDate?: string, userId?: string, readableId?: string, paymentMethodId?: string, status?: TransactionStatus, isInvoiceCreated?: boolean, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -292,7 +292,7 @@ export class TransactionsService {
         }
 
         let localVarPath = `/transactions`;
-        return this.httpClient.request<TransactionSimpleDtoPaginatedList>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PlugTransactionSimpleDtoPaginatedList>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -311,9 +311,9 @@ export class TransactionsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public transactionsIdGet(id: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<TransactionDto>;
-    public transactionsIdGet(id: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<TransactionDto>>;
-    public transactionsIdGet(id: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<TransactionDto>>;
+    public transactionsIdGet(id: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<PlugTransactionDto>;
+    public transactionsIdGet(id: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<PlugTransactionDto>>;
+    public transactionsIdGet(id: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<PlugTransactionDto>>;
     public transactionsIdGet(id: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling transactionsIdGet.');
@@ -363,7 +363,7 @@ export class TransactionsService {
         }
 
         let localVarPath = `/transactions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        return this.httpClient.request<TransactionDto>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PlugTransactionDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

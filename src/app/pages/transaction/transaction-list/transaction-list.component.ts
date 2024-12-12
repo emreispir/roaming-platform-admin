@@ -20,14 +20,10 @@ import {
 } from 'primeng/dynamicdialog';
 import { NotificationService } from '../../../@core/services/notification.service';
 import {
-  InvoiceStatus,
-  OrderBy,
-  RetryCreateInvoiceCommand,
-  RetryTransactionPaymentCommand,
-  TransactionDto,
-  TransactionSimpleDto,
-  TransactionStatus,
-  TransactionsService
+  RetryRoamingTransactionCommand,
+  RoamingTransactionDto,
+  RoamingTransactionsService,
+  TransactionStatus
 } from '../../../../../api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Icons, IconsArray } from '../../../../assets/svg/svg-variables';
@@ -55,8 +51,8 @@ import {
   CardWithAvatarComponent,
   DynamicElementComponent,
   ElementType,
-  DynamicMenuComponent,
-  DataTableComponent
+  DataTableComponent,
+  DynamicMenuComponent
 } from 'surge-components';
 import { HeaderPanelComponent } from '../../../@core/components/header-panel/header-panel.component';
 import { InfoCardComponent } from '../../../@core/components/info-card/info-card.component';
@@ -66,6 +62,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { MenuModule } from 'primeng/menu';
 import { SharedService } from '../../../@core/services/shared.service';
 import { InfoPanelComponent } from '../../../@core/components/info-panel/info-panel.component';
+import { ExportFileComponent } from '../../../@core/export-file/export-file.component';
+import { TransactionManualCompleteComponent } from '../transaction-manual-complete/transaction-manual-complete.component';
 
 @Component({
   selector: 'app-transaction-list',
@@ -101,9 +99,9 @@ export class TransactionListComponent extends ScrollableComponent
   @Input() showActionbarFilter: boolean = true;
   @Input() showActionbarButton: boolean;
   @Input() isPaginated: boolean = true;
-  @Input() directoryId: string;
-  @Input() workspaceId: string = null;
+  @Input() hubPlatformId: string;
   @Input() chargePointId: string = null;
+  @Input() sessionId: string = null;
   @Input() userId: string;
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -164,17 +162,16 @@ export class TransactionListComponent extends ScrollableComponent
     )
   );
 
-  transactionsResponse: TransactionSimpleDto[];
-  selectedTransaction: TransactionSimpleDto;
+  transactionsResponse: RoamingTransactionDto[];
+  selectedTransaction: RoamingTransactionDto;
   statusTypes = TransactionStatus;
-  retryPaymentRequest = <RetryTransactionPaymentCommand>{};
-  invoiceStatus = InvoiceStatus;
+  retryPaymentRequest = <RetryRoamingTransactionCommand>{};
 
   roundPipe = new RoundPipe();
 
   constructor(
     protected sharedService: SharedService,
-    protected transactionService: TransactionsService,
+    protected transactionService: RoamingTransactionsService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
     protected router: Router,
@@ -190,10 +187,6 @@ export class TransactionListComponent extends ScrollableComponent
   }
 
   init() {
-    this.directoryId = this.getDecodedUserToken()?.extension_DirectoryId
-      ? this.getDecodedUserToken()?.extension_DirectoryId
-      : null;
-
     this.myForm = this.formBuilder.group({
       rangeDate: [
         [
@@ -210,15 +203,14 @@ export class TransactionListComponent extends ScrollableComponent
     });
 
     this.components = {
+      exportFile: ExportFileComponent,
+      completeManually: TransactionManualCompleteComponent,
       confirmationDialog: ConfirmationDialogComponent
     };
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (
-      (changes.workspaceId && changes.workspaceId.currentValue) ||
-      (changes.userId && changes.userId.currentValue)
-    ) {
+    if (changes.userId && changes.userId.currentValue) {
       this.getTransactions(this.page, this.pageSize);
     }
   }
@@ -228,21 +220,6 @@ export class TransactionListComponent extends ScrollableComponent
   }
 
   ngAfterViewInit(): void {
-    if (!this.isChild) {
-      this.breadcrumbMenuItems = [
-        { label: this.getTranslate('SURGE'), routerLink: '/dashboard' },
-        {
-          label: this.getDecodedUserToken()?.extension_Directory?.name,
-          routerLink: '/dashboard'
-        },
-        {
-          label: this.getTranslate('PAGES.TRANSACTIONS.TITLE'),
-          routerLink: '/transactions'
-        }
-      ];
-
-      this.sharedService.changedBreadcrumbData(this.breadcrumbMenuItems);
-    }
     super.ngAfterViewInit();
   }
 
@@ -299,9 +276,10 @@ export class TransactionListComponent extends ScrollableComponent
           page,
           size,
           this.searchItem.value,
-          this.directoryId,
-          this.workspaceId,
+          this.hubPlatformId,
           this.chargePointId,
+          this.sessionId,
+          this.userId,
           this.myForm.get('rangeDate').value
             ? moment(this.myForm.get('rangeDate')?.value[0])
                 ?.startOf('day')
@@ -311,9 +289,7 @@ export class TransactionListComponent extends ScrollableComponent
             ? moment(this.myForm.get('rangeDate')?.value[1])
                 ?.endOf('day')
                 .format('YYYY-MM-DDTHH:mm:ss.SSSZ')
-            : null,
-          this.userId,
-          this.filter
+            : null
         )
         .subscribe({
           next: v => {
@@ -340,7 +316,7 @@ export class TransactionListComponent extends ScrollableComponent
 
   loadLazy(e: LazyLoadEvent) {
     this.sort_by = e.sortField ? e.sortField : 'created';
-    this.order_by = e.sortOrder === 1 ? OrderBy.Asc : OrderBy.Desc;
+    // this.order_by = e.sortOrder === 1 ? OrderBy.Asc : OrderBy.Desc;
     var currentPage = e.first / this.pageSize + 1;
 
     if (currentPage !== this.page) {
@@ -356,7 +332,7 @@ export class TransactionListComponent extends ScrollableComponent
   generateDataTable() {
     this.tableColumns = [
       {
-        field: 'name',
+        field: 'readableId',
         header: this.getTranslate('PAGES.TRANSACTIONS.TRANSACTION-ID'),
         visible: true,
         templateComponent: CardWithAvatarComponent,
@@ -364,7 +340,7 @@ export class TransactionListComponent extends ScrollableComponent
           title: 'readableId'
         },
         templateConfig: {
-          // routePath: '/transactions/{{id}}',
+          routePath: '/transactions/{{id}}',
           showAvatar: true,
           svgElement: this.receiptIcon
         }
@@ -401,25 +377,22 @@ export class TransactionListComponent extends ScrollableComponent
         visible: !this.chargePointId ? true : false,
         templateComponent: CardWithAvatarComponent,
         templateConfig: {
-          // routePath: '/charge-points/{{chargePointId}}'
+          routePath: '/charge-points/{{chargePointInterestId}}'
         },
         templateInputs: {
           title: '{{ chargePointName }}'
         }
       },
-      // {
-      //   field: 'user',
-      //   header: this.getTranslate('PAGES.TRANSACTIONS.USER'),
-      //   visible: !this.userId ? true : false,
-      //   templateComponent: CardWithAvatarComponent,
-      //   templateConfig: {
-      //     // routePath: '/users/{{user.id}}'
-      //   },
-      //   templateInputs: {
-      //     title: '{{user.firstName}} {{user.lastName}}',
-      //     subtitleFirst: (item: TransactionDto) => item.plateNo || '-'
-      //   }
-      // },
+      {
+        field: 'userId',
+        header: this.getTranslate('PAGES.TRANSACTIONS.USER'),
+        visible: !this.userId ? true : false,
+        templateComponent: CardWithAvatarComponent,
+        templateInputs: {
+          title: '{{userId}}',
+          subtitleFirst: (item: RoamingTransactionDto) => item.plateNo || '-'
+        }
+      },
       {
         field: 'chargeSessionData',
         header: this.getTranslate('PAGES.SESSIONS.DURATION'),
@@ -439,7 +412,7 @@ export class TransactionListComponent extends ScrollableComponent
         visible: true,
         templateComponent: CardWithAvatarComponent,
         templateInputs: {
-          title: (item: TransactionDto) =>
+          title: (item: RoamingTransactionDto) =>
             `${this.roundPipe.transform(item?.totalKWH, 3)}${this.getTranslate(
               'PAGES.SESSIONS.KWH'
             )}`
@@ -488,7 +461,7 @@ export class TransactionListComponent extends ScrollableComponent
         visible: true,
         templateComponent: CardWithAvatarComponent,
         templateInputs: {
-          tagValue: (item, utils) =>
+          tagValue: item =>
             this.getEnumTypeTranslation(TransactionStatus, item.status),
           tagClass: item => item.status?.toLowerCase()
         },
@@ -513,24 +486,24 @@ export class TransactionListComponent extends ScrollableComponent
           binaryValue: true,
           disabledValue: true
         }
+      },
+      {
+        field: null,
+        header: null,
+        visible: true,
+        templateComponent: DynamicMenuComponent,
+        templateConfig: {
+          dynamicMenuItems: item => {
+            return this.generateMenuItems(item);
+          }
+        }
       }
-      // {
-      //   field: null,
-      //   header: null,
-      //   visible: true,
-      //   templateComponent: DynamicMenuComponent,
-      //   templateConfig: {
-      //     dynamicMenuItems: item => {
-      //       return this.generateMenuItems(item);
-      //     }
-      //   }
-      // }
     ];
 
     this.loading = false;
   }
 
-  generateMenuItems(item: TransactionSimpleDto): MenuItem[] {
+  generateMenuItems(item: RoamingTransactionDto): MenuItem[] {
     const menuItems: MenuItem[] = [];
 
     menuItems.push({
@@ -538,38 +511,33 @@ export class TransactionListComponent extends ScrollableComponent
       routerLink: ['/transactions', item?.id]
     });
 
-    // if (
-    //   item.status === TransactionStatus.Failed ||
-    //   item.status === TransactionStatus.Pending
-    // ) {
-    //   menuItems.push({
-    //     label: this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT'),
-    //     command: () => {
-    //       this.retryPaymentConfirmation(item);
-    //     }
-    //   });
-    // }
+    menuItems.push({
+      label: this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT'),
+      disabled:
+        item.status !== TransactionStatus.Failed ||
+        item.status !== TransactionStatus.Pending,
+      command: () => {
+        this.retryPaymentConfirmation(item);
+      }
+    });
 
-    // if (
-    //   item.status === TransactionStatus.Failed ||
-    //   item.status === TransactionStatus.Pending
-    // ) {
-    //   menuItems.push({
-    //     label: this.getTranslate('PAGES.TRANSACTIONS.COMPLETE-MANUALLY'),
-    //     command: () => {
-    //       this.completeManuallyConfirmation(item);
-    //     }
-    //   });
-    // }
+    menuItems.push({
+      label: this.getTranslate('PAGES.TRANSACTIONS.COMPLETE-MANUALLY'),
+      disabled:
+        item.status !== TransactionStatus.Failed ||
+        item.status !== TransactionStatus.Pending,
+      command: () => {
+        this.completeManuallyConfirmation(item);
+      }
+    });
 
-    // if (item.status === TransactionStatus.Success && item?.invoiceId == null) {
-    //   menuItems.push({
-    //     label: this.getTranslate('PAGES.INVOICES.RETRY-CREATE-INVOICE'),
-    //     command: () => {
-    //       this.retryCreateInvoice(item);
-    //     }
-    //   });
-    // }
+    menuItems.push({
+      label: this.getTranslate('PAGES.INVOICES.RETRY-CREATE-INVOICE'),
+      disabled: item.status !== TransactionStatus.Success && !item?.invoiceId,
+      command: () => {
+        this.retryCreateInvoice(item);
+      }
+    });
 
     return menuItems;
   }
@@ -675,97 +643,96 @@ export class TransactionListComponent extends ScrollableComponent
     this.searchItem.setValue(null);
   }
 
-  // retryPayment(transaction: TransactionSimpleDto) {
-  //   this.loading = true;
-  //   this.retryPaymentRequest.transactionId = transaction.id;
-  //   this.subscription.add(
-  //     this.transactionService
-  //       .transactionsIdRetryPaymentPost(
-  //         transaction.id,
-  //         this.xApplicationClientId,
-  //         this.retryPaymentRequest
-  //       )
-  //       .subscribe({
-  //         next: v => {
-  //           this.notificationService.showSuccessToast(
-  //             this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT-SUCCESS')
-  //           );
-  //           this.getTransactions(this.page, this.pageSize);
-  //           this.close();
-  //         },
-  //         error: e => {
-  //           this.notificationService.showErrorToast(this.handleError(e));
-  //           this.loading = false;
-  //           this.close();
-  //         },
-  //         complete: () => {
-  //           this.loading = false;
-  //           this.close();
-  //         }
-  //       })
-  //   );
-  // }
-
-  // retryPaymentConfirmation(item: TransactionSimpleDto) {
-  //   this.dialogConfig.data = {
-  //     description: this.getTranslate(
-  //       'PAGES.TRANSACTIONS.RETRY-PAYMENT-DESCRIPTION'
-  //     ),
-  //     buttonText: this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT'),
-  //     confirmEventCallback: (eventData: any) => {
-  //       this.retryPayment(item);
-  //     }
-  //   };
-
-  //   this.open(this.components.confirmationDialog);
-  // }
-
-  // retryCreateInvoice(transaction: TransactionSimpleDto) {
-  //   this.loading = true;
-  //   let retryCommand: RetryCreateInvoiceCommand = {
-  //     transactionId: transaction?.id
-  //   };
-  //   this.subscription.add(
-  //     this.transactionService
-  //       .transactionsIdRetryCreateInvoicePost(
-  //         transaction?.id,
-  //         this.xApplicationClientId,
-  //         retryCommand
-  //       )
-  //       .subscribe({
-  //         next: v => {
-  //           this.notificationService.showSuccessToast(
-  //             this.getTranslate('PAGES.INVOICES.RETRY-CREATE-INVOICE-SUCCESS')
-  //           );
-  //           this.getTransactions(this.page, this.pageSize);
-  //         },
-  //         error: e => {
-  //           this.notificationService.showErrorToast(this.handleError(e));
-  //           this.loading = false;
-  //         },
-  //         complete: () => {}
-  //       })
-  //   );
-  // }
-
-  // completeManuallyConfirmation(transaction: TransactionSimpleDto) {
-  //   this.dialogConfig.data = {
-  //     isChild: true,
-  //     transactionId: transaction.id,
-  //     confirmEventCallback: () => {
-  //       this.getTransactions(this.page, this.pageSize);
-  //       this.close();
-  //     },
-  //     cancelEventCallback: () => {
-  //       this.close();
-  //     }
-  //   };
-
-  //   this.open(this.components.completeManually);
-  // }
-
   closeCalendar() {
     this.datePicker.overlayVisible = false;
+  }
+
+  retryPaymentConfirmation(item: RoamingTransactionDto) {
+    this.dialogConfig.data = {
+      description: this.getTranslate(
+        'PAGES.TRANSACTIONS.RETRY-PAYMENT-DESCRIPTION'
+      ),
+      buttonText: this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT'),
+      confirmEventCallback: (eventData: any) => {
+        this.retryPayment(item);
+      }
+    };
+
+    this.open(this.components.confirmationDialog);
+  }
+
+  retryPayment(transaction: RoamingTransactionDto) {
+    this.loading = true;
+    this.retryPaymentRequest.transactionId = transaction.id;
+    this.subscription.add(
+      this.transactionService
+        .transactionsIdRetryPaymentPost(
+          transaction.id,
+          this.retryPaymentRequest
+        )
+        .subscribe({
+          next: v => {
+            this.notificationService.showSuccessToast(
+              this.getTranslate('PAGES.TRANSACTIONS.RETRY-PAYMENT-SUCCESS')
+            );
+            this.getTransactions(this.page, this.pageSize);
+            this.close();
+          },
+          error: e => {
+            this.notificationService.showErrorToast(this.handleError(e));
+            this.loading = false;
+            this.close();
+          },
+          complete: () => {
+            this.loading = false;
+            this.close();
+          }
+        })
+    );
+  }
+
+  completeManuallyConfirmation(transaction: RoamingTransactionDto) {
+    this.dialogConfig.data = {
+      isChild: true,
+      transactionId: transaction.id,
+      confirmEventCallback: () => {
+        this.getTransactions(this.page, this.pageSize);
+        this.close();
+      },
+      cancelEventCallback: () => {
+        this.close();
+      }
+    };
+
+    this.open(this.components.completeManually);
+  }
+
+  retryCreateInvoice(transaction: RoamingTransactionDto) {
+    // this.loading = true;
+    // let retryCommand: RetryCreateInvoiceCommand = {
+    //   transactionId: transaction?.id
+    // };
+    // this.subscription.add(
+    //   this.transactionService
+    //     .transactionsIdRetryCreateInvoicePost(
+    //       transaction?.id,
+    //       this.xApplicationClientId,
+    //       retryCommand
+    //     )
+    //     .subscribe({
+    //       next: v => {
+    //         this.notificationService.showSuccessToast(
+    //           this.getTranslate('PAGES.INVOICES.RETRY-CREATE-INVOICE-SUCCESS')
+    //         );
+    //         this.getTransactions(this.page, this.pageSize);
+    //       },
+    //       error: e => {
+    //         this.notificationService.showErrorToast(this.handleError(e));
+    //         this.loading = false;
+    //       },
+    //       complete: () => {}
+    //     })
+    // );
   }
 
   ngOnDestroy() {

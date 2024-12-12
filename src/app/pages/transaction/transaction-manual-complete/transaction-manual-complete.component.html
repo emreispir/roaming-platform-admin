@@ -1,0 +1,40 @@
+<div
+  [ngClass]="{
+    'page-container child-modal': config.data?.isChild,
+    'child-page': isChild
+  }"
+>
+  <div class="page-body">
+    <div class="page-body-left-dialog" *ngIf="config.data?.isChild">
+      <div class="svgContainer" [innerHTML]="transactionIcon"></div>
+    </div>
+
+    <div class="page-body-right">
+      <button
+        type="button"
+        tabindex="-1"
+        class="p-button p-button-default circle close transparent p-0"
+        (click)="cancel()"
+        [disabled]="buttonLoading"
+        *ngIf="config.data?.isChild"
+      >
+        <div class="svgContainer" [innerHTML]="closeIcon"></div>
+      </button>
+
+      <div class="info-header">
+        <div class="info-header-left">
+          <label>{{ 'PAGES.TRANSACTIONS.TITLE' | translate }}</label>
+        </div>
+      </div>
+
+      <lib-surge-form
+        [surgeFormConfig]="formConfig"
+        [surgeForm]="myForm"
+        [loading]="buttonLoading"
+        [submitted]="submitted"
+        (formSubmitTriggered)="onFormSubmit()"
+        (cancelButtonTriggered)="cancelEvent.emit()"
+      ></lib-surge-form>
+    </div>
+  </div>
+</div>

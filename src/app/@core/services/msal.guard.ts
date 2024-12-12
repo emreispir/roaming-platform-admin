@@ -32,24 +32,6 @@ export class MsalGuard {
       return false;
     }
 
-    const userPolicies = <string>(
-      JSON.parse(localStorage.getItem(Keys.USER_POLICIES_DATA))
-    );
-
-    const policies = route.data['policies'] as Array<string>;
-
-    if (policies == null) {
-      return true;
-    }
-
-    for (const policy of policies) {
-      for (const userPolicy of userPolicies) {
-        if (userPolicy === policy) {
-          return true;
-        }
-      }
-    }
-
     this.router.navigate(['/dashboard']);
     return false;
   }

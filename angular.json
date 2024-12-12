@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "surge-mobility-backoffice-call-center": {
+    "surge-mobility-roaming-platform-admin": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/surge-mobility-backoffice-call-center",
+            "outputPath": "dist/surge-mobility-roaming-platform-admin",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
@@ -82,14 +82,6 @@
               "buildOptimizer": true,
               "budgets": []
             },
-            "staging": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.staging.ts"
-                }
-              ]
-            },
             "local": {
               "fileReplacements": [
                 {
@@ -104,24 +96,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "surge-mobility-backoffice-call-center:build"
+            "browserTarget": "surge-mobility-roaming-platform-admin:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "surge-mobility-backoffice-call-center:build:production"
-            },
-            "staging": {
-              "browserTarget": "surge-mobility-backoffice-call-center:build:staging"
+              "browserTarget": "surge-mobility-roaming-platform-admin:build:production"
             },
             "local": {
-              "browserTarget": "surge-mobility-backoffice-call-center:build:local"
+              "browserTarget": "surge-mobility-roaming-platform-admin:build:local"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "surge-mobility-backoffice-call-center:build"
+            "browserTarget": "surge-mobility-roaming-platform-admin:build"
           }
         },
         "test": {
@@ -165,17 +154,14 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "surge-mobility-backoffice-call-center:serve"
+            "devServerTarget": "surge-mobility-roaming-platform-admin:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "surge-mobility-backoffice-call-center:serve:production"
-            },
-            "staging": {
-              "devServerTarget": "surge-mobility-backoffice-call-center:serve:staging"
+              "devServerTarget": "surge-mobility-roaming-platform-admin:serve:production"
             },
             "local": {
-              "devServerTarget": "surge-mobility-backoffice-call-center:serve:local"
+              "devServerTarget": "surge-mobility-roaming-platform-admin:serve:local"
             }
           }
         },

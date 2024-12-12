@@ -10,12 +10,12 @@ import { SharedService } from '../../../@core/services/shared.service';
 import { Router, RouterModule } from '@angular/router';
 import { BaseComponent } from '../../../shared/base.component';
 import { MenuItem } from 'primeng/api';
-import { UserDetailsDto } from '../../../../../api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IconsArray } from '../../../../assets/svg/svg-variables';
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { SurgeAvatarComponent } from 'surge-components';
+import { RoamingUserDetailDto } from '../../../../../api';
 
 @Component({
   selector: 'app-header',
@@ -26,6 +26,7 @@ import { SurgeAvatarComponent } from 'surge-components';
     TranslateModule,
     RouterModule,
     NgIf,
+    NgFor,
     BreadcrumbModule,
     SurgeAvatarComponent
   ]
@@ -33,7 +34,7 @@ import { SurgeAvatarComponent } from 'surge-components';
 export class HeaderComponent extends BaseComponent
   implements OnDestroy, AfterViewChecked {
   breadcrumbItems: MenuItem[];
-  user: UserDetailsDto = this.sharedService?.userData;
+  user: RoamingUserDetailDto = this.sharedService?.userData;
   private destroy$: Subject<void> = new Subject<void>();
 
   infoIcon: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(

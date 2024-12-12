@@ -1,7 +1,7 @@
 {
-  "HELLO": "Surge Mobility Call Center'e hoş geldiniz!",
-  "SURGE": "Surge Call Center",
-  "SURGE-MOBILITY": "Surge Mobility Call Center",
+  "HELLO": "Surge Mobility Roaming Backoffice'e hoş geldiniz!",
+  "SURGE": "Surge Romaing",
+  "SURGE-MOBILITY": "Surge Mobility Romaing",
   "MONDAY": "Pazartesi",
   "TUESDAY": "Salı",
   "WEDNESDAY": "Çarşamba",
@@ -14,12 +14,10 @@
     "en": "İngilizce"
   },
   "LANDING": {
-    "WELCOME": "Surge Call Center ile İlerleyin",
-    "WELCOME-DESCRIPTION": "Gelişmiş şarj çözümleri için giriş yapın.",
-    "POWER-UP": "Surge Call Center: EV deneyiminizi güçlendirin.",
-    "MANAGE-ALL-CHARGING": "Tüm şarj istasyonlarınızı rahatlıkla yönetin.",
-    "AGREEMENT": "<p class='agreement-text'> Kayıt olarak, <a href='https://surgemobility.tech/user-agreement' target='_blank' >Kullanıcı Sözleşmesi</a>'ni ve kişisel verilerimin işlenmesi dahil olmak üzere <a href='https://surgemobility.tech/privacy-and-security-policy' target='_blank'>Gizlilik Politikası</a>'nı kabul ettiğimi beyan ederim. </p>",
-    "PLEASE-ACCEPT-AGREEMENT": "Lütfen sözleşmeleri okuyup, kabul edin"
+    "WELCOME": "Surge Roaming ile Güçlenin",
+    "WELCOME-DESCRIPTION": "Sizi şarj ağları dünyasına bağlıyoruz.",
+    "POWER-UP": "Surge Roaming: Sınırları aşan güç.",
+    "MANAGE-ALL-CHARGING": "Roaming hizmetlerinizi ve ağlarınızı Kolayca yönetin."
   },
   "COMMON": {
     "SUMMARY": "Özet",
@@ -247,29 +245,6 @@
     "SETTINGS": "Ayarlar",
     "SENDING": "Gönderiliyor..."
   },
-  "TOURS": {
-    "NEXT": "Sonraki",
-    "END": "Bitir",
-    "TITLE": "Surge Turu",
-    "HEADER-BREADCRUMB-ANCHOR-CONTENT": "Bu menü, nerede olduğunuzu takip etmenize yardımcı olan bir <b>ekmek kırıntısı menüsü</b>dür. Ana sayfadan şu an bulunduğunuz sayfaya kadar olan yolu gösterir. Ekmek kırıntısı menüsündeki herhangi bir <b>bağlantıya tıklayarak hızlıca önceki bir sayfaya gidebilirsiniz.</b>",
-    "SIDENAV-MAIN-ANCHOR-CONTENT": "<b>Navigasyon Çubuğuna Hoş Geldiniz:</b> Bu, yan navigasyon çubuğunuzdur. Uygulamanın farklı bölümlerine <b>kolayca erişmenizi sağlar.</b>",
-    "SIDENAV-DASHBOARD-ANCHOR-CONTENT": "<b>'Kontrol Paneli'</b> bölümü, <b>dizinin performansı ve metrikleri</b> hakkında bir genel bakış <b>görüntülemenizi</b> sağlar.",
-    "DASHBOARD-ANCHOR-CONTENT": "<b>Kontrol Paneli'ne hoş geldiniz!</b> Bu sayfa dizininizle ilgili <b>önemli bilgilerin özetini gösterir</b>. Sayfa birkaç bölüme ayrılmıştır ve her biri faydalı <b>veriler içeren bir rapor kartı</b> içerir.",
-    "DASHBOARD": {
-      "SIDENAV-MAIN-ANCHOR-CONTENT": "Uygulamanın <b>solundaki ana menüyü kullanarak tüm özellikleri keşfedin</b>.",
-      "SIDENAV-DASHBOARD-ANCHOR-CONTENT": "<b>Bu senin kontrol panelin</b>, burada verilerin ve aktivitenin bir özetini görebilirsin.",
-      "SIDENAV-WORKSPACES-ANCHOR-CONTENT": "<b>Bu senin çalışma alanların sayfasıdır</b>, burada çalışma alanlarınızı görebilirsiniz.",
-      "SIDENAV-CHARGE-POINTS-ANCHOR-CONTENT": "<b>Bu senin şarj noktaları sayfan</b>, burada şarj noktalarınızı görebilirsiniz.",
-      "SIDENAV-USERS-ANCHOR-CONTENT": "<b>Bu senin kullanıcıların ve rollerinin sayfasıdır</b>, burada <b>kullanıcılar, roller, davetiyeleri</b> görebilirsin.",
-      "HEADER-BREADCRUMB-ANCHOR-CONTENT": "Uygulamanın farklı sayfaları ve bölümleri arasında <b>gezinmek için üstteki ekmek kırıntısı navigasyonunu kullanın</b>.",
-      "DASHBOARD-ANCHOR-CONTENT": "Kontrol paneli, verileriniz hakkında bilgi sağlayan çeşitli widget'lar ve grafikler gösterir. <b>Daha fazla bilgi edinmek için üzerlerine tıklayın</b>.",
-      "WORKSPACES-ANCHOR-CONTENT": "<b>Çalışma alanları özelleştirilebilir alanlardır</b>, burada verilerinizi düzenleyebilir ve diğerleriyle işbirliği yapabilirsiniz.",
-      "WORKSPACES-PAGE-ANCHOR-CONTENT": "Bu sayfada, <b>çalışma alanlarınızı görüntüleyebilir ve yönetebilirsiniz</b>. Ayarlarını açmak ve özelleştirmek için üzerlerine tıklayın.",
-      "CHARGE-POINTS-ANCHOR-CONTENT": "<b>Şarj noktaları, elektrikli araçların şarj edilebileceği fiziksel konumları temsil eder</b>.",
-      "CHARGE-POINTS-PAGE-ANCHOR-CONTENT": "Bu sayfada, <b>şarj noktalarınızı görüntüleyebilir ve yönetebilirsiniz</b>. Daha fazla bilgi için üzerlerine tıklayın.",
-      "USERS-MAIN-ANCHOR-CONTENT": "Bu sayfada, <b>veritabanındaki kullanıcıları görüntüleyebilir ve yönetebilirsiniz.</b>"
-    }
-  },
   "NOTIFICATIONS": {
     "PROCESS-SUCCEEDED": "İşlem başarılı!",
     "PROCESS-FAILED": "İşlem başarısız!",
@@ -400,6 +375,7 @@
       "SESSION-CARD-DESCRIPTION": "@{{ param1 }} - @{{ param2 }}",
       "NOT-INVITED": "davet edilemedi.",
       "NO-ITEM": "Kullanıcı bulunamadı",
+      "USERS-TOOLTIP": "Bu bölüm, dizininizdeki kullanıcıları yönetmek için tasarlanmıştır.",
       "DIRECTORY-ADMIN-USERS-TOOLTIP": "Dizin yöneticilerinizi davet edebilir ve yönetebilirsiniz",
       "WORKSPACE-ADMIN-USERS-TOOLTIP": "Çalışma alanınızın yöneticilerini davet edebilir ve yönetebilirsiniz",
       "WORKSPACES-TOOLTIP": "Bu kallanıcının çalışma alanlarını yönetmeye olanak tanır."
@@ -487,7 +463,8 @@
       "CONNECT": "Bağlan",
       "DISCONNECT": "Bağlantıyı Kes",
       "CHANGE-CHARGE-POINT-ACCESSIBILITY-SUCCESS": "Şarj noktasının erişilebilirlik ayarlarını başarıyla değiştirdiniz",
-      "TOTAL-ITEM": "Toplam <b>{{param1}} şarj noktası</b> kaydedildi, bunlardan <b>{{param2}} tanesi etkin</b> ve <b>{{param3}} tanesi eşleştirilmemiş</b>",
+      "TOTAL-ITEM": "Toplam <b>{{count}} şarj noktası</b> listelendi.",
+      "OPERATOR-NAME": "Operatör Adı",
       "NO-ITEM": "Hiçbir şarj noktası bulunamadı",
       "DEACTIVATE": "Devre Dışı Bırak",
       "START-CHARGE": "Şarjı Başlat",
@@ -894,6 +871,8 @@
       "COUPON-LIMIT-TYPE": "Kupon Adedi Türü"
     },
     "COUPONS": {
+      "NO-COUPON": "Henüz bir kupon yok",
+      "LAST-COUPONS": "Son Kuponlar",
       "LAST-MODIFIED": "Düzenlenme Tarihi",
       "COUPON": "Kupon",
       "COUPONS-TOOLTIP": "'Kuponlar' bölümü, çalışma alanlarınıza özel kampanyalara ait kupon oluşturup, kontrol sağlamak üzere tasarlanmıştır.",

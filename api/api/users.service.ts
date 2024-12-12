@@ -671,17 +671,23 @@ export class UsersService {
 
     /**
      * @param emailAddress 
+     * @param roleId 
      * @param directoryId 
      * @param workspaceId 
-     * @param roleId 
      * @param xApplicationClientId ApplicationClientId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public usersInvitePost(emailAddress?: string, directoryId?: string, workspaceId?: string, roleId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<BaseResponseDto>;
-    public usersInvitePost(emailAddress?: string, directoryId?: string, workspaceId?: string, roleId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<BaseResponseDto>>;
-    public usersInvitePost(emailAddress?: string, directoryId?: string, workspaceId?: string, roleId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<BaseResponseDto>>;
-    public usersInvitePost(emailAddress?: string, directoryId?: string, workspaceId?: string, roleId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public usersInvitePost(emailAddress: string, roleId: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<BaseResponseDto>;
+    public usersInvitePost(emailAddress: string, roleId: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<BaseResponseDto>>;
+    public usersInvitePost(emailAddress: string, roleId: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<BaseResponseDto>>;
+    public usersInvitePost(emailAddress: string, roleId: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        if (emailAddress === null || emailAddress === undefined) {
+            throw new Error('Required parameter emailAddress was null or undefined when calling usersInvitePost.');
+        }
+        if (roleId === null || roleId === undefined) {
+            throw new Error('Required parameter roleId was null or undefined when calling usersInvitePost.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (emailAddress !== undefined && emailAddress !== null) {

@@ -2,42 +2,13 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
-import { CampaignsService } from './api/campaigns.service';
-import { CardsService } from './api/cards.service';
-import { ChargePointsService } from './api/chargePoints.service';
-import { ChargeSessionsService } from './api/chargeSessions.service';
-import { CitiesService } from './api/cities.service';
-import { ConnectorsService } from './api/connectors.service';
-import { CountriesService } from './api/countries.service';
-import { CouponsService } from './api/coupons.service';
 import { CurrenciesService } from './api/currencies.service';
-import { DevUtilsService } from './api/devUtils.service';
-import { DeviceTokensService } from './api/deviceTokens.service';
-import { DirectoriesService } from './api/directories.service';
-import { DirectoryIntegrationsService } from './api/directoryIntegrations.service';
-import { DistrictsService } from './api/districts.service';
-import { IntegrationsService } from './api/integrations.service';
-import { InvitationsService } from './api/invitations.service';
-import { InvoiceRequestsService } from './api/invoiceRequests.service';
-import { InvoicesService } from './api/invoices.service';
-import { PoliciesService } from './api/policies.service';
-import { ReportsService } from './api/reports.service';
-import { ReservationsService } from './api/reservations.service';
-import { ReviewsService } from './api/reviews.service';
-import { RoamingPointReviewsService } from './api/roamingPointReviews.service';
-import { RoamingPointUserFavoritesService } from './api/roamingPointUserFavorites.service';
+import { RoamingInvoicesService } from './api/roamingInvoices.service';
 import { RoamingPointsService } from './api/roamingPoints.service';
 import { RoamingSessionsService } from './api/roamingSessions.service';
-import { RolesService } from './api/roles.service';
-import { SiteHostsService } from './api/siteHosts.service';
-import { SubscriptionPaymentsService } from './api/subscriptionPayments.service';
-import { SubscriptionsService } from './api/subscriptions.service';
-import { TariffsService } from './api/tariffs.service';
-import { TransactionsService } from './api/transactions.service';
-import { UserFavoritedChargePointsService } from './api/userFavoritedChargePoints.service';
-import { UsersService } from './api/users.service';
-import { VehiclesService } from './api/vehicles.service';
-import { WorkspacesService } from './api/workspaces.service';
+import { RoamingTariffsService } from './api/roamingTariffs.service';
+import { RoamingTransactionsService } from './api/roamingTransactions.service';
+import { RoamingUsersService } from './api/roamingUsers.service';
 
 @NgModule({
   imports:      [],

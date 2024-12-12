@@ -1,7 +1,6 @@
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../environments/environment';
 import { Keys, Patterns } from '../@core/constants/keys';
-import { CurrencyDto, DayOfWeek, OrderBy } from '../../../api/model/models';
 import { MenuItem, SelectItem } from 'primeng/api';
 import {
   DialogService,
@@ -15,12 +14,7 @@ import {
   UntypedFormGroup,
   Validators
 } from '@angular/forms';
-import {
-  DataViewType,
-  JwtResponse,
-  StepType,
-  TabResponse
-} from '../@core/models/common';
+import { JwtResponse, StepType, TabResponse } from '../@core/models/common';
 import { ElementRef, QueryList } from '@angular/core';
 import { Router } from '@angular/router';
 import { Icons, IconsArray } from '../../assets/svg/svg-variables';
@@ -45,8 +39,8 @@ export class BaseComponent {
   page: any = 1;
   pageSize: any = 50;
   sort_by: string = null;
-  order_by = OrderBy.Desc;
-  sortOrder = OrderBy.Asc;
+  // order_by = OrderBy.Desc;
+  // sortOrder = OrderBy.Asc;
   sortField = null;
   patterns = Patterns;
   totalItemCount: any = 0;
@@ -68,8 +62,6 @@ export class BaseComponent {
   selectedFilter: string = null;
   selectedFilters: any[] = [];
   isSearchActive: boolean;
-  daysOfWeek = this.generateSelectItemsFromEnum(DayOfWeek);
-  daysOfWeekType = DayOfWeek;
   map: atlas.Map;
   dataSource: atlas.source.DataSource | undefined;
   point: atlas.Shape | null = null;
@@ -158,60 +150,7 @@ export class BaseComponent {
       ...jwtBase
     };
 
-    if (jwtBase && this.sharedService?.userRolesData) {
-      let activeDirectory = this.sharedService?.userRolesData?.userRoles?.find(
-        x => x.directoryId === jwtBase.extension_DirectoryId
-      );
-
-      let currencies: CurrencyDto[] = [];
-      if (activeDirectory.directory) {
-        if (localStorage.getItem(Keys.CURRENCIES)) {
-          currencies = JSON.parse(localStorage.getItem(Keys.CURRENCIES));
-          activeDirectory.directory.currencyDto = currencies.find(
-            c => c.id === activeDirectory.directory.currencyId
-          );
-        }
-      }
-
-      jwtDecodedResponse = {
-        ...jwtBase,
-        extension_DirectoryId: jwtBase?.extension_DirectoryId
-          ? jwtBase.extension_DirectoryId
-          : null,
-        extension_Directory: activeDirectory
-          ? activeDirectory?.directory
-          : null,
-        extension_Role: activeDirectory?.role ? activeDirectory?.role : null
-      };
-
-      jwtDecodedResponse.extension_Directory.currencyDto = currencies.find(
-        c => c.id === activeDirectory.directory.currencyId
-      );
-    }
-
     return jwtDecodedResponse;
-  }
-
-  isUserValidForPolicies(policies: string[]): boolean {
-    let userPoliciesData = localStorage.getItem(Keys.USER_POLICIES_DATA);
-
-    if (!userPoliciesData) {
-      localStorage.clear();
-      sessionStorage.clear();
-      return false;
-    }
-
-    let userPolicies = JSON.parse(userPoliciesData);
-
-    for (const policy of policies) {
-      for (const userPolicy of userPolicies) {
-        if (userPolicy === policy) {
-          return true;
-        }
-      }
-    }
-
-    return false;
   }
 
   getParameterByName(name, url) {
@@ -242,7 +181,9 @@ export class BaseComponent {
     let objectError = '';
 
     if (response.status === 403) {
-      objectError = this.getTranslate('COMMON.NOT-AUTHORIZED');
+      objectError = errorBody?.detail
+        ? errorBody?.detail
+        : this.getTranslate('COMMON.NOT-AUTHORIZED');
     } else if (response.status === 400) {
       if (errorBody.errors) {
         Object.getOwnPropertyNames(errorBody.errors).forEach(x => {

@@ -1,0 +1,184 @@
+<div class="page-container detail">
+  <div class="page-detail-header">
+    <app-header-panel
+      [title]="chargePointResponse?.name"
+      [subtitle]="' / ' + chargePointResponse?.externalId"
+      *ngIf="!isScrolled"
+    >
+    </app-header-panel>
+
+    <ul class="nav nav-tabs">
+      <ng-container *ngFor="let tab of tabs; let i = index">
+        <li
+          class="nav-item"
+          *ngIf="tab?.label"
+          [class.active]="(sharedService.selectedTabIndex | async) === i"
+        >
+          <a
+            class="nav-link"
+            [routerLink]="['/charge-points', chargePointId, tab.routeTab]"
+            (click)="sharedService?.changeSelectedTab(i)"
+            >{{ tab.label }}</a
+          >
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+
+  <div
+    class="page-body overview-report"
+    *ngIf="(sharedService.selectedTabIndex | async) === 0"
+    #pageBody
+  >
+    <ng-container *ngIf="(sharedService.selectedTabIndex | async) === 0">
+      <ng-container *ngIf="!chargePointLoading">
+          <div class="first-section">
+            <div class="card white overview-card p-0">
+              <app-loader
+                [loaderMessage]="loaderMessage"
+                *ngIf="chargePointLoading"
+                class="base-loader"
+              ></app-loader>
+
+              <ng-container *ngIf="!chargePointLoading && chargePointResponse">
+                <div class="info-container flex-column w-100">
+                  <div class="d-flex mb-10">
+                    <lib-surge-avatar [svgElement]="chargePointIconMedium">
+                    </lib-surge-avatar>
+                    <div class="d-flex flex-column">
+                      <label class="title"
+                        >{{
+                          getEnumTypeTranslation(
+                            chargingLevel,
+                            this.chargePointResponse?.chargingLevel
+                          )
+                        }}
+                      </label>
+                      <label class="subTitle">
+                        {{
+                          getEnumTypeTranslation(
+                            chargingPowerType,
+                            this.chargePointResponse?.chargingPowerType
+                          )
+                        }}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="connectUrl-container" *ngIf="secureConnectUrl">
+                    <div class="d-flex flex-column">
+                      <lable class="connectUrl">
+                        {{ secureConnectUrl }}
+                      </lable>
+                      <small class="copy-text" *ngIf="secureVisible">{{
+                        'PAGES.CHARGE-POINTS.CONNECT-COPY-SECURE-URL'
+                          | translate
+                      }}</small>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="p-button p-button-default circle small transparent"
+                      (click)="copyUrl('secure')"
+                      ngxClipboard
+                      [cbContent]="secureConnectUrl"
+                    >
+                      <i class="pi pi-copy"></i>
+                    </button>
+                  </div>
+
+                  <div class="connectUrl-container" *ngIf="nonSecureConnectUrl">
+                    <div class="d-flex flex-column">
+                      <lable class="connectUrl">
+                        {{ nonSecureConnectUrl }}
+                      </lable>
+                      <small class="copy-text" *ngIf="nonSecureVisible">{{
+                        'PAGES.CHARGE-POINTS.CONNECT-COPY-NON-SECURE-URL'
+                          | translate
+                      }}</small>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="p-button p-button-default circle small transparent"
+                      (click)="copyUrl('nonsecure')"
+                      ngxClipboard
+                      [cbContent]="nonSecureConnectUrl"
+                    >
+                      <i class="pi pi-copy"></i>
+                    </button>
+                  </div>
+
+                  <div class="d-flex mb-10">
+                      <label class="title">
+                        {{ chargePointResponse?.operatorName }}
+                      </label>
+                  </div>
+
+                  <div class="tags" *ngIf="chargePointTagsResponse?.length > 0">
+                    <span
+                      class="tag {{ tag?.color ? tag?.color : 'gray' }}"
+                      *ngFor="let tag of chargePointTagsResponse"
+                    >
+                      <i class="{{ tag.icon }}" *ngIf="tag?.icon"></i>
+                      <span>{{ tag.text }}</span>
+                    </span>
+                  </div>
+                </div>
+
+                <ng-container
+                  *ngIf="
+                    chargePointResponse?.longitude &&
+                    chargePointResponse?.latitude
+                  "
+                >
+                  <div class="map" id="Map"></div>
+                </ng-container>
+
+                <div class="info-container flex-column w-100">
+                  <p class="subTitle mb-0">
+                    {{ chargePointResponse?.address }}
+                  </p>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div
+    class="page-detail-body"
+    *ngIf="(sharedService.selectedTabIndex | async) > 0"
+    #pageBody
+  >
+
+    <ng-container *ngIf="(sharedService.selectedTabIndex | async) === 1">
+      <div class="page-detail-body-right">
+        <app-transaction-list
+          [chargePointId]="chargePointResponse?.id"
+          [isChild]="true"
+          [showActionbar]="true"
+          [showActionbarSearch]="true"
+          [showActionbarFilter]="true"
+          [showActionbarButton]="true"
+        >
+        </app-transaction-list>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="(sharedService.selectedTabIndex | async) === 2">
+      <div class="page-detail-body-right">
+        <app-session-list
+          [chargePointId]="chargePointResponse?.id"
+          [isChild]="true"
+          [showActionbar]="true"
+          [showActionbarSearch]="true"
+          [showActionbarFilter]="true"
+          [showActionbarButton]="true"
+        >
+        </app-session-list>
+      </div>
+    </ng-container>
+  </div>
+</div>

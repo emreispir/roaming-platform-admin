@@ -1,5 +1,4 @@
 import { TemplateRef } from '@angular/core';
-import { DirectoryDto, RoleDto, WorkspaceDto } from '../../../../api';
 
 export interface TagResponse {
   icon: string;
@@ -28,17 +27,17 @@ export interface TabResponse {
 
 export enum DataViewType {
   List = 'List',
-  Table = 'Table',
+  Table = 'Table'
 }
 
 export enum StepType {
   Next = 'Next',
-  Previous = 'Previous',
+  Previous = 'Previous'
 }
 
 export enum OperationType {
   Single = 'Single',
-  Many = 'Many',
+  Many = 'Many'
 }
 
 export interface JwtResponse {
@@ -50,8 +49,8 @@ export interface JwtResponse {
   emails: string[];
   extension_Roles: string;
   extension_DirectoryId: string;
-  extension_Directory: DirectoryDto;
-  extension_Role: RoleDto;
+  extension_Directory: any;
+  extension_Role: any;
   tfp: string;
   nonce: string;
   scp: string;
@@ -66,31 +65,31 @@ export interface JwtResponse {
 
 export enum Language {
   EN = 'en',
-  TR = 'tr',
+  TR = 'tr'
 }
 
 export enum CountryCode {
   TR = 'TR',
   US = 'US',
   CA = 'CA',
-  GB = 'GB',
+  GB = 'GB'
 }
 
 export enum Country {
   TR = 'Turkey',
   US = 'United States',
   CA = 'Canada',
-  GB = 'United Kingdom',
+  GB = 'United Kingdom'
 }
 
 export enum ConnectorActionType {
   START_CHARGE = 'START_CHARGE',
   STOP_CHARGE = 'STOP_CHARGE',
-  UNLOCK_CONNECTOR = 'UNLOCK_CONNECTOR',
+  UNLOCK_CONNECTOR = 'UNLOCK_CONNECTOR'
 }
 
 export enum InvoiceRequestType {
   ChargePoint = 'ChargePoint',
   Workspace = 'Workspace',
-  SiteHost = 'SiteHost',
+  SiteHost = 'SiteHost'
 }

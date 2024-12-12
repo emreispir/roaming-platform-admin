@@ -7,11 +7,10 @@ import { SharedService } from './shared.service';
 import {
   DialogService,
   DynamicDialogConfig,
-  DynamicDialogRef,
+  DynamicDialogRef
 } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { BaseService } from './base.service';
-import { SignalRService } from './signalr.service';
 
 @NgModule({
   providers: [
@@ -25,8 +24,7 @@ import { SignalRService } from './signalr.service';
     MsalGuard,
     DynamicDialogRef,
     DynamicDialogConfig,
-    DialogService,
-    SignalRService,
-  ],
+    DialogService
+  ]
 })
 export class ServicesModule {}

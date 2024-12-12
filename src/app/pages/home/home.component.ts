@@ -7,7 +7,7 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BaseComponent } from '../../shared/base.component';
 import { Router, RouterModule } from '@angular/router';
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { IconsArray } from '../../../assets/svg/svg-variables';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -21,8 +21,6 @@ import { LoaderComponent } from '../../@core/components/loader/loader.component'
     TranslateModule,
     RouterModule,
     NgIf,
-    NgFor,
-    NgStyle,
     FormsModule,
     CheckboxModule,
     LoaderComponent
@@ -57,13 +55,6 @@ export class HomeComponent extends BaseComponent
 
   ngAfterViewChecked() {
     this.cd.detectChanges();
-  }
-
-  register() {
-    this.submitted = true;
-    if (this.acceptAgreement) {
-      this.sharedService?.register();
-    }
   }
 
   ngOnDestroy() {

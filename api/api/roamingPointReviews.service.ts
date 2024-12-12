@@ -111,19 +111,25 @@ export class RoamingPointReviewsService {
     }
 
     /**
-     * @param xApplicationClientId ApplicationClientId
      * @param chargePointInterestId 
      * @param rating 
+     * @param xApplicationClientId ApplicationClientId
      * @param comment 
      * @param photos 
      * @param files 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public chargePointInterestReviewsCreateWithPhotosPost(xApplicationClientId?: string, chargePointInterestId?: string, rating?: number, comment?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public chargePointInterestReviewsCreateWithPhotosPost(xApplicationClientId?: string, chargePointInterestId?: string, rating?: number, comment?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public chargePointInterestReviewsCreateWithPhotosPost(xApplicationClientId?: string, chargePointInterestId?: string, rating?: number, comment?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public chargePointInterestReviewsCreateWithPhotosPost(xApplicationClientId?: string, chargePointInterestId?: string, rating?: number, comment?: string, photos?: Array<object>, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public chargePointInterestReviewsCreateWithPhotosPost(chargePointInterestId: string, rating: number, xApplicationClientId?: string, comment?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public chargePointInterestReviewsCreateWithPhotosPost(chargePointInterestId: string, rating: number, xApplicationClientId?: string, comment?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public chargePointInterestReviewsCreateWithPhotosPost(chargePointInterestId: string, rating: number, xApplicationClientId?: string, comment?: string, photos?: Array<object>, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public chargePointInterestReviewsCreateWithPhotosPost(chargePointInterestId: string, rating: number, xApplicationClientId?: string, comment?: string, photos?: Array<object>, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (chargePointInterestId === null || chargePointInterestId === undefined) {
+            throw new Error('Required parameter chargePointInterestId was null or undefined when calling chargePointInterestReviewsCreateWithPhotosPost.');
+        }
+        if (rating === null || rating === undefined) {
+            throw new Error('Required parameter rating was null or undefined when calling chargePointInterestReviewsCreateWithPhotosPost.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
         if (xApplicationClientId !== undefined && xApplicationClientId !== null) {

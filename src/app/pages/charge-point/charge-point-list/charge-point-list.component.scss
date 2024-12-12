@@ -1,0 +1,15 @@
+@import '../../../@theme/styles/colors';
+
+  .identifier-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 10px;
+
+    .copy-text {
+        position: absolute;
+        margin-top: 30px;
+        color: $blue;
+    }
+  }
+  

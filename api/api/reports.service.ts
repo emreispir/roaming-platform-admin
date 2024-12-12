@@ -184,10 +184,16 @@ export class ReportsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reportsChargePointStatusGet(startDate?: string, endDate?: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public reportsChargePointStatusGet(startDate?: string, endDate?: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public reportsChargePointStatusGet(startDate?: string, endDate?: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public reportsChargePointStatusGet(startDate?: string, endDate?: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public reportsChargePointStatusGet(startDate: string, endDate: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public reportsChargePointStatusGet(startDate: string, endDate: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public reportsChargePointStatusGet(startDate: string, endDate: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public reportsChargePointStatusGet(startDate: string, endDate: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (startDate === null || startDate === undefined) {
+            throw new Error('Required parameter startDate was null or undefined when calling reportsChargePointStatusGet.');
+        }
+        if (endDate === null || endDate === undefined) {
+            throw new Error('Required parameter endDate was null or undefined when calling reportsChargePointStatusGet.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (startDate !== undefined && startDate !== null) {
@@ -275,10 +281,16 @@ export class ReportsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reportsConnectorStatusGet(startDate?: string, endDate?: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public reportsConnectorStatusGet(startDate?: string, endDate?: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public reportsConnectorStatusGet(startDate?: string, endDate?: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public reportsConnectorStatusGet(startDate?: string, endDate?: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public reportsConnectorStatusGet(startDate: string, endDate: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public reportsConnectorStatusGet(startDate: string, endDate: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public reportsConnectorStatusGet(startDate: string, endDate: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public reportsConnectorStatusGet(startDate: string, endDate: string, chargePointId?: string, directoryId?: string, workspaceId?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (startDate === null || startDate === undefined) {
+            throw new Error('Required parameter startDate was null or undefined when calling reportsConnectorStatusGet.');
+        }
+        if (endDate === null || endDate === undefined) {
+            throw new Error('Required parameter endDate was null or undefined when calling reportsConnectorStatusGet.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (startDate !== undefined && startDate !== null) {
@@ -1101,10 +1113,13 @@ export class ReportsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reportsTotalRevenueGet(currencyId?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, siteHostId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public reportsTotalRevenueGet(currencyId?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, siteHostId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public reportsTotalRevenueGet(currencyId?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, siteHostId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public reportsTotalRevenueGet(currencyId?: string, directoryId?: string, workspaceId?: string, chargePointId?: string, siteHostId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public reportsTotalRevenueGet(currencyId: string, directoryId?: string, workspaceId?: string, chargePointId?: string, siteHostId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public reportsTotalRevenueGet(currencyId: string, directoryId?: string, workspaceId?: string, chargePointId?: string, siteHostId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public reportsTotalRevenueGet(currencyId: string, directoryId?: string, workspaceId?: string, chargePointId?: string, siteHostId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public reportsTotalRevenueGet(currencyId: string, directoryId?: string, workspaceId?: string, chargePointId?: string, siteHostId?: string, startDate?: string, endDate?: string, xApplicationClientId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (currencyId === null || currencyId === undefined) {
+            throw new Error('Required parameter currencyId was null or undefined when calling reportsTotalRevenueGet.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (currencyId !== undefined && currencyId !== null) {

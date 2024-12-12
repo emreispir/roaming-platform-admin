@@ -1,7 +1,7 @@
 {
-  "HELLO": "Welcome to Surge Mobility Call Center!",
-  "SURGE": "Surge Call Center",
-  "SURGE-MOBILITY": "Surge Mobility Call Center",
+  "HELLO": "Welcome to Surge Mobility Romaing!",
+  "SURGE": "Surge Romaing",
+  "SURGE-MOBILITY": "Surge Mobility Romaing",
   "MONDAY": "Monday",
   "TUESDAY": "Tuesday",
   "WEDNESDAY": "Wednesday",
@@ -14,12 +14,10 @@
     "en": "English"
   },
   "LANDING": {
-    "WELCOME": "Surge Ahead with Surge Call Center",
-    "WELCOME-DESCRIPTION": "Your Gateway to Advanced Charging Solutions",
-    "POWER-UP": "Surge Call Center: Power up your EV experience.",
-    "MANAGE-ALL-CHARGING": " Manage all your charging stations with ease.",
-    "AGREEMENT": "<p class='agreement-text'> By signing up, I accept the <a href='https://surgemobility.tech/user-agreement' target='_blank' >User Agreement</a> and acknowledge the <a href='https://surgemobility.tech/privacy-and-security-policy' target='_blank'>Privacy Policy</a >, including the processing of my personal data. </p>",
-    "PLEASE-ACCEPT-AGREEMENT": "*Please read and approve the agreements"
+    "WELCOME": "Expand with Surge Roaming",
+    "WELCOME-DESCRIPTION": "Connecting you to a world of charging networks",
+    "POWER-UP": "Surge Roaming: Power Up beyond borders",
+    "MANAGE-ALL-CHARGING": "Effortlessly manage your roaming services and charging networks"
   },
   "COMMON": {
     "SUMMARY": "Summary",
@@ -247,29 +245,6 @@
     "SETTINGS": "Settings",
     "SENDING": "Sending..."
   },
-  "TOURS": {
-    "NEXT": "Next",
-    "END": "End",
-    "TITLE": "Surge Tour",
-    "HEADER-BREADCRUMB-ANCHOR-CONTENT": "This is the <b>breadcrumb menu</b>, which helps you <b>keep track of where you are on the website.</b> It shows the path from the homepage to the current page you are on. You can <b>click on any of the links</b> in the breadcrumb menu to <b>quickly navigate to a previous page.</b>",
-    "SIDENAV-MAIN-ANCHOR-CONTENT": "<b>Welcome to the Side Navigation Bar:</b> This is your side navigation bar. It allows you to <b>easily access different sections of the application.</b>",
-    "SIDENAV-DASHBOARD-ANCHOR-CONTENT": "<b>'The Dashboard'</b> section is where you can <b>view</b> an overview of the <b>directory's performance and metrics.</b>",
-    "DASHBOARD-ANCHOR-CONTENT": "<b>Welcome to the dashboard!</b> This page displays a summary of <b>important information</b> related to your directory. The page is divided into several sections, each <b>containing a report card with useful data.</b>",
-    "DASHBOARD": {
-      "SIDENAV-MAIN-ANCHOR-CONTENT": "Explore all the features of the app <b>using the main menu on the left</b>.",
-      "SIDENAV-DASHBOARD-ANCHOR-CONTENT": "<b>This is your dashboard</b>, where you can see an overview of your data and activity.",
-      "SIDENAV-WORKSPACES-ANCHOR-CONTENT": "<b>This is your workspaces page</b>, where you can see your workspaces.",
-      "SIDENAV-CHARGE-POINTS-ANCHOR-CONTENT": "<b>This is your charge points page</b>, where you can see your charge points.",
-      "SIDENAV-USERS-ANCHOR-CONTENT": "<b>This is your users and roles page</b>, where you can see <b>users, roles, invitations.</b>",
-      "HEADER-BREADCRUMB-ANCHOR-CONTENT": "Use the <b>breadcrumb navigation above</b> to move between different pages and sections of the app.",
-      "DASHBOARD-ANCHOR-CONTENT": "The dashboard displays various widgets and charts that <b>provide insights into your data.</b>",
-      "WORKSPACES-ANCHOR-CONTENT": "<b>Workspaces are customizable areas</b> where you can organize your data and collaborate with others.",
-      "WORKSPACES-PAGE-ANCHOR-CONTENT": "On this page, you can <b>view and manage your workspaces</b>. Click on them to open and customize their settings.",
-      "CHARGE-POINTS-ANCHOR-CONTENT": "<b>Charge points represent physical locations</b> where electric vehicles can be charged.",
-      "CHARGE-POINTS-PAGE-ANCHOR-CONTENT": "On this page, you can <b>view and manage your charge points</b>. Click on them to see more information.",
-      "USERS-MAIN-ANCHOR-CONTENT": "On this page, you can <b>view and manage users in your directory</b>."
-    }
-  },
   "NOTIFICATIONS": {
     "PROCESS-SUCCEEDED": "Process succeeded!",
     "PROCESS-FAILED": "Process failed!",
@@ -314,7 +289,7 @@
     "WORKSPACES": {
       "TITLE": "Workspaces",
       "WORKSPACE": "Workspace",
-      "WORKSPACES-TOOLTIP": "As a directory admin of Surge Plug, the 'Workspaces' section is your control center for managing multiple charge points across different locations or criteria.",
+      "WORKSPACES-TOOLTIP": "As a directory admin of Surge Roaming, the 'Workspaces' section is your control center for managing multiple charge points across different locations or criteria.",
       "WORKSPACE-ID": "Workspace Id",
       "FINANCE-CP-TOOLTIP": "Set up and modify the payout methods for revenue generated from the charge points in each Workspace. This section allows you to manage how profits are distributed or reinvested.",
       "FIRST-LETTERS": "WS",
@@ -465,6 +440,7 @@
       "NO-ITEM": "No user found",
       "NOT-INVITED": "not invited.",
       "INVITED-USERS": " invite successful",
+      "USERS-TOOLTIP": "You can manage your directory's users",
       "DIRECTORY-ADMIN-USERS-TOOLTIP": "You can invite and manage your directory's admins",
       "WORKSPACE-ADMIN-USERS-TOOLTIP": "You can invite and manage your workspace's admins",
       "WORKSPACES-TOOLTIP": "This section allows managing this user's workspaces."
@@ -552,7 +528,8 @@
       "CONNECT": "Connect",
       "DISCONNECT": "Disconnect",
       "CHANGE-CHARGE-POINT-ACCESSIBILITY-SUCCESS": "You have successfully changed your charge points accessibility",
-      "TOTAL-ITEM": "Total <b>{{param1}} charge points</b> registered, <b>{{param2}} passive</b> and <b>{{param3}} not paired</b>",
+      "TOTAL-ITEM": "Total <b>{{count}} charge points</b> listed.",
+      "OPERATOR-NAME": "Operator Name",
       "NO-ITEM": "No charge point found",
       "DEACTIVATE": "Deactivate",
       "START-CHARGE": "Start Charge",
@@ -949,6 +926,8 @@
       "COUPON-LIMIT-TYPE": "Coupon Limit Type"
     },
     "COUPONS": {
+      "NO-COUPON": "There is no coupon yet",
+      "LAST-COUPONS": "Latest Coupons",
       "LAST-MODIFIED": "Modified Date",
       "COUPON": "Coupon",
       "COUPONS-TOOLTIP": "The 'Coupons' section is designed for creating and managing coupons specific to your workspaces.",
